@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="crm_tag_user" model="crm.tag">
+        <field name="name">sharetribe-user</field>
+    </record>
+
+    <record id="crm_stage_1" model="crm.stage">
+        <field name="name">Registered</field>
+        <field name="team_id" ref="sales_team.team_sales_department"/>
+        <field name="sequence">1</field>
+    </record>
+
+</odoo>

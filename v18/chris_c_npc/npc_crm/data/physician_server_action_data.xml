@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+    <record id="set_opportunity_from_physician" model="ir.actions.server">
+        <field name="name">Set Opportunity from Physician</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="sequence">1</field>
+        <field name="binding_model_id" ref="crm.model_crm_lead"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.set_opportunity_from_lead()
+        </field>
+    </record>
+    </data>
+</odoo>

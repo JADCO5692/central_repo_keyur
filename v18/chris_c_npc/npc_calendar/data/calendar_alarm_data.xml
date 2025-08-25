@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!--    EMAIL   -->
+    <record id="alarm_email_4hrs" model="calendar.alarm">
+        <field name="name">Email - 4 Hours</field>
+        <field name="duration" eval="4"/>
+        <field name="interval">hours</field>
+        <field name="alarm_type">email</field>
+        <field name="default_for_new_appointment_type">True</field>
+        <field name="mail_template_id" ref="npc_calendar.calendar_template_meeting_reminder"/>
+    </record>
+
+    <record id="alarm_email_2hrs" model="calendar.alarm">
+        <field name="name">Email - 2 Hours</field>
+        <field name="duration" eval="2"/>
+        <field name="interval">hours</field>
+        <field name="alarm_type">email</field>
+        <field name="default_for_new_appointment_type">True</field>
+        <field name="mail_template_id" ref="npc_calendar.calendar_template_meeting_reminder"/>
+    </record>
+
+
+    <!--    SMS   -->
+    <!-- <record id="alarm_sms_1hr" model="calendar.alarm">
+        <field name="name">SMS - 1 Hour</field>
+        <field name="duration" eval="1"/>
+        <field name="interval">hours</field>
+        <field name="alarm_type">sms</field>
+        <field name="default_for_new_appointment_type">True</field>
+        <field name="sms_template_id" ref="npc_calendar.sms_template_data_calendar_reminder"/>
+    </record>
+
+    <record id="alarm_sms_10mins" model="calendar.alarm">
+        <field name="name">SMS - 10 Minutes</field>
+        <field name="duration" eval="10"/>
+        <field name="interval">minutes</field>
+        <field name="alarm_type">sms</field>
+        <field name="default_for_new_appointment_type">True</field>
+        <field name="sms_template_id" ref="npc_calendar.sms_template_data_calendar_reminder"/>
+    </record>
+
+    <record id="alarm_sms_5mins" model="calendar.alarm">
+        <field name="name">SMS - 5 Minutes</field>
+        <field name="duration" eval="5"/>
+        <field name="interval">minutes</field>
+        <field name="alarm_type">sms</field>
+        <field name="default_for_new_appointment_type">True</field>
+        <field name="sms_template_id" ref="npc_calendar.sms_template_data_calendar_reminder"/>
+    </record>-->
+
+    <!-- Disable Default Reminders   -->
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'appointment_sms'), ('name', '=', 'calendar_alarm_data_1h_sms')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function>
+
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'calendar'), ('name', '=', 'alarm_mail_1')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function>
+
+
+    <record id="appointment_sms.calendar_alarm_data_1h_sms" model="calendar.alarm">
+        <field name="default_for_new_appointment_type">False</field>
+    </record>
+    <record id="calendar.alarm_mail_1" model="calendar.alarm">
+        <field name="default_for_new_appointment_type">False</field>
+    </record>
+
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'appointment_sms'), ('name', '=', 'calendar_alarm_data_1h_sms')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function>
+
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'calendar'), ('name', '=', 'alarm_mail_1')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function>
+
+
+</odoo>

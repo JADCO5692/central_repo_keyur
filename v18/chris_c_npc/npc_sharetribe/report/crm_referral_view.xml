@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_crm_referral_report_list" model="ir.ui.view">
+        <field name="name">crm.referral.report.list</field>
+        <field name="model">crm.referral.report</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="lead_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="email_from" optional="show"/>
+                <field name="reg_date" optional="show"/> 
+                <field name="custom_user_referral" optional="show"/>
+                <field name="stage_id" optional="show"/>
+                <field name="date" optional="show"/>
+                <field name="invoice_id" optional="show"/>
+                <field name="payment_date" optional="show"/>
+                <field name="invoice_amount" sum="Total" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_crm_referral_report_search" model="ir.ui.view">
+        <field name="name">crm.referral.report.search</field>
+        <field name="model">crm.referral.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="lead_id"/>
+                <field name="custom_user_referral"/>
+                <field name="stage_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="NP Name" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="User Referral" name="group_by_referral" context="{'group_by': 'custom_user_referral'}"/>
+                    <filter string="Stage" name="group_by_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_crm_referral_report" model="ir.actions.act_window">
+        <field name="name">Referral Leads and Invoices</field>
+        <field name="res_model">crm.referral.report</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_crm_referral_report_search"/>
+    </record>
+
+    <menuitem id="menu_crm_referral_report"
+              name="Referral Report"
+              parent="menu_affiliate_leads_root"
+              action="action_crm_referral_report"
+              sequence="20"/>
+</odoo>

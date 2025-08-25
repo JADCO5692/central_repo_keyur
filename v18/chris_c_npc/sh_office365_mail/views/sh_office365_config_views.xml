@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id='sh_office365_mail_form' model='ir.ui.view'>
+        <field name="name">sh.office365.mail.form</field>
+        <field name="model">sh.office365.base.config</field>
+        <field name="inherit_id" ref="sh_office365_base.sh_get_creds_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group" position="after">
+                <h1 class="text-primary">Mail</h1>
+                <group>
+                    <span>
+                        <group>
+                            <field name="import_mail" string="Import"/>
+                        </group>
+                    </span>
+                    <span>
+                        <group>
+                            <field name="auto_schedule_mail"/>
+                        </group>
+                    </span>
+                    <group>
+
+                    </group>
+                    <group>
+                        <field name="manage_log_mail" string="Manage Log History"/>
+                    </group>
+                </group>
+                <div class="row mb-4" id="imp3">
+                    <div class="col-md-6 col-xl-6 col-lg-6 col-sm-6">
+                        <button type="object" class="btn btn-primary" string="Sync Mails" name="mail_import"/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

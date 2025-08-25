@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="seq_commission_logs" model="ir.sequence">
+            <field name="name">Commission Logs</field>
+            <field name="code">commission_logs</field>
+            <field name="prefix">COMM/LOG/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+</odoo>

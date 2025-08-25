@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_invoice_view_form_inherit_ncp" model="ir.ui.view">
+        <field name="name">account.invoice.form.inherit.npc</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml"> 
+            <xpath expr="//group[@name='accounting_info_group']" position="inside">
+                <field name="commission_id" widget="many2many_tags" readonly="1"/>
+                <field name="is_commission_excluded" widget="boolean_toggle" class="o_field_boolean"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

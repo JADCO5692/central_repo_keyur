@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_product_subscription_commission_form" model="ir.ui.view">
+        <field name="name">product.template.expense.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <div name="options" position="inside">
+                <span class="d-inline-flex">
+                    <field name="is_np_fees_product"/>
+                    <label for="is_np_fees_product"/>
+                </span>
+                <span class="d-inline-flex" invisible="not is_np_fees_product">
+                    <field name="is_np_main_fees_product"/>
+                    <label for="is_np_main_fees_product"/>
+                </span>
+                <span class="d-inline-flex">
+                    <field name="is_physician_fees_product"/>
+                    <label for="is_physician_fees_product"/>
+                </span>
+                <span class="d-inline-flex" invisible="not is_physician_fees_product">
+                    <field name="is_physician_main_fees_product"/>
+                    <label for="is_physician_main_fees_product"/>
+                </span>
+            </div>
+        </field>
+    </record>
+
+</odoo>

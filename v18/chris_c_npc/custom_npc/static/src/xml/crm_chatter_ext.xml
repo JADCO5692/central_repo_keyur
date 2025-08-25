@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+    <t t-name="mail.Composer.ext" t-inherit="mail.Composer" t-inherit-mode="extension" >
+        <xpath expr="//div[@t-if='extended and !props.composer.message']/t[@t-call='mail.Composer.sendButton']" position="replace">
+            <t t-if="this.props.composer.thread.model == 'crm.lead'">
+                <t t-call="mailComposerfullComposer"/>    
+            </t>
+            <t t-else="" >
+                <t t-call="mail.Composer.sendButton"/>     
+            </t>
+        </xpath>
+    </t>
+    <t t-name="mailComposerfullComposer" owl="1" >
+        <button t-if="props.showFullComposer and thread and thread.model !== 'discuss.channel'" class="btn-primary btn-sm o-mail-Composer-fullComposer btn" title="Full composer" aria-label="Full composer" type="button" t-on-click="onClickFullComposer" data-hotkey="shift+c">
+            Send
+        </button>
+    </t>
+
+</templates>

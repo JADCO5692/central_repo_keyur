@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Incoming SMS list view -->
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">view_incoming_sms.inherit.npc_twilio_sms</field>
+        <field name="model">twilio.incoming.sms</field>
+        <field name="inherit_id" ref="twilio_sms_odoo.view_incoming_sms"/>
+        <field name="arch" type="xml">
+            <xpath expr="." position="replace">
+                <list editable="top" edit="0" create="0">
+                    <field name="received_date"/>
+                    <field name="phone" widget="phone"/>
+                    <field name="partner_id" widget="many2onebutton"/>
+                    <field name="body"/>
+                    <field name="formatted_phone" optional="hide"/>
+                    <field name="incoming_message_sid" optional="hide"/>
+                </list>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

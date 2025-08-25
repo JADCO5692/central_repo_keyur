@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="vendor_selection_view_view_form" model="ir.ui.view">
+        <field name="name">vendor.selection.view.view.form</field>
+        <field name="model">vendor.selection</field>
+        <field name="arch" type="xml">
+            <form string="Vendor_selection_view">
+                <sheet>
+                    <group>
+                        <field name="lead_partner_ids" invisible="1"/>
+                        <field name="vendor_id" domain="[('id', 'in', lead_partner_ids)]" required="1"/>
+                    </group>
+                    <sperator/>
+                    <field name="invoice_line_ids">
+                        <list>
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id"/>
+                            <field name="name"/>
+                            <field name="account_id"/>
+                            <field name="quantity" optional="show"/>
+                            <field name="product_uom_id" string="UoM" optional="show"
+                                   width="92px"/>
+                            <field name="price_unit" string="Price"/>
+                            <field name="discount" width="50px" string="Disc.%" optional="hide"/>
+                            <field name="tax_ids" widget="many2many_tax_tags"/>
+                            <field name="price_subtotal" string="Amount"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button string="Create Vendor Bills" type="object" name="process" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

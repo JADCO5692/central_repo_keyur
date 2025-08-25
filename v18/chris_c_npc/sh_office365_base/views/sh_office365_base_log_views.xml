@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id='sh_office365_log_tree' model='ir.ui.view'>
+        <field name="name">sh.office365.log.list</field>
+        <field name="model">sh.office365.base.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="error"/>
+                <field name="operation"/>
+                <field name="datetime"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_office365_log_action" model="ir.actions.act_window">
+        <field name="name">Logger</field>
+        <field name="res_model">sh.office365.base.log</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list</field>
+        <field name="context">{
+            'create': False
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Logger
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="Logger" action="sh_office365_log_action" id="sh_log_item" parent="sh_office365_base" sequence="3"/>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- list view for Affiliate Leads -->
+    <record id="view_crm_lead_affiliate_list" model="ir.ui.view">
+        <field name="name">crm.lead.affiliate.list</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email_from"/>
+                <field name="reg_date" string="Registration Date"/>
+                <field name="custom_user_referral"/>
+                <field name="stage_id" optional="show"/>
+                <field name="description" optional="show"/>
+                <field name="custom_last_stage_changed_date" optional="show"/>
+                <field name="custom_stage_duration_hours" optional="show"/>
+                <field name="activity_ids" optional="show"/>
+                <field name="activity_state" optional="show"/>
+                <field name="meeting_date" optional="show"/>
+                <field name="activity_calendar_event_id" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="first_payment_date" optional="show"/>
+                <field name="second_payment_date" optional="show"/>
+                <field name="calendly_questions_answers" optional="show"/>
+                <field name="custom_sch_zoom_call_date" optional="hide"/>
+                <field name="custom_contract_sent_date" optional="hide"/>
+                <field name="custom_invoice_sent_date" optional="hide"/>
+                <field name="custom_all_contracts_signed1" optional="hide"/>
+                <field name="active_status_label" optional="hide"/>
+                <field name="lost_reason_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view for Affiliate Leads (reuse default form) -->
+    
+    <!-- Action for Affiliate Leads -->
+    <record id="action_affiliate_leads" model="ir.actions.act_window">
+        <field name="name">Affiliate Leads</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_crm_lead_affiliate_list"/>
+        <field name="domain">["&amp;", ("custom_user_referral", "!=", False), "|", ("active", "=", True), ("active", "=", False)]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu item for Affiliate Leads -->
+    <menuitem id="menu_affiliate_leads_root" name="Affiliate" parent="crm.crm_menu_root" sequence="5"/>
+    <menuitem id="menu_affiliate_leads" name="Affiliates Leads" action="action_affiliate_leads" parent="menu_affiliate_leads_root" sequence="6"/>
+</odoo>

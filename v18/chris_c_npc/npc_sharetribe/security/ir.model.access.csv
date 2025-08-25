@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sync_wizard,access npc_sharetribe.sync admin,model_npc_sharetribe_sync,base.group_system,1,1,1,1
+access_work_history_admin,access npc_sharetribe.work_history admin,model_npc_sharetribe_work_history,base.group_system,1,1,1,1
+access_work_history_user,access npc_sharetribe.work_history user,model_npc_sharetribe_work_history,base.group_user,1,0,0,0
+access_crm_referral_report_user,access npc_sharetribe.crm_referral_report user,model_crm_referral_report,base.group_user,1,0,0,0
+npc_sharetribe.access_npc_favorites,access_npc_favorites,npc_sharetribe.model_npc_favorites,base.group_user,1,1,1,1
+npc_sharetribe.access_npc_calendly_qa,access_npc_calendly_qa,npc_sharetribe.model_npc_calendly_qa,base.group_user,1,1,1,1

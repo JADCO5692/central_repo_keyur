@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Lead kanban view -->
+    <record id="crm_case_kanban_view_leads" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.lead.inherit.npc_calendly</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer" position="before">
+                <div t-if="record.meeting_date.raw_value" title="Meeting Date" class="mt-1 text-primary">
+                    <i class="fa fa-fw fa-lg text-muted fa-video-camera me-1"/>
+                    <field name="meeting_date"/>
+                    <button name="open_meeting_link"
+                            type="object"
+                            class="btn btn-link btn-sm">
+                        Zoom
+                        <i class="fa fa-fw fa-external-link"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Lead Calendar view -->
+    <record id="crm_case_calendar_view_leads" model="ir.ui.view">
+        <field name="name">crm.lead.list.lead.inherit.npc_calendly</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_calendar_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lead_properties']" position="before">
+                <field name="meeting_date" options="{'icon': 'fa fa-lg fa-video-camera'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Opportunity List view -->
+    <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+        <field name="name">crm.lead.list.opportunity.inherit.npc_crm.npc_calendly</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="npc_crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='referred']" position="after">
+                <field name="meeting_date" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Lead Form view: add Calendly Info page -->
+    <record id="crm_lead_form_view_calendly_page" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.npc_calendly.page</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Calendly Info">
+                    <group>
+                        <field name="meeting_date"/>
+                        <field name="meeting_link"/>
+                        <field name="calendly_created_at"/>
+                        <field name="calendly_event_uri"/>
+                        <field name="calendly_event_type"/>
+                        <field name="calendly_guest_email"/>
+                        <field name="calendly_guest_name"/>
+                        <field name="calendly_questions_answers" widget="text"/>
+                        <field name="calendly_json_data" widget="text"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

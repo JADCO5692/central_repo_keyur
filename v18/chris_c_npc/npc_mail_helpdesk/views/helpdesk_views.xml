@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="helpdesk_ticket_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherited.npc_mail_helpdesk</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="before">
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_open_related_record"
+                        type="object"
+                        string="Open Related Record"
+                        invisible="not res_model or not res_id"
+                        class="btn btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

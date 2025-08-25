@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="sales_team.team_sales_department" model="crm.team">
+            <field name="name">NP</field>
+        </record>
+
+        <record id="team_physician" model="crm.team">
+            <field name="name">Physician</field>
+            <field name="sequence">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="use_opportunities" eval="True"/>
+            <field name="use_leads" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <record id="zoom_res_users_view_form" model="ir.ui.view">
+        <field name="name">zoom.res.users.view.form.inherit</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Zoom Meeting" name="meeting">
+                    <group name="Zoom Meeting">
+                        <group>
+                            <field name="client_id" style="width:250px;border-width:3px;"/>
+                            <field name="secret_id" style="width:250px;border-width:3px;"/>
+                            <field name="refresh_token" invisible="True"/>
+                        </group>
+                        <group>
+                            <field name="authentication_state" widget="badge" decoration-primary="authentication_state == 'new'" decoration-danger="authentication_state == 'error'" decoration-success="authentication_state == 'authorize_token'"/>
+                            <field name="redirect_urls" style="border-width:3px;" widget="CopyClipboardChar" no_label="1" options="{'string': 'Copy Link'}"/>
+                        </group>
+                    </group>
+                    <button name="generate_access_token" type="object" string="Authorization" class="btn-primary" invisible="refresh_token" />
+                    <button name="refresh_access_token" type="object" string="Refresh Access Token" class="btn-success" invisible="not refresh_token" />
+                    <button name="reset_state" type="object" string="Reset" class="btn-danger ms-2" invisible="authentication_state in ['new']" />
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

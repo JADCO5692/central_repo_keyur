@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="calendar.calendar_menu_config" model="ir.ui.menu">
+        <field name="groups_id" eval="[(3, ref('base.group_no_one'))]"/>
+    </record>
+<!--    <record id="calendar.menu_calendar_settings" model="ir.ui.menu">-->
+<!--        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"/>-->
+<!--    </record>-->
+    <record id="calendar.calendar_submenu_reminders" model="ir.ui.menu">
+        <field name="groups_id" eval="[(3, ref('base.group_no_one'))]"/>
+    </record>
+
+<!--    <menuitem-->
+<!--            id="calendar_menu_config"-->
+<!--            parent="calendar.mail_menu_calendar"-->
+<!--            name="Configuration"-->
+<!--            sequence="41"-->
+<!--            action="calendar.action_calendar_event"-->
+<!--            groups="!base.group_no_one,base.group_system"/>-->
+
+<!--    <menuitem-->
+<!--            id="calendar_submenu_reminders"-->
+<!--            parent="npc_calendar.calendar_menu_config"-->
+<!--            name="Reminders"-->
+<!--            sequence="50"-->
+<!--            action="action_calendar_alarm"/>-->
+
+
+</odoo>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Email   -->
+    <record id="calendar_template_meeting_reminder" model="mail.template">
+        <field name="name">Calendar: NPC Email reminder</field>
+        <field name="model_id" ref="calendar.model_calendar_attendee"/>
+<!--        <field name="subject">{{ object.event_id.name }} - Reminder</field>-->
+        <field name="subject">{{ object.event_id._get_email_subject() }}</field>
+        <field name="email_from">{{ (object.event_id.user_id.email_formatted or user.email_formatted or '') }}</field>
+        <field name="email_to">{{ ('' if object.partner_id.email and object.partner_id.email == object.email else object.email) }}</field>
+        <field name="partner_to">{{ object.partner_id.id if object.partner_id.email and object.partner_id.email == object.email else False }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="description">Sent to all attendees if a reminder is set</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Hi All,</p>
+                <p>
+                    This is a friendly reminder about the upcoming meeting today.
+                </p>
+                <br/>
+                <span>Date:
+                    <t t-out='format_datetime(dt=object.event_id.start, tz=object.event_id.event_tz if not object.event_id.allday else None, dt_format="EEE M/d/Y", lang_code=object.env.lang) or ""'>
+                        Wed 6/4/2025
+                    </t>
+                </span><br/>
+                <span>Time:
+                    <t t-out='format_time(time=object.event_id.start, tz=object.event_id.event_tz, time_format="h:mm a", lang_code=object.env.lang) or ""'>
+                        4:30 PM
+                    </t> -
+                    <t t-out='format_time(time=object.event_id.stop, tz=object.event_id.event_tz, time_format="h:mm a z (zzzz)", lang_code=object.env.lang) or ""'>
+                        5:00 PM
+                    </t>
+<!--                    <t t-if="object.mail_tz">-->
+<!--                        (<t t-out="object.mail_tz"> Europe/Brussels</t>)-->
+<!--                    </t>-->
+                </span>
+                <t t-if="object.event_id.videocall_location or object.event_id.location">
+                    <br/>
+                    <span>Location/Platform: Zoom Meeting --------
+                        <a target="_blank" style="text-decoration: underline;"
+                           t-attf-href="{{object.event_id.videocall_location or object.event_id.location}}">Click Here
+                        </a>
+                    </span>
+                </t>
+                <br/>
+                <br/>
+                <p style="margin:0;">Your presence is important. The session is set for 30 minutes and will automatically disconnect once
+                    the time is up. Please make every effort to be on time.
+                </p>
+                <br/>
+                <p>However, if you are unable to attend, kindly let us know in advance so we can make the necessary adjustments.</p>
+                <br/>
+                Thank you.
+                <br/>
+                NPCollaborator Team
+            </div>
+        </field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+
+    <!--    SMS   -->
+    <!--<record id="sms_template_data_calendar_reminder" model="sms.template">
+        <field name="name">Calendar Event: NPC Reminder</field>
+        <field name="model_id" ref="calendar.model_calendar_event"/>
+        <field name="body">Hi!
+This is a friendly reminder of your upcoming meeting today ({{ format_datetime(dt=object.start, tz=object.event_tz if not object.allday else None, dt_format='EEE M/d/Y h:mm a', lang_code=object.env.lang) }} - {{ format_time(time=object.stop, tz=object.event_tz if not object.allday else None, time_format='h:mm a z (zzzz)', lang_code=object.env.lang) }}). You may join through this link.
+
+Thank you.
+NPCollaborator Team
+        </field>
+    </record>-->
+
+</odoo>

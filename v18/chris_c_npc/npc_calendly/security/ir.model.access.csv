@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sync_wizard,access npc_calendly.sync admin,model_npc_calendly_sync,base.group_system,1,1,1,1
+

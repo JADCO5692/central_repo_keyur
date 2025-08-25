@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="practice_type_1" model="npc_crm.practice_type">
+        <field name="name">Medical_Aesthetics</field>
+    </record>
+    <record id="practice_type_2" model="npc_crm.practice_type">
+        <field name="name">Hormone_Optimization</field>
+    </record>
+    <record id="practice_type_3" model="npc_crm.practice_type">
+        <field name="name">IV_Infusion</field>
+    </record>
+    <record id="practice_type_4" model="npc_crm.practice_type">
+        <field name="name">Primary_Care</field>
+    </record>
+    <record id="practice_type_5" model="npc_crm.practice_type">
+        <field name="name">Medical_Weight_Loss</field>
+    </record>
+    <record id="practice_type_6" model="npc_crm.practice_type">
+        <field name="name">Mental_Health</field>
+    </record>
+    <record id="practice_type_7" model="npc_crm.practice_type">
+        <field name="name">Tele</field>
+    </record>
+    <record id="practice_type_8" model="npc_crm.practice_type">
+        <field name="name">Urgent_Care</field>
+    </record>
+    <record id="practice_type_9" model="npc_crm.practice_type">
+        <field name="name">Mens_Health_TRT</field>
+    </record>
+    <record id="practice_type_10" model="npc_crm.practice_type">
+        <field name="name">Womens_Health</field>
+    </record>
+    <record id="practice_type_11" model="npc_crm.practice_type">
+        <field name="name">Other</field>
+    </record>
+
+</odoo>

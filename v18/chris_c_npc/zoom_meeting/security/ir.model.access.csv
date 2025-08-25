@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+public_zoom_wizard,public_wizard_zoom,model_wizard_zoom,,1,0,0,0
+wizard_zoom,admin_wizard_zoom,model_wizard_zoom,base.group_user,1,1,1,1

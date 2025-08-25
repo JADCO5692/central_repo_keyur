@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- PARTNERS -->
+    <!-- Partner form view -->
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.npc_crm</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="custom_first_name" readonly="1" invisible="is_company == True"/>
+                <field name="custom_last_name" readonly="1" invisible="is_company == True"/>
+                <field name="npc_user_type"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

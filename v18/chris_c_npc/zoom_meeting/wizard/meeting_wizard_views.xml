@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>;) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="zoom_meeting_form">
+            <field name="name">create meeting</field>
+            <field name="model">wizard.zoom</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create Meeting">
+                    <span class="o_horizontal_separator">Basic details</span>
+                    <group>
+                        <field name="agenda" required="True" help = "
+                        The meeting's agenda. This value has a maximum length of 2,000 characters." />
+                        <field name="password" password="True" help = "By default, a password can only have a maximum length of 10 characters and only contain alphanumeric characters and the @, -, _, and * characters."/>
+                        <field name="meeting_type"/>
+                    </group>
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <group>
+                                    <field name="joining_option" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="jbh_time" invisible="joining_option in ['waiting_room',False]"  />
+                                    <field name="mute_upon_entry" help="Whether to mute participants upon entry."/>
+                                    <field name="approval_type"></field>
+                                    <field name="calendar_type"/>
+                                    <field name ="audio"/>
+                                    <field name="auto_recording"/>
+                                </group>
+                                <group>
+                                    <field name="host_video" help="Whether to start meetings with the host video on."/>
+                                    <field name="participant_video" help="Start video when participants join the meeting."/>
+                                    <field name="watermark" help="
+                                    Whether to add a watermark when viewing a shared screen." />
+                                    <field name="allow_multiple_devices"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Continous Meeting Configuration">
+                            <group>
+                                <field name ="enable"/>
+                                <field name ="auto_add_invited_external_users"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="create_zoom_meeting" type="object" string="Create" class="btn-primary btn-lg"/>
+                        <button string="Close" special="cancel" class="btn-danger btn-lg"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="zoom_meeting_update_form">
+            <field name="name">Update meeting</field>
+            <field name="model">wizard.zoom</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Update Meeting">
+                    <span class="o_horizontal_separator">Basic details</span>
+                    <group>
+                        <field name="agenda"/>
+                        <field name="password" password="True"/>
+                        <field name="meeting_type"/>
+                        <field name="alternative_hosts" placeholder="enter email with comma seperate eq. text@er.com,abc123@xyz.su"/>
+                    </group>
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <group>
+                                    <field name="joining_option" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="jbh_time" invisible="joining_option in ['waiting_room',False]"  />
+                                    <field name="mute_upon_entry" help="Whether to mute participants upon entry."/>
+                                    <field name="approval_type"></field>
+                                    <field name="calendar_type"/>
+                                    <field name ="audio"/>
+                                    <field name="auto_recording"/>
+                                </group>
+                                <group>
+                                    <field name="host_video" help="Whether to start meetings with the host video on."/>
+                                    <field name="participant_video" help="Start video when participants join the meeting."/>
+                                    <field name="watermark" help="
+                                    Whether to add a watermark when viewing a shared screen." />
+                                    <field name="allow_multiple_devices"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Continous Meeting Configuration">
+                            <group>
+                                <field name ="enable"/>
+                                <field name ="auto_add_invited_external_users"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="update_zoom_meeting" type="object" string="Update" class="btn-primary btn-lg"/>
+                        <button string="Close" special="cancel" class="btn-danger btn-lg"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="zoom_meeting_delete_form">
+            <field name="name">Delete meeting</field>
+            <field name="model">wizard.zoom</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Delete Meeting">
+                    <span class="o_horizontal_separator">Optional part</span>
+                    <group>
+                        <group>
+                            <field name="schedule_for_reminder"/>
+                        </group>
+                        <group>
+                            <field name="cancel_meeting_reminder"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="delete_zoom_meeting" type="object" string="Delete" class="btn-danger"/>
+                        <button string="Close" special="cancel" class="btn-info"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

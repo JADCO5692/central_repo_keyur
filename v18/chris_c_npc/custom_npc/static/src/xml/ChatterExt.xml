@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+    <t t-name="mail.Chatter.ext" t-inherit="mail.Chatter" t-inherit-mode="extension" >
+        <xpath expr="//button[contains(@class,'o-mail-Chatter-sendMessage')]" position="replace">
+            <t t-if="state.thread.model == 'crm.lead'">
+                <button class="o-mail-Chatter-sendMessage btn text-nowrap me-1" t-att-class="{
+                    'btn-primary': state.composerType !== 'note',
+                    'btn-secondary': state.composerType === 'note',
+                    'active': state.composerType === 'message',
+                    'my-2': !props.compactHeight
+                }" t-att-disabled="!state.thread.hasWriteAccess and !(state.thread.hasReadAccess and state.thread.canPostOnReadonly) and props.threadId" data-hotkey="m" t-on-click="(el) => this.onClickFullComposer(el)">
+                    Send message
+                </button>
+            </t> 
+            <t t-else="">
+                <button class="o-mail-Chatter-sendMessage btn text-nowrap me-1" t-att-class="{
+                    'btn-primary': state.composerType !== 'note',
+                    'btn-secondary': state.composerType === 'note',
+                    'active': state.composerType === 'message',
+                    'my-2': !props.compactHeight
+                }" t-att-disabled="!state.thread.hasWriteAccess and !(state.thread.hasReadAccess and state.thread.canPostOnReadonly) and props.threadId" data-hotkey="m" t-on-click="() => this.toggleComposer('message')">
+                    Send message
+                </button>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

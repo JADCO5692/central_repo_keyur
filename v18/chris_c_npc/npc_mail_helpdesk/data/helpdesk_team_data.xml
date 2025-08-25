@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+<!--        <record id="helpdesk.helpdesk_team1" model="helpdesk.team">-->
+<!--        </record>-->
+
+        <record id="helpdesk_email" model="helpdesk.team">
+            <field name="name">Email Replies</field>
+            <field name="stage_ids" eval="[(6, 0, [ref('helpdesk.stage_new'), ref('helpdesk.stage_in_progress'), ref('helpdesk.stage_solved'), ref('helpdesk.stage_cancelled')])]"/>
+            <field name="alias_name">email</field>
+            <field name="use_sla" eval="True"/>
+            <field name="member_ids" eval="[Command.link(ref('base.user_admin'))]"/>
+        </record>
+        <record id="helpdesk_sms" model="helpdesk.team">
+            <field name="name">SMS Replies</field>
+            <field name="stage_ids" eval="[(6, 0, [ref('helpdesk.stage_new'), ref('helpdesk.stage_in_progress'), ref('helpdesk.stage_solved'), ref('helpdesk.stage_cancelled')])]"/>
+            <field name="alias_name">sms</field>
+            <field name="use_sla" eval="True"/>
+            <field name="member_ids" eval="[Command.link(ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

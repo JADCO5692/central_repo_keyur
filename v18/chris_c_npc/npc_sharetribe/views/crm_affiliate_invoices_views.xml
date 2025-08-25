@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Tree view for Affiliate Invoices -->
+    <record id="view_account_move_affiliate_invoice_tree" model="ir.ui.view">
+        <field name="name">account.move.affiliate.invoice.tree</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="invoice_origin"/>
+                <field name="partner_id"/>
+                <field name="name" string="Invoice Number"/>
+                <field name="invoice_date"/>
+                <field name="amount_total"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for Affiliate Invoices -->
+    <record id="action_affiliate_invoices" model="ir.actions.act_window">
+        <field name="name">Affiliate Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_account_move_affiliate_invoice_tree"/>
+        <field name="domain">[
+            ('move_type', '=', 'out_invoice'),
+            ('invoice_origin', '!=', False),
+            ('invoice_origin', 'in',
+                (0, 0, 0)  # TODO: Replace with a dynamic domain if possible
+            )
+        ]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu item for Affiliate Invoices -->
+    <menuitem id="menu_affiliate_invoices" name="Affiliate Invoices" action="action_affiliate_invoices" parent="crm.crm_menu_root" sequence="26"/>
+</odoo>

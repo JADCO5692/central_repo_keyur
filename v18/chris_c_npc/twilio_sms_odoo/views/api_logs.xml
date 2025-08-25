@@ -1,0 +1,134 @@
+<?xml  version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_twilio_api_logs" model="ir.ui.view">
+        <field name="name">view_twilio_api_logse</field>
+        <field name="model">twilio.response.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="api_response"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+	
+	 <record id="action_twilio_api_logs" model="ir.actions.act_window">
+        <field name="name">Twilio API Log</field>
+        <field name="res_model">twilio.response.log</field>
+        <field name="view_mode">tree</field>
+    </record>
+	
+    <record id="view_twilio_outgoing_sms_logs" model="ir.ui.view">
+        <field name="name">view_twilio_outgoing_sms_logs</field>
+        <field name="model">twilio.outgoing.log</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="api_response"/>
+				<field name="message_id"/>
+                <field name="to_phone"/>
+				<field name="status"/>
+				<field name="body"/>
+            </list>
+        </field>
+    </record>
+	
+	 <record id="action_twilio_api_logs" model="ir.actions.act_window">
+        <field name="name">Twilio API Log</field>
+        <field name="res_model">twilio.response.log</field>
+        <field name="view_mode">list</field>
+    </record>
+	<record id="action_twilio_outgoing_sms_logs" model="ir.actions.act_window">
+        <field name="name">Twilio API Outgoing Log</field>
+        <field name="res_model">twilio.outgoing.log</field>
+        <field name="view_mode">list</field>
+    </record>
+	
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.twilio.configuration</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="60"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Twilio Configuration" string="Twilio Configuration" name="twilio_config">
+                        <block title="Twilio Configuration" name="managa_twilio_configuration_setting_container">
+                            <setting title="This tool is for configuring Twilio API configuration Account SID">
+                                <field name="twilio_account_sid"/>
+							</setting>
+							<setting title="This tool is for configuring Twilio API configuration Auth Token">
+								<field name="twilio_auth_token"/>
+							</setting>
+							<setting title="This tool is for configuring Twilio API number">
+								<field name="twilio_phone"/>
+							</setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_twilio_api_configuration" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'twilio_sms_odoo', 'bin_size': False}</field>
+        </record>
+		
+		<record id="mailing_sms_test_view_form_inherit" model="ir.ui.view">
+            <field name="name">mailing_sms_test_view_form_inherit</field>
+            <field name="model">mailing.sms.test</field>
+            <field name="inherit_id" ref="mass_mailing_sms.mailing_sms_test_view_form"/>
+			<field name="arch" type="xml">
+			<xpath expr="//footer/button[1]" position="replace">
+			<button string="Send Test" name="action_send_twilio_outgoing_sms" type="object" class="btn-primary" data-hotkey="q"/>
+			</xpath>
+			</field>
+        </record>
+
+<record id="view_incoming_sms" model="ir.ui.view">
+        <field name="name">view_incoming_sms</field>
+        <field name="model">twilio.incoming.sms</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="incoming_message_sid"/>
+                <field name="phone" widget="phone"/>
+				<field name="body"/>
+				<field name="received_date"/>
+				<field name="formatted_phone"/>
+            </list>
+        </field>
+    </record>
+	
+	 <record id="action_twilio_incoming_sms" model="ir.actions.act_window">
+        <field name="name">Incoming SMS</field>
+        <field name="res_model">twilio.incoming.sms</field>
+        <field name="view_mode">list</field>
+    </record>
+	<menuitem
+        id="menu_twilio_incoming_sms"
+        name="Twilio Incoming SMS"
+        parent="mass_mailing_sms.mass_mailing_sms_menu_configuration"
+		action="action_twilio_incoming_sms"
+        sequence="25"/>		
+		
+
+
+
+
+
+<!--    MENU FOR PACKAGES-->
+    <menuitem
+        id="menu_twilio_api_logs"
+        name="Twilio API Logs"
+        parent="mass_mailing_sms.mass_mailing_sms_menu_configuration"
+		action="action_twilio_api_logs"
+        sequence="25"/>
+    <menuitem
+        id="menu_twilio_outgoing_api_logs"
+        name="Twilio Outgoing API Logs"
+        parent="mass_mailing_sms.mass_mailing_sms_menu_configuration"
+		action="action_twilio_outgoing_sms_logs"
+        sequence="25"/>
+		
+</odoo>

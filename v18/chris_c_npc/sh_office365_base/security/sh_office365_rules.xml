@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_office635_base_user_rule" model="ir.rule">
+        <field name="name">Own Records</field>
+        <field name="model_id" ref="sh_office365_base.model_sh_office365_base_config"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('sh_office365_base.sh_office365_base_user'))]"/>
+    </record>
+    <record id="sh_office635_base_manager_rule" model="ir.rule">
+        <field name="name">All Records</field>
+        <field name="model_id" ref="sh_office365_base.model_sh_office365_base_config"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('sh_office365_base.sh_office365_base_manager'))]"/>
+    </record>
+</odoo>

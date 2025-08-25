@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Opportunity List view -->
+    <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+        <field name="name">crm.lead.list.opportunity.inherit.npc_crm.npc_twilio_sms</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="npc_crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='has_message']" position="after">
+                <field name="last_incoming_message" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

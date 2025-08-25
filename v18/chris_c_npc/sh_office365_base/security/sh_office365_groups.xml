@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_office365_base_category" model="ir.module.category">
+        <field name="name">Office 365</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="sh_office365_base_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="sh_office365_base_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="sh_office365_base_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="sh_office365_base_category"/>
+        <field name="implied_ids" eval="[(4, ref('sh_office365_base_user'))]"/>
+    </record>
+</odoo>

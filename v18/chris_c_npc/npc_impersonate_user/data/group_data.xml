@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+        <function model="res.groups" name="_update_can_be_impersonated_group_view"/>
+</odoo>

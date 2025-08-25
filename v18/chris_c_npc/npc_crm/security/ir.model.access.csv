@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_practice_type_admin,access npc_crm.practice_type admin,model_npc_crm_practice_type,base.group_system,1,1,1,1
+access_practice_type_user,access npc_crm.practice_type user,model_npc_crm_practice_type,base.group_user,1,0,0,0
+access_physician_admin,access npc_crm.physician admin,model_npc_crm_physician,sales_team.group_sale_salesman,1,1,1,1
+access_physician_user,access npc_crm.physician user,model_npc_crm_physician,base.group_user,1,0,0,0

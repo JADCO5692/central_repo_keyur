@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <record id="sale_commission_logs_view_list" model="ir.ui.view">
+        <field name="name">sale.commission.logs.view.list</field>
+        <field name="model">sale.commission.logs</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="name" optional="show"/> 
+                <field name="collaborator_id" optional="show"/>
+                <field name="np_partner_id" optional="hide"/>
+                <field name="practice_type_ids" optional="show" widget="many2many_tags"/> 
+                <field name="np_email" optional="show"/>
+                <field name="np_state" optional="show" widget="many2many_tags" string="NP State"/> 
+                <field name="np_phone" optional="show"/>
+                <field name="npc_user_type" optional="hide"/>
+                
+                <field name="effective_date" optional="show"/>
+                <field name="np_monthly_total" optional="show" sum="Monthly"/>
+                <field name="physician_monthly_fee" optional="show" sum="Physician Monthly Fee"/>
+                <field name="physician_fee" optional="show" sum="Physician Fee"/>
+                <field name="npc_monthly_fee" optional="show" sum="NPC Monthly Fee"/>
+                <field name="npc_fee" optional="show" sum="NPC Fee"/>
+                <field name="prorate_percentage" optional="show" widget="percentage" avg="Prorate %"/>
+                
+                <field name="order_name" optional="hide"/>
+                <field name="invoice_id" optional="hide"/>
+                <field name="invoice_date" optional="hide"/>
+                <field name="invoice_date_due" optional="hide"/>
+                <field name="custom_contract_end_date" optional="hide"/>
+                <field name="first_month_total" optional="hide"/>
+                <field name="first_month_physician_fee" optional="hide"/>
+                <field name="first_month_npc_fee" optional="hide"/>
+                
+                <field name="lead_id" optional="hide"/>
+                <field name="salesperson_id" optional="hide"/>
+                
+                <field name="subscription_pause_date" optional="hide"/>
+                <field name="subscription_status" optional="hide"/> 
+            </list>
+        </field>
+    </record>
+    <record id="sale_commission_logs_search_view" model="ir.ui.view">
+        <field name="name">Commission Logs Search</field>
+        <field name="model">sale.commission.logs</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- Search Fields -->
+                <field name="name" /> 
+                <field name="order_name" string="Order"/>
+                <field name="np_partner_id" string="NP Name"/>
+                <field name="np_email" string="NP Email"/>
+                <field name="invoice_id" string="Invoice"/>
+                <field name="collaborator_id" string="Collaborator"/>        
+                <field name="subscription_status" string="Subscription Status"/>
+                <!-- Filters -->
+                <filter name="filter_date_current_month_due" string="Current month - Due Date"
+                    domain="[
+                            ('invoice_date_due', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                            ('invoice_date_due', '&lt;', (context_today() + relativedelta(months=+1, day=1)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter name="filter_date_last_month_due" string="Last month - Due Date" 
+                    domain="[
+                            ('invoice_date_due', '&lt;', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')), 
+                            ('invoice_date_due', '&gt;=', (context_today() + relativedelta(months=-1, day=1)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter string="Last 30 Days - Due Date" name="filter_last_30_days_due" 
+                    domain="[
+                            ('invoice_date_due','&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter string="Last 3 Months - Due Date" name="filter_last_3_month_dues" 
+                    domain="[
+                            ('invoice_date_due','&gt;=', (context_today() - relativedelta(months=3)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter string="Last 12 Months - Due Date" name="filter_last_12_month_dues" 
+                    domain="[
+                            ('invoice_date_due','&gt;=', (context_today() - relativedelta(years=1)).strftime('%Y-%m-%d'))
+                        ]"/>
+                        
+                <filter name="filter_date_current_month" string="Current month - Invoice Date"
+                    domain="[
+                            ('invoice_date', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                            ('invoice_date', '&lt;', (context_today() + relativedelta(months=+1, day=1)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter name="filter_date_last_month" string="Last month - Invoice Date" 
+                    domain="[
+                            ('invoice_date', '&lt;', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')), 
+                            ('invoice_date', '&gt;=', (context_today() + relativedelta(months=-1, day=1)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter string="Last 30 Days - Invoice Date" name="filter_last_30_days" 
+                    domain="[
+                            ('invoice_date','&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter string="Last 3 Months - Invoice Date" name="filter_last_3_months" 
+                    domain="[
+                            ('invoice_date','&gt;=', (context_today() - relativedelta(months=3)).strftime('%Y-%m-%d'))
+                        ]"/>
+                <filter string="Last 12 Months - Invoice Date" name="filter_last_12_months" 
+                    domain="[
+                            ('invoice_date','&gt;=', (context_today() - relativedelta(years=1)).strftime('%Y-%m-%d'))
+                        ]"/> 
+                <group expand="1" string="Group by">
+                    <filter name="collaborator_id" string="Collaborator" context="{'group_by': 'collaborator_id'}"/>
+                    <filter name="np_partner_id" string="NP Name" context="{'group_by': 'np_partner_id'}"/>
+                    <filter name="invoice_date" string="Invoice Date" context="{'group_by': 'invoice_date'}" />
+                    <filter name="invoice_date_due" string="Due Date" context="{'group_by': 'invoice_date_due'}" />
+                    <filter name="subscription_status" string="Subscription Status" context="{'group_by': 'subscription_status'}" />
+                    <filter name="order_name" string="Origin" context="{'group_by': 'order_name'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_sale_commission_logs" model="ir.actions.act_window">
+        <field name="name">Sale Commission Logs</field>
+        <field name="res_model">sale.commission.logs</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[]</field>
+    </record>
+    <menuitem id="menu_commisions_np" name="Commission" parent="accountant.menu_accounting" sequence="4">
+        <menuitem id="menu_commission_logs" name="Commission Log" action="action_sale_commission_logs"/>
+    </menuitem>
+</odoo>

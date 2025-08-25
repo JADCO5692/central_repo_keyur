@@ -1,0 +1,18 @@
+<odoo>
+
+    <template id="mail_notification" inherit_id="mail.mail_notification_layout" priority="10">
+        <xpath expr="//a[@t-att-href=&quot;button_access['url']&quot;]/.." position="attributes">
+                <attribute name="t-if">has_button_access and not message.npc_disable_access_btn</attribute>
+        </xpath>
+        <xpath expr="//td[@t-if='has_button_access']" position="attributes">
+                <attribute name="t-if">has_button_access and not message.npc_disable_access_btn</attribute>
+        </xpath>
+    </template>
+    <template id="mail_notification_light" inherit_id="mail.mail_notification_light">
+        <xpath expr="//t[@t-if='has_button_access']" position="attributes">
+            <attribute name="t-if">has_button_access and not message.npc_disable_access_btn</attribute>
+        </xpath>
+    </template>
+
+
+</odoo>

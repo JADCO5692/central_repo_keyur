@@ -1,0 +1,99 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_office365_mail
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-09 07:22+0000\n"
+"PO-Revision-Date: 2021-08-09 07:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_office365_mail
+#: model:ir.model,name:sh_office365_mail.model_ir_attachment
+msgid "Attachment"
+msgstr "Attachement"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_ir_attachment__attachment_id
+msgid "Attachment Id"
+msgstr "ID de pièce jointe"
+
+#. module: sh_office365_mail
+#: model:ir.model,name:sh_office365_mail.model_sh_office365_base_config
+msgid "Authorize your credentials"
+msgstr "Autoriser vos informations d'identification"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config__auto_schedule_mail
+msgid "Auto Schedule"
+msgstr "Horaire automatique"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_ir_attachment__display_name
+#: model:ir.model.fields,field_description:sh_office365_mail.field_mail_message__display_name
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config__display_name
+msgid "Display Name"
+msgstr "Afficher un nom"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config__export_mail
+msgid "Export"
+msgstr "Exportation"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_ir_attachment__id
+#: model:ir.model.fields,field_description:sh_office365_mail.field_mail_message__id
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config__id
+msgid "ID"
+msgstr "identifiant"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config__import_mail
+msgid "Import"
+msgstr "Importer"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_ir_attachment____last_update
+#: model:ir.model.fields,field_description:sh_office365_mail.field_mail_message____last_update
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification sur"
+
+#. module: sh_office365_mail
+#: model_terms:ir.ui.view,arch_db:sh_office365_mail.sh_office365_mail_form
+msgid "Mail"
+msgstr "Poster"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_sh_office365_base_config__manage_log_mail
+msgid "Manage Log History"
+msgstr "Gérer l'historique des journaux"
+
+#. module: sh_office365_mail
+#: model:ir.model,name:sh_office365_mail.model_mail_message
+msgid "Message"
+msgstr "Un message"
+
+#. module: sh_office365_mail
+#: code:addons/sh_office365_mail/models/sh_mail_config.py:0
+#, python-format
+msgid "Select Import to import mails"
+msgstr "Sélectionnez Importer pour importer des mails"
+
+#. module: sh_office365_mail
+#: model_terms:ir.ui.view,arch_db:sh_office365_mail.sh_office365_mail_form
+msgid "Sync Mails"
+msgstr "Synchroniser les mails"
+
+#. module: sh_office365_mail
+#: model:ir.model.fields,field_description:sh_office365_mail.field_mail_mail__unique_id
+#: model:ir.model.fields,field_description:sh_office365_mail.field_mail_message__unique_id
+msgid "Unique ID"
+msgstr "Identifiant unique"

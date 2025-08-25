@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <data>
+        <record id="mail_template_meeting_invitation" model="mail.template">
+            <field name="name">Zoom meeting invitation</field>
+            <field name="subject">Meeting Invitation</field>
+            <field name="email_from">{{object.sudo().create_uid.email_formatted}}</field>
+            <field name="email_to">{{','.join([partner.email for partner in object.partner_ids if partner.email != object.user_id.email])}}</field>
+            <field name="model_id" ref="zoom_meeting.model_calendar_event"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <t t-out="object.user_id.name"/>
+ is inviting you to a scheduled Zoom meeting.<br/>
+                    <br/>
+                    <p>Topic: <t t-out="object.name"/>
+                    </p>
+                    <br/>
+                    <p t-if="not object.start.hour == 0 and object.start.minute == 0 and object.start.second == 0 and object.start.microsecond == 0">Time: <t t-out='(object.start.strftime("%d/%m/%Y %H:%M:%S %p"))'/>
+                    </p>
+                    <p t-else="">Time: <t t-out='(object.start.strftime("%d/%m/%Y"))'/>
+                    </p>
+                    <br/>
+                    <br/>
+                    <p>Join Zoom Meeting</p>
+                    <t t-out="object.videocall_location"/>
+                    <br/>
+                    <br/>
+                    <p>Meeting ID:</p>
+                    <t t-out="object.meeting_id"/>
+                    <br/>
+                    <p>Passcode:</p>
+                    <t t-out="object.password"/>
+                    <br/>
+                    <br/>
+                </p>
+                        Do not hesitate to contact us if you have any questions.
+                <br/>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_meeting_delete_alternative_hosts" model="mail.template">
+            <field name="name">Zoom meeting delete for alternative hosts</field>
+            <field name="subject">Regarding meeting Cancelation</field>
+            <field name="email_from">piyush.chauhan322@webkul.in</field>
+            <field name="email_to">{{object.alternative_hosts}}</field>
+            <field name="model_id" ref="zoom_meeting.model_calendar_event"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <t t-out="object.user_id.name"/>
+ is canceling the Zoom meeting.<br/>
+                    <br/>
+                    <p>Topic: <t t-out="object.name"/>
+                    </p>
+                    <br/>
+                    <p t-if="not object.start.hour == 0 and object.start.minute == 0 and object.start.second == 0 and object.start.microsecond == 0">Time: <t t-out='(object.start.strftime("%d/%m/%Y %H:%M:%S %p"))'/>
+                    </p>
+                    <p t-else="">Time: <t t-out='(object.start.strftime("%d/%m/%Y"))'/>
+                    </p>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p>Meeting ID:</p>
+                    <t t-out="object.meeting_id"/>
+                    <br/>
+                </p>
+                        Do not hesitate to contact us if you have any questions.
+                <br/>
+            </div>
+        </field>
+    </record>
+    <record id="mail_template_meeting_delete_attendees" model="mail.template">
+            <field name="name">Zoom meeting delete for attendees</field>
+            <field name="subject">Regarding meeting Cancelation</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted or '') }}</field>
+            <field name="email_to">{{','.join([partner.email for partner in object.partner_ids if partner.email != object.user_id.email])}}</field>
+            <field name="model_id" ref="zoom_meeting.model_calendar_event"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <t t-out="object.user_id.name"/>
+ is canceling the Zoom meeting.<br/>
+                    <br/>
+                    <p>Topic: <t t-out="object.name"/>
+                    </p>
+                    <br/>
+                    <p t-if="not object.start.hour == 0 and object.start.minute == 0 and object.start.second == 0 and object.start.microsecond == 0">Time: <t t-out='(object.start.strftime("%d/%m/%Y %H:%M:%S %p"))'/>
+                    </p>
+                    <p t-else="">Time: <t t-out='(object.start.strftime("%d/%m/%Y"))'/>
+                    </p>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p>Meeting ID:</p>
+                    <t t-out="object.meeting_id"/>
+                    <br/>
+                </p>
+                        Do not hesitate to contact us if you have any questions.
+                <br/>
+            </div>
+        </field>
+    </record>
+</data>
+</odoo>

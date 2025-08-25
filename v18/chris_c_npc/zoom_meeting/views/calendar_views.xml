@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <record id="zoom_view_calendar_event_form" model="ir.ui.view">
+        <field name="name">zoom.inherit.form</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <button name="generate_meeting_link" type="object" string="Create Zoom meeting" class="m-1 btn-primary" invisible="meeting_id"/>
+                <button name="start_zoom_meeting" type="object" string="Start Zoom meeting" class="m-1 btn-primary" invisible="not meeting_id or not start_meeting_url"/>
+                <button name="update_meeting" type="object" string="Update Zoom meeting" class="m-1 btn-success" invisible="not meeting_id"/>
+                <button name="delete_meeting" type="object" string="Delete Zoom meeting" class="m-1 btn-danger" invisible="not meeting_id"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Zoom Meeting Description" name="meeting">
+                    <group name="Meeting Description">
+                        <field name="meeting_id" invisible="True"/>
+                        <field name="start_meeting_url" invisible="True"/>
+                        <field name="zoom_description"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="zoom_quick_view_calendar_event_form" model="ir.ui.view">
+        <field name="name">alendar.event.form.quick_create</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form_quick_create"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_row')]" position="before">
+                
+                    <button name="generate_meeting_link" type="object" string="Create Zoom meeting" class="m-1 btn-primary" invisible="meeting_id"/>
+                    <button name="start_zoom_meeting" type="object" string="Start Zoom meeting" class="m-1 btn-primary" invisible="not meeting_id or not start_meeting_url"/>
+                    <button name="update_meeting" type="object" string="Update Zoom meeting" class="m-1 btn-success" invisible="not meeting_id"/>
+                    <button name="delete_meeting" type="object" string="Delete Zoom meeting" class="m-1 btn-danger" invisible="not meeting_id"/>
+                    <field name="meeting_id" invisible="True"/>
+                    <field name="start_meeting_url" invisible="True"/>
+                    <field name="zoom_description" invisible="True"/>
+                
+            </xpath>
+            </field>
+            </record>
+</odoo>

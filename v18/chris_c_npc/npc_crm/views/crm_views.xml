@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- PRACTICE TYPES -->
+    <!-- Practice type list view -->
+    <record id="practice_type_list" model="ir.ui.view">
+        <field name="name">npc_crm.practice_type.form</field>
+        <field name="model">npc_crm.practice_type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+                <field name="sequence"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Practice type action -->
+    <record id="action_practice_type" model="ir.actions.act_window">
+        <field name="name">Practice Types</field>
+        <field name="res_model">npc_crm.practice_type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Practice type menu -->
+    <menuitem id="menu_practice_type"
+              name="Practice Types"
+              sequence="99"
+              parent="crm.crm_menu_config"
+              action="action_practice_type"/>
+
+    <!-- CRM LEADS: -->
+    <!-- Lead form view -->
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.npc_crm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group string="Collaboration" invisible="type!='opportunity'">
+                    <field name="physician_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="company_currency" column_invisible="1"/>
+                            <field name="md_lead_id" options="{'no_create': True, 'no_create_edit':True}"
+                                   string="Physician"/>
+                            <field name="name" string="Physician Contact" optional="hide"/>
+                            <field name="email"/>
+                            <field name="collab_fee"
+                                   widget="monetary"
+                                   options="{'currency_field': 'company_currency'}"/>
+                            <field name="npc_fee"
+                                   widget="monetary"
+                                   options="{'currency_field': 'company_currency'}"/>
+                            <field name="total_monthly_fee"
+                                   sum="total fee"
+                                   widget="monetary"
+                                   options="{'currency_field': 'company_currency'}"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='medium_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='lead']/group[1]/group[2]/div[1]" position="after">
+                <field name='custom_first_name' readonly='1'/>
+                <field name='custom_last_name' readonly='1'/>
+            </xpath>
+            <xpath expr="//field[@name='day_close']" position="after">
+                <field name="medium_id"
+                       string="Referral Source"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button groups="sign.group_sign_user" name="open_signatures" type="object" class="oe_stat_button"
+                        icon="fa-pencil">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="signature_count"/>
+                        </span>
+                        <span class="o_stat_text">Signature Requested</span>
+                    </div>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Lead list view -->
+    <record id="crm_case_tree_view_leads" model="ir.ui.view">
+        <field name="name">crm.lead.list.lead.inherit.npc_crm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email_from']" position="after">
+                <field name="reg_date" optional="show"/>
+            </xpath>
+            <xpath expr="." position="attributes">
+                <attribute name="default_order">reg_date desc</attribute>
+            </xpath>
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="before">
+                <field name="npc_user_type" optional="show"/>
+                <field name="practice_type_ids" widget="many2many_tags" optional="show"/>
+                <field name="controlled_substances" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Lead search view -->
+    <record id="crm_lead_view_search_npc" model="ir.ui.view">
+        <field name="name">crm.lead.view.search.npc</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="mode">primary</field>
+        <field name="priority">35</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="replace"/>
+            <xpath expr="//field[@name='team_id']" position="replace"/>
+            <xpath expr="//field[@name='stage_id']" position="replace"/>
+            <xpath expr="//field[@name='country_id']" position="replace"/>
+            <xpath expr="//field[@name='city']" position="replace"/>
+            <xpath expr="//field[@name='phone_mobile_search']" position="replace"/>
+            <xpath expr="//field[@name='activity_state']" position="replace"/>
+            <xpath expr="//field[@name='lead_properties']" position="replace"/>
+            <xpath expr="//filter[@name='salesperson']" position="before">
+                <filter string="Collaborating Physicians"
+                        name="group_by_physicians"
+                        context="{'group_by':'physician_partner_ids'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Opportunity List view -->
+    <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+        <field name="name">crm.lead.list.opportunity.inherit.npc_crm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="id" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="has_message" optional="show"/>
+                <field name="x_collaborator" optional="show"/>
+                <field name="physician_ids" optional="show"/>
+                <field name="recurring_revenue" optional="show"/>
+                <field name="company_currency"/>
+                <field name="referred" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="date_last_stage_update" optional="show"/>
+                <field name="reg_date" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- NP/PA -->
+    <record id="crm_lead_np_pipeline" model="ir.actions.act_window">
+        <field name="name">NP/PA Pipeline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">kanban,list,graph,pivot,form,calendar,activity</field>
+        <field name="domain"
+               eval="[('type','=','opportunity'), ('team_id', '=', ref('sales_team.team_sales_department'))]"/>
+        <field name="context" eval="{
+            'default_type': 'opportunity',
+            'default_team_id': ref('sales_team.team_sales_department'),
+            }"/>
+        <field name="search_view_id" ref="crm_lead_view_search_npc"/>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'kanban', 'view_id': ref('crm.crm_case_kanban_view_leads')}),
+                      (0, 0, {'view_mode': 'list', 'view_id': ref('crm.crm_case_tree_view_oppor')}),
+                      (0, 0, {'view_mode': 'calendar', 'view_id': ref('crm.crm_case_calendar_view_leads')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('crm.crm_lead_view_pivot')}),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('crm.crm_lead_view_graph')}),
+                      ]"/>
+    </record>
+
+    <menuitem id="menu_crm_np_pipeline"
+              name="NP Pipeline"
+              parent="crm.crm_menu_sales"
+              action="crm_lead_np_pipeline"
+              sequence="0"/>
+
+    <!-- Physician -->
+    <record id="crm_lead_md_pipeline" model="ir.actions.act_window">
+        <field name="name">Physician Pipeline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,kanban,graph,pivot,form,calendar,activity</field>
+        <field name="domain"
+               eval="[('type','=','opportunity'), ('team_id', '=', ref('team_physician'))]"/>
+        <field name="context" eval="{
+            'default_type': 'opportunity',
+            'default_npc_user_type': 'PHYS',
+            'default_team_id': ref('team_physician'),
+            }"/>
+        <field name="search_view_id" ref="crm_lead_view_search_npc"/>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'list', 'view_id': ref('crm.crm_case_tree_view_oppor')}),
+                      (0, 0, {'view_mode': 'kanban', 'view_id': ref('crm.crm_case_kanban_view_leads')}),
+                      (0, 0, {'view_mode': 'calendar', 'view_id': ref('crm.crm_case_calendar_view_leads')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('crm.crm_lead_view_pivot')}),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('crm.crm_lead_view_graph')}),
+                      ]"/>
+    </record>
+
+    <menuitem id="menu_crm_md_pipeline"
+              name="Physician Pipeline"
+              parent="crm.crm_menu_sales"
+              action="crm_lead_md_pipeline"
+              sequence="0"/>
+
+    <!-- CRM STAGES -->
+    <!-- Lead stage form view -->
+    <record id="crm_stage_form" model="ir.ui.view">
+        <field name="name">crm.stage.form.inherit.npc_crm</field>
+        <field name="model">crm.stage</field>
+        <field name="inherit_id" ref="crm.crm_stage_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="default_probability"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

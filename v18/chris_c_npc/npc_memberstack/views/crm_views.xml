@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Lead form view -->
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.npc_memberstack</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='internal_notes']" position="before">
+                <page string="Memberstack Information" name="memberstack_info" invisible="not memberstack_id">
+                    <group>
+                        <field name="memberstack_id" groups="base.group_no_one" readonly="1"/>
+                        <group string="Basic Profile">
+                            <field name="reg_date"/>
+                            <field name="email_verified"/>
+                        </group>
+                        <group string="Professional Information">
+                            <field name="board_certs"/>
+                            <field name="npi_number"/>
+                            <field name="controlled_substances"/>
+                            <field name="medical_degree"/>
+                            <field name="practice_type_ids" widget="many2many_tags"/>
+                            <field name="active_license_state_ids"
+                                   widget="many2many_tags"
+                                   domain="[('country_id', '=', %(base.us)d)]"
+                                   options="{'no_create': True}"/>
+                            <field name="npc_user_type"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

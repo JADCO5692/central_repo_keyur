@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- LEAD VIEWS -->
+    <!-- Lead form view -->
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.npc_sharetribe</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone']/.." position="after">
+                <field name="npc_user_type"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='internal_notes']" position="before">
+                <page string="Information" name="sharetribe_info" invisible="not sharetribe_id">
+                    <group>
+                        <field name="sharetribe_id" groups="base.group_no_one" readonly="1"/>
+                        <group string="Basic Profile">
+                            <!--                            <field name="npc_user_type"/>-->
+                            <field name="reg_date"/>
+                            <field name="practice_state_ids"
+                                   widget="many2many_tags"
+                                   domain="[('country_id', '=', %(base.us)d)]"
+                                   options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                            <field name="practice_type_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color'}"/>
+                            <field name="controlled_substances"/>
+                            <field name="license_type"/>
+                            <field name="availability_start"/>
+                            <field name="availability_start_pub"/>
+                            <field name="custom_user_referral"/>
+                            <field name="summary" invisible="1"/>
+                            <field name="npi_number" invisible="1"/>
+                            <field name="has_linkedin" invisible="1"/>
+                            <field name="linkedin_url" widget="url" invisible="1"/>
+                            <field name="years_experience" invisible="1"/>
+                        </group>
+                        <group string="Intial Choice" name="intial_choice">
+                            <field name="calendlyintialisation_url" widget="url" string="URL"/>
+                            <field name="calendlyintialisation_date" string="Date"/>
+                            <separator string="Favorites"/>
+                            <field name="favorites_ids" widget="many2many_tags" nolabel="1" readonly="1"/>
+                            <separator string="Calendly Q&amp;A"/>
+                            <field name="custom_calendly_qa_ids" readonly="1" nolabel="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="answer"/>
+                                </list>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+                <page string="Sharetribe Information" name="sharetribe_info" invisible="not sharetribe_id">
+                    <notebook>
+                        <page string="Profile" name="profile">
+                            <group>
+                                <field name="sharetribe_id" groups="base.group_no_one" readonly="1"/>
+                                <group string="Basic Profile">
+                                    <!--                            <field name="npc_user_type"/>-->
+                                    <field name="practice_state_ids"
+                                           widget="many2many_tags"
+                                           domain="[('country_id', '=', %(base.us)d)]"
+                                           options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                    <field name="reg_date"/>
+                                    <field name="has_linkedin"/>
+                                    <field name="linkedin_url" widget="url"/>
+                                    <field name="custom_user_referral"/>
+                                    <field name="summary"/>
+                                </group>
+                                <group string="Credentials &amp; Preferences">
+                                    <field name="license_type"/>
+                                    <field name="npi_number"/>
+                                    <field name="controlled_substances"/>
+                                    <field name="practice_type_ids" widget="many2many_tags"
+                                           options="{'color_field': 'color'}"/>
+                                    <field name="years_experience"/>
+                                    <field name="availability_start"/>
+                                    <field name="availability_start_pub"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Favorites" name="favorites">
+                            <field name="favorites_ids" options="{'no_create': True, 'no_edit': True}" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Calendly" name="calendly">
+                            <group>
+                                <field name="calendlyintialisation" widget="json_editor"/>
+                                <field name="calendlyintialisation_url" widget="url"/>
+                                <field name="calendlyintialisation_date"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </page>
+                <page string="Work History" name="work_history" invisible="not sharetribe_id">
+                    <field name="work_history_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="company"/>
+                            <field name="location"/>
+                            <field name="year_start"/>
+                            <field name="month_start"/>
+                            <field name="year_end"/>
+                            <field name="month_end"/>
+                            <field name="is_current"/>
+                            <field name="description"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="custom_sch_zoom_call_date_alternative"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Lead list view -->
+    <record id="crm_case_tree_view_leads" model="ir.ui.view">
+        <field name="name">crm.lead.list.lead.inherit.npc_sharetribe</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="before">
+                <field name="practice_state_ids" optional="show" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Lead search view -->
+    <record id="crm_lead_view_search" model="ir.ui.view">
+        <field name="name">crm.lead.view.search.npc_sharetribe</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="npc_crm.crm_lead_view_search_npc"/>
+        <field name="priority">40</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="practice_state_ids"/>
+                <field name="physician_ids"
+                       filter_domain="['|', ('physician_ids.md_lead_id.name', 'ilike', self), ('physician_ids.name.name', 'ilike', self)]"/>
+                <field name="practice_type_ids"/>
+                <field name="user_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- OPPORTUNITY VIEWS -->
+    <!-- Opportunity List view -->
+    <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+        <field name="name">crm.lead.list.opportunity.inherit.npc_crm.npc_sharetribe</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="npc_crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='expected_revenue']" position="after">
+                <field name="practice_type_ids" widget="many2many_tags" optional="show"/>
+                <field name="practice_state_ids" widget="many2many_tags" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='reg_date']" position="after">
+                <field name="availability_start_pub" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Opportunity kanban view -->
+    <record id="crm_case_kanban_view_leads" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.lead.inherit.npc_crm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="templates//field[@name='tag_ids']" position="replace">
+            </xpath>
+            <xpath expr="//footer" position="before">
+                <div t-if="record.practice_state_ids.raw_value.length" title="States Needing Collaborator" class="mt-1">
+                    <i class="fa fa-fw fa-lg text-muted fa-flag me-1 float-start"/>
+                    <field name="practice_state_ids" widget="many2many_tags"/>
+                </div>
+                <div t-if="record.physician_ids.raw_value.length" title="Collaborating Physicians" class="mt-1">
+                    <i class="fa fa-fw fa-lg text-muted fa-user-md me-1 float-start"/>
+                    <field name="physician_ids" widget="many2many_tags"/>
+                </div>
+                <div t-if="record.user_id.raw_value" title="Salesperson" class="mt-1">
+                    <i class="fa fa-fw fa-lg text-muted fa-user me-1 float-start"/>
+                    <field name="user_id"/>
+                </div>
+                <div t-if="record.practice_type_ids.raw_value.length" title="Practice Types" class="mt-1">
+                    <field name="practice_type_ids"
+                           widget="many2many_tags"
+                           options="{'color_field': 'color'}"/>
+                </div>
+            </xpath>
+            <xpath expr="templates//field[@name='partner_id']" position="replace"/>
+            <xpath expr="//footer//field[@name='priority']" position="replace"/>
+        </field>
+    </record>
+
+
+</odoo>

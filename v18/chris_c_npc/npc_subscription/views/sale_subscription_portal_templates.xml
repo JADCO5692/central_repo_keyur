@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="subscription_portal_sidebar" inherit_id="sale_subscription.subscription_portal_sidebar">
+            <xpath expr="//t[@t-if='enable_token_management']/t[@t-else='']" position="replace"/>
+            <xpath expr="//button[@t-elif='not user._is_public()']" position="replace"/>
+            <xpath expr="//a[@t-else='providers_sudo or tokens_sudo']" position="replace"/>
+    </template>
+</odoo>

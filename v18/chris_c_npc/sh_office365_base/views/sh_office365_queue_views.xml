@@ -1,0 +1,49 @@
+<odoo>
+    <record id='sh_office365_contact_tree' model='ir.ui.view'>
+        <field name="name">sh.office365.contact.list</field>
+        <field name="model">sh.office.queue</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sh_queue_name"/>
+                <field name="sh_contact_id"/>
+                <field name="queue_sync_date"/>
+                <field name="sh_current_state"/>
+                <field name="sh_current_config"/>
+                <field name="sh_message"/>
+            </list>
+        </field>
+    </record>
+    <record id='sh_office365_calendar_tree' model='ir.ui.view'>
+        <field name="name">sh.office365.calendar.list</field>
+        <field name="model">sh.office.queue</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sh_queue_name"/>
+                <field name="sh_calendar_id"/>
+                <field name="queue_sync_date"/>
+                <field name="sh_current_state"/>
+                <field name="sh_current_config"/>
+                <field name="sh_message"/>
+            </list>
+        </field>
+    </record>
+    <record id="sh_office365_contact_queue_search_view" model="ir.ui.view">
+        <field name="name">office365.contact.queue.search.view</field>
+        <field name="model">sh.office.queue</field>
+        <field name="arch" type="xml">
+            <search string="Office365 Queue">
+                <field name="sh_queue_name"/>
+                <field name="sh_contact_id" />
+                <field name="sh_calendar_id"/>
+                <field name="sh_current_state"/>
+                <separator />
+                <filter string="Contact" name="contact_queue" domain="[('sh_contact_id', '!=', False),('sh_current_state', '=', 'draft')]" />
+                <filter string="Calendar" name="calendar_queue" domain="[('sh_calendar_id', '!=', False),('sh_current_state', '=', 'draft')]" />
+                <group name="group" string="Group By">
+                    <filter name="status_filter" string="Status" context="{'group_by':'sh_current_state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <menuitem name="Queue" id="sh_office365_queue" parent="sh_office365_base" sequence="2"/>
+</odoo>
