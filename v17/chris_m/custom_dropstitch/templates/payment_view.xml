@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="website_sale_payment_inherit_form_view_cd" inherit_id="aspl_website_partial_payment_ee.website_sale_payment_inherit_form_view" name="template_name">
+        <xpath expr="//tr[@t-if='user_id.partner_id.allow_partial_payment']" position="replace">
+            <tr id="partial_payment_values" t-if="user_id.partner_id.allow_partial_payment">
+                <td colspan="2" class="border-0 ps-0 pt-3" style="width:60%">
+                    <input type="checkbox" class="form-check-input d-none" checked="checked" id="payment_checkbox" disabled=""/>
+                    <strong>Down-Payment</strong>
+                </td>
+                <td class="partial_payment_switch_button text-end border-0 px-0 pt-3" >
+                    <input type="text" id="payment_values" t-att-value='"{0:.2f}".format(website_sale_order.get_discount_amount())' t-att-data-max="website_sale_order.amount_total" style="text-align:right" name="payment_values" class="form-control"/> 
+                </td>
+            </tr>
+        </xpath>
+    </template>
+    <template id="payment_delivery_inherit" name="Delivery Costs" inherit_id="website_sale.payment">
+        <xpath expr="//t[@name='website_sale_non_free_cart']/div[contains(@class,'alert')]" position="attributes">
+            <attribute name="t-attf-class">alert alert-warning mt-4 #{'' if website_sale_order.get_discount_amount() &gt; 0 else 'd-none'}</attribute>
+        </xpath>
+    </template>
+</odoo>

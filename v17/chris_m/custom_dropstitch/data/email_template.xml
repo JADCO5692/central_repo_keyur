@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Override Sale Order Confirmation Email Template -->
+        <!-- Set noupdate to False to allow modifications -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'sale'), ('name', '=', 'mail_template_sale_confirmation')]"/>
+            <value eval="{'noupdate': False}"/>
+        </function>
+
+        <!-- Modify partner_to field to use custom recipients for order confirmations -->
+        <record id="sale.mail_template_sale_confirmation" model="mail.template">
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_order_confirmation_ids') }}</field>
+        </record>
+
+        <!-- Reset noupdate to True to prevent future automatic updates -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'sale'), ('name', '=', 'mail_template_sale_confirmation')]"/>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+        <!-- Override Delivery Confirmation Email Template -->
+        <!-- Set noupdate to False to allow modifications -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'stock'), ('name', '=', 'mail_template_data_delivery_confirmation')]"/>
+            <value eval="{'noupdate': False}"/>
+        </function>
+
+        <!-- Modify partner_to field to use custom recipients for shipping confirmations -->
+        <record id="stock.mail_template_data_delivery_confirmation" model="mail.template">
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_shipping_confirmation_ids') }}</field>
+        </record>
+
+        <!-- Reset noupdate to True to prevent future automatic updates -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'stock'), ('name', '=', 'mail_template_data_delivery_confirmation')]"/>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+        <!-- Override Invoice Email Template -->
+        <!-- Set noupdate to False to allow modifications -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'account'), ('name', '=', 'email_template_edi_invoice')]"/>
+            <value eval="{'noupdate': False}"/>
+        </function>
+
+        <!-- Modify partner_to field to use custom recipients for invoice notifications -->
+        <record id="account.email_template_edi_invoice" model="mail.template">
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_invoice_generated_ids') }}</field>
+        </record>
+
+        <!-- Reset noupdate to True to prevent future automatic updates -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'account'), ('name', '=', 'email_template_edi_invoice')]"/>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+        <!-- Override Payment Receipt Email Template -->
+        <!-- Set noupdate to False to allow modifications -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'account'), ('name', '=', 'mail_template_data_payment_receipt')]"/>
+            <value eval="{'noupdate': False}"/>
+        </function>
+
+        <!-- Modify partner_to field to use custom recipients for payment confirmations -->
+        <record id="account.mail_template_data_payment_receipt" model="mail.template">
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_payment_completed_ids') }}</field>
+        </record>
+
+        <!-- Reset noupdate to True to prevent future automatic updates -->
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'account'), ('name', '=', 'mail_template_data_payment_receipt')]"/>
+            <value eval="{'noupdate': True}"/>
+        </function>
+
+    </data>
+</odoo>

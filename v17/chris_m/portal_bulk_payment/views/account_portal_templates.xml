@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_invoices_vk" name="Portal layout" inherit_id="account.portal_my_invoices" priority="20">
+        <xpath expr="//t[@t-foreach='invoices']/tr/td[1]" position="before">
+            <td colspan="1">
+                <input type="checkbox" name="invoices"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>

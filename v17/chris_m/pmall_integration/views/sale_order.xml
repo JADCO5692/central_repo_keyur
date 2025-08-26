@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+         <record id="pmall_sales_order_form_view_ext" model="ir.ui.view">
+            <field name="name">pmall.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <notebook position="inside">
+                        <page string="Pmall Info" name="Pmall Info" invisible="not pmall_order_log_id">
+                            <group>
+                                <group>
+                                    <field name="is_pmall_order" readonly="1"/> 
+                                    <field name="pmall_order_log_id" readonly="1"/> 
+                                    <field name="pmall_order_number" readonly="1"/> 
+                                    <field name="pmall_order_date" readonly="1"/> 
+                                    <field name="pmall_config_id" readonly="1"/> 
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+</odoo>

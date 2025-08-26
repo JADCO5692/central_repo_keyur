@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="method_form_stripe_custom" inherit_id="stripe_fee_ext.method_form_stripe" name="Payment Form: Stripe Fees">
+        <xpath expr="//t[@t-if='provider_sudo.stripe_fees_active and amount and currency']" position="replace">
+            <t t-if="provider_sudo.stripe_fees_active and amount and currency">
+                <t t-if='provider_sudo.get_fees(amount, partner_id,pm_sudo)>0'>
+                    <span class="badge rounded-pill text-bg-secondary ms-1">
+                        + <t t-esc="provider_sudo.get_fees(amount, partner_id,pm_sudo)"
+                            t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                        Fees
+                    </span>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="token_form_stripe_custom" inherit_id="stripe_fee_ext.token_form_stripe" name="Payment Token Form: Stripe Fees">
+        <xpath expr="//t[@t-if='provider_sudo.stripe_fees_active and amount and currency']" position="replace">
+            <t t-if="provider_sudo.stripe_fees_active and amount and currency">
+                <t t-if='provider_sudo.get_fees(amount, partner_id,pm_sudo)>0'>
+                    <span class="badge rounded-pill text-bg-secondary ms-1">
+                        + <t t-esc="provider_sudo.get_fees(amount, partner_id,pm_sudo) "
+                            t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                        Fees
+                    </span>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>

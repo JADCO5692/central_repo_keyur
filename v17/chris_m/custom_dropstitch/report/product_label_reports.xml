@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="paperformat_label_175x4" model="report.paperformat">
+        <field name="name">Label 1.75x4 inches</field>
+        <field name="format">custom</field>
+        <field name="page_height">102</field>
+        <field name="page_width">45</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="disable_shrinking" eval="True"/>
+        <field name="dpi">96</field>
+        <field name="default" eval="True"/>
+    </record>
+
+    <record id="gift_print_label_format" model="report.paperformat">
+        <field name="name">Gift Print Format</field>
+        <field name="default" eval="False"/>
+        <field name="format">custom</field>
+        <field name="page_height">138</field>
+        <field name="page_width">108</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_travel_ticket_label_102X45" model="ir.actions.report">
+        <field name="name">Product Labels 50x38mm</field>
+        <field name="model">mrp.production</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="paperformat_label_175x4"/>
+        <field name="report_name">custom_dropstitch.report_travel_ticket_label_102X45</field>
+        <field name="report_file">custom_dropstitch.report_travel_ticket_label_102X45</field>
+        <field name="binding_model_id" ref="model_mrp_production"/>
+        <field name="print_report_name">'Traveler - %s' % (object.name)</field>
+    </record>
+
+    <record id="action_report_mass_travel_ticket_labels_102X45" model="ir.actions.report">
+        <field name="name">Traveler Tickets</field>
+        <field name="model">mrp.production</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="paperformat_label_175x4"/>
+        <field name="report_name">custom_dropstitch.report_mass_travel_ticket_label_102X45</field>
+        <field name="report_file">custom_dropstitch.report_mass_travel_ticket_label_102X45</field>
+        <field name="binding_model_id" ref="model_mrp_production"/>
+        <field name="print_report_name">'Traveler Tickets'</field>
+    </record>
+
+    <record id="action_report_gift_label_print" model="ir.actions.report">
+        <field name="name">Gift Labels</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="gift_print_label_format"/>
+        <field name="report_name">custom_dropstitch.report_gift_message_label_print</field>
+        <field name="report_file">custom_dropstitch.report_gift_message_label_print</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="print_report_name">'Gift Card'</field>
+    </record>
+
+    <!-- wave transfer report -->
+    <record id="action_report_wt_gift_label_print" model="ir.actions.report">
+        <field name="name">Gift Cards</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="gift_print_label_format"/>
+        <field name="report_name">custom_dropstitch.report_wt_gift_message_label_print</field>
+        <field name="report_file">custom_dropstitch.report_wt_gift_message_label_print</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="print_report_name">'Gift Card'</field>
+    </record>
+    <record id="action_report_batch_delivery" model="ir.actions.report">
+        <field name="name">Batch Delivery Slip</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_dropstitch.report_batch_deliveryslip</field>
+        <field name="report_file">custom_dropstitch.report_batch_deliveryslip</field>
+        <field name="print_report_name">'Batch Delivery Slip - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_stock_picking_batch"/>
+        <field name="binding_type">report</field>
+    </record> 
+</odoo>

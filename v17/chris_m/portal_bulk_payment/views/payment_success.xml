@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="view_payment_success" name="Payment successfull">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 my-3">
+                        <div class="d-flex align-items-center">
+                            <a href="/my/home"><i class="fa fa-home"></i></a>
+                            <span class="px-2">/</span>
+                            <a href="/my/quotes">Quotations</a>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <div class="text-success">
+                            <h4>Payment successfully done</h4> 
+                        </div>
+                        <div class="mt-2">
+                            For Orders: 
+                            <t t-foreach="orders" t-as="order">
+                                <t t-esc="order.name" />
+                                <t t-if="len(orders) > 1 and not order_last" >
+                                    ,
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo> 

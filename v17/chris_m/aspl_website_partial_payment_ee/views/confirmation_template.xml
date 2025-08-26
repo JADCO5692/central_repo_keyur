@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="confirmation_inherit_form_view" name="Partial Payment" inherit_id="website_sale.confirmation">
+        <xpath expr="//table[hasclass('table')]" position="replace">
+            <table class="table">
+                <tbody>
+                    <t t-if="order.partial_pay_amount != 0.0">
+                        <tr>
+                            <td colspan="2">
+                                <t t-esc="order.get_portal_last_transaction().provider_id.name" />
+                            </td>
+                            <td class="text-right" width="100">
+                                <strong>Paid Total:</strong>
+                            </td>
+                            <td class="text-right" width="100">
+                                <strong t-field="order.partial_pay_amount" t-options="{'widget': 'monetary', 'display_currency': order.pricelist_id.currency_id}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                            </td>
+                            <td class="text-right" width="100">
+                                <strong>Remaining Amount:</strong>
+                            </td>
+                            <td class="text-right" width="100">
+                                <t t-set="amount" t-value="order.amount_total - order.partial_pay_amount"/>
+                                <strong t-esc="amount" t-options="{'widget': 'monetary', 'display_currency': order.pricelist_id.currency_id}" />
+                            </td>
+                        </tr>
+                    </t>
+                    <t t-else="">
+                        <tr>
+                            <td colspan="2">
+                                <t t-esc="order.get_portal_last_transaction().provider_id.name" />
+                            </td>
+                            <td class="text-right" width="100">
+                                <strong>Total:</strong>
+                            </td>
+                            <td class="text-right" width="100">
+                                <strong t-field="order.amount_total" t-options="{'widget': 'monetary', 'display_currency': order.pricelist_id.currency_id}" />
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+</odoo>

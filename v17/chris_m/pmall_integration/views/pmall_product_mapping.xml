@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pmall_product_mapping_view_form" model="ir.ui.view">
+        <field name="name">pmall.product.mapping.view.form</field>
+        <field name="model">pmall.product.mapping</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="partner_sku" readonly="1"/>
+                            <field name="odoo_product_id" readonly="1"/>
+                            <field name="odoo_product_partner_sku" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="pmall_product_mapping_view_tree" model="ir.ui.view">
+        <field name="name">pmall.product.mapping.view.tree</field>
+        <field name="model">pmall.product.mapping</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="partner_sku" />
+                <field name="odoo_product_id" />
+                <field name="odoo_product_partner_sku" />
+            </tree>
+        </field>
+    </record>
+    <record id="pmall_producyt_mapping_action" model="ir.actions.act_window">
+        <field name="name">Product Mapping</field>
+        <field name="res_model">pmall.product.mapping</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="pmall_integration.pmall_product_mapping_view_tree" />
+    </record>
+    <menuitem id="menu_products_mapping_menu" name="Pmall Product Mapping"
+        action="pmall_integration.pmall_producyt_mapping_action"
+        parent="pmall_integration.pmall_config_view_main_menu" sequence="20" />
+
+</odoo>

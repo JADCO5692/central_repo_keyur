@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+pmall_integration.access_pmall_config,access_pmall_config,pmall_integration.model_pmall_config,base.group_user,1,1,1,1
+pmall_integration.access_pmall_order_logs,access_pmall_order_logs,pmall_integration.model_pmall_order_logs,base.group_user,1,1,1,1
+pmall_integration.access_order_create_error_log,access_order_create_error_log,pmall_integration.model_order_create_error_log,base.group_user,1,1,1,1
+pmall_integration.access_shipping_status,access_shipping_status,pmall_integration.model_shipping_status,base.group_user,1,1,1,1
+pmall_integration.access_pmall_product_mapping,access_pmall_product_mapping,pmall_integration.model_pmall_product_mapping,base.group_user,1,1,1,1

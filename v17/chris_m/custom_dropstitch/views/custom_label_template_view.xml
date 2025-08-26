@@ -1,0 +1,62 @@
+<odoo>
+    <data>
+        <record id="view_custom_label_template_form" model="ir.ui.view">
+            <field name="name">custom.label.template.form</field>
+            <field name="model">custom.label.template</field>
+            <field name="arch" type="xml">
+                <form string="Custom Label">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="label_type" required="1"/>
+                            <field name="label_placement" required="1"/>
+                            <field name="bag_info" required="1"/>
+                            <field name="box_info" required="1"/>
+                            <field name="brand_label" required="1"/>
+                            <field name="care_label" required="1"/>
+                            <field name="instruction" required="1"/>
+                            <field name="pack_instr" required="1"/>
+                            <field name="label_image" widget="image" options="{'zoom': true}" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_custom_label_template_tree" model="ir.ui.view">
+            <field name="name">custom.label.template.tree</field>
+            <field name="model">custom.label.template</field>
+            <field name="arch" type="xml">
+                <tree string="Custom Label">
+                    <field name="name"/>
+                    <field name="label_type"/>
+                    <field name="label_placement"/>
+                    <field name="bag_info"/>
+                    <field name="box_info"/>
+                    <field name="brand_label"/>
+                    <field name="care_label"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_custom_label_template_search" model="ir.ui.view">
+            <field name="name">custom.label.template.search</field>
+            <field name="model">custom.label.template</field>
+            <field name="arch" type="xml">
+                <search string="Custom Label">
+                    <field name="name"/>
+                    <field name="label_type"/>
+                    <field name="label_placement"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_custom_label_template" model="ir.actions.act_window">
+            <field name="name">Custom Template Labels</field>
+            <field name="res_model">custom.label.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="menu_custom_label_template" name="Label Template" parent="custom_dropstitch.menu_sale_customizaion" action="action_custom_label_template"/>
+    </data>
+</odoo>

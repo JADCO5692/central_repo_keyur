@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="view_stock_landed_cost_form_custom" model="ir.ui.view">
+			<field name="name">stock.landed.cost.form.custom</field>
+			<field name="model">stock.landed.cost</field>
+			<field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+			<field name="arch" type="xml">
+				<field name="picking_ids" position="replace">
+					<field name="picking_ids" widget="many2many_tags" options="{'no_create_edit': True}" invisible="target_model != 'picking'" readonly="state == 'done'" domain="[('id', 'in', custom_picking_ids)]"/>
+                    <field name="custom_picking_ids" widget="many2many_tags" invisible="1"/>
+				</field>
+			</field>
+		</record>
+    </data>
+</odoo>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_picking_batch_form_custom" model="ir.ui.view">
+           <field name="name">stock.picking.batch.form</field>
+            <field name="model">stock.picking.batch</field>
+			<field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+			<field name="arch" type="xml">
+                <xpath expr="//field[@name='scheduled_date']" position="after">
+                    <field name="custom_carrier_id" required="1" readonly="state in ['cancel', 'done']" domain="[('id', 'in', custom_available_carrier_ids)]"/>
+                    <field name="custom_carrier_tracking_ref" readonly="state in ['cancel', 'done']"/>
+                    <field name='custom_delivery_price' invisible="1"/>
+                    <field name='custom_shipping_fees' invisible="1"/>
+                    <field name='custom_available_carrier_ids' invisible="1"/>
+                    <label for="custom_display_price" invisible="custom_shipping_fees == 'no_fees'"/>
+                    <div class="o_row" invisible="custom_shipping_fees == 'no_fees'">
+                        <field name='custom_display_price' widget="monetary" invisible="not custom_carrier_id" force_save="1"/>
+                        <button name="get_shipment_rate" type="object" >
+                            <i class="oi oi-arrow-right me-1"/>Get rate
+                        </button>
+                    </div>
+                    <field name="custom_journal_id" readonly="state in ['cancel', 'done']" options="{'no_open': True, 'no_create': True}" />
+                    <field name="custom_invoice_payment_state" invisible="1"/>
+                    <field name="custom_delivery_set" invisible="1"/>
+                    <field name="custom_sale_payment_term_id" readonly="1" invisible="1"/>
+                    <field name="custom_order_payment_term" readonly="1" invisible="1"/>
+                    <field name="is_show_gift_lable_action" invisible="1"/>
+                 </xpath>
+                <xpath expr="//form[1]/header" position="inside">
+                    <button string="Process Delivery" type="object"
+                            invisible ="state not in ('in_progress') " name="action_open_batch_delivery_stock_wizard" class="oe_highlight" />
+                    <button name="action_register_payment_batch_delivery_custom"
+                                type="object" class="oe_highlight"
+                                invisible ="custom_invoice_payment_state == False or  custom_order_payment_term != 'PrePayment'"
+                                context="{'dont_redirect_to_payments': True, 'display_account_trust': True}"
+                                string="Register Payment"/>
+                    <button string="Gift Card" type="object" name="action_download_delivery_gift_label" invisible="is_show_gift_lable_action == False"/>
+                </xpath>
+                <xpath expr="//form[1]/header[1]/button[@name='action_done'][4]" position="attributes">
+					<attribute name="invisible">state not in ["ready_to_be_sent"] or not quality_check_todo or ( not show_check_availability and custom_invoice_payment_state == True )</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="stock_picking_batch_form_custom_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.batch.form.quality.control.inherit.custom</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="inherit_id" ref="quality_control_picking_batch.stock_picking_batch_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='scheduled_date']" position="after">
+                     <field name="custom_invoice_payment_state" invisible="1"/>
+                    <field name="custom_delivery_set" invisible="1"/>
+                 </xpath>
+                <xpath expr="////form[1]/header/button[2]" position="replace">
+                  <button name="action_done" string="Validate" type="object" class="oe_highlight"
+                        invisible="state  not in  ('invoice_sent','ready_to_be_sent') or quality_check_todo or show_check_availability   or (custom_order_payment_term =='PrePayment' and custom_invoice_payment_state == True)"/>
+                </xpath>
+                <xpath expr="////form[1]/header/button[4]" position="replace">
+                     <button name="action_done" string="Validate" type="object"
+                        invisible="state not in  ('ready_to_be_sent') or not quality_check_todo and not show_check_availability or custom_invoice_payment_state == True"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="shipstation_ept_inherit_stock_picking_batch_form_custom_inherit" model="ir.ui.view">
+            <field name="name">Stock Picking Batch inherit custom</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="inherit_id" ref="shipstation_ept.shipstation_ept_inherit_stock_picking_batch_form"/>
+            <field name="arch" type="xml">
+                <field name="carrier_id" position="replace">
+                     <field name="carrier_id"
+                           invisible="1"
+                           options='{"no_create": 1, "no_create_edit": 1}'/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="stock_picking_batch.action_picking_tree_wave" model="ir.actions.act_window">
+        	<field name="context">{'search_default_draft': True, 'search_default_invoice_sent': True, 'search_default_in_progress': True, 'search_default_ready_to_be_sent': True}</field>
+        </record>
+        
+        <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
+            <field name="context">{'search_default_draft': True, 'search_default_invoice_sent': True, 'search_default_in_progress': True, 'search_default_ready_to_be_sent': True}</field>
+        </record>
+        
+        <record id="custom_stock_picking_batch_filter" model="ir.ui.view">
+            <field name="name">custom.stock.picking.batch.filter</field>
+            <field name="model">stock.picking.batch</field>
+            <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_filter"/>
+            <field name="arch" type="xml">
+                <filter name="in_progress" position="after">
+                    <filter name="invoice_sent" string="Invoice Sent" domain="[('state', '=', 'invoice_sent')]"/>
+                    <filter name="ready_to_be_sent" string="Ready to be Sent" domain="[('state', '=', 'ready_to_be_sent')]"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
+</odoo>

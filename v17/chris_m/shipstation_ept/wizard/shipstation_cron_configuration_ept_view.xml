@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--This is a common view for cron configuration wizard -->
+    <record id="shipstation_cron_configuration_ept_form_view"
+            model="ir.ui.view">
+        <field name="name">shipstation.cron.configuration.ept.form</field>
+        <field name="model">shipstation.cron.configuration.ept</field>
+        <field name="priority">11</field>
+        <field name="arch" type="xml">
+            <form string="Schedular" class="o_shipstation_ept">
+                <div class="oe_title mb-2 ml-2"
+                     invisible="shipstation_instance_id">
+                    <h1 class="o_on_board_heading">
+                        No Instance Created Yet!
+                    </h1>
+                </div>
+                <div class="oe_title"
+                     invisible="not context.get('is_calling_from_onboarding_panel', False) or not shipstation_instance_id">
+                    <h1 class="font-weight-bold o_on_board_heading">
+                        <field name="shipstation_instance_id" readonly="1" options="{'no_open': True}"/>
+                    </h1>
+                </div>
+                <div class="o_horizontal_separator o_onboard_header font-weight-bold"
+                     invisible="context.get('is_calling_from_onboarding_panel', False) and not context.get('is_instance_exists', False)">
+                    Order Information
+                </div>
+                <div class="app_settings_block">
+                    <group invisible="context.get('is_calling_from_onboarding_panel', False) and not context.get('is_instance_exists', False)">
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="shipstaion_order_auto_export" widget="boolean_toggle"
+                                           class="o_onboard_boolean_toggle"
+                                           style="margin-left: -0.5em"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span>
+                                        <h6>Export Orders</h6>
+                                    </span>
+                                    <div class="text-muted">
+                                        If checked, It will create a cron job to automatically Export Orders to
+                                        Shipstaiton at certain intervals.
+                                    </div>
+                                    <div class="o_onboard_cron_settings" invisible="not shipstaion_order_auto_export">
+                                        <field name="shipstation_export_order_interval_number"
+                                               placeholder="Interval Number"
+                                               required="shipstaion_order_auto_export"
+                                               class="o_onboard_cron_box"/>
+                                        <field name="shipstation_export_order_interval_type"
+                                               placeholder="Interval Type"
+                                               required="shipstaion_order_auto_export"
+                                               class="o_onboard_cron_type"/>
+                                        <field name="shipstation_export_order_next_execution"
+                                               placeholder="Next Execution Date"
+                                               required="shipstaion_order_auto_export"
+                                               class="o_onboard_cron_execution"/>
+                                        <field name="shipstation_export_order_user_id"
+                                               required="shipstaion_order_auto_export"
+                                               class="o_onboard_cron_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="shipstaion_validate_order" widget="boolean_toggle"
+                                           class="o_onboard_boolean_toggle"
+                                           style="margin-left: -0.5em"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span>
+                                        <h6>Validate Orders</h6>
+                                    </span>
+                                    <div class="text-muted">
+                                        If checked, It will create a cron job to automatically Validate Orders at
+                                        certain intervals.
+                                    </div>
+                                    <div class="o_onboard_cron_settings"
+                                         invisible="not shipstaion_validate_order">
+                                        <field name="shipstation_validate_order_interval_number"
+                                               placeholder="Interval Number"
+                                               required="shipstaion_validate_order"
+                                               class="o_onboard_cron_box"/>
+                                        <field name="shipstation_validate_order_interval_type"
+                                               placeholder="Interval Type"
+                                               required="shipstaion_validate_order"
+                                               class="o_onboard_cron_type"/>
+                                        <field name="shipstation_validate_order_next_execution"
+                                               placeholder="Next Execution Date"
+                                               required="shipstaion_validate_order"
+                                               class="o_onboard_cron_execution"/>
+                                        <field name="shipstation_validate_order_user_id"
+                                               required="shipstaion_validate_order"
+                                               class="o_onboard_cron_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </group>
+                </div>
+
+                <footer>
+                    <button string="Save" class="oe_highlight o_onboard_button" type="object" name="save"
+                            invisible="context.get('is_calling_from_onboarding_panel', False) and not context.get('is_instance_exists', False)"/>
+                    <button string="Cancel" special="cancel"
+                            class="oe_highlight o_onboard_button_white"/>
+                </footer>
+                <style>
+                    @charset "UTF-8";
+                    .o_shipstation_ept {
+                    padding-right: 0px !important;
+                    padding-left: 0px !important;
+                    }
+                    .o_settings_container_shopify_config{
+                    padding: 0 30px 0 30px !important;
+                    }
+
+                    .o_shopify_cell{
+                    width:100% !important;
+                    }
+
+                    .o_settings_container_shopify{
+                    padding: 0 25px 0 17px !important;
+                    }
+
+                    .table-responsive{
+                    overflow-x: inherit;
+                    }
+                </style>
+                <script>
+                    $('document').ready(function(){
+                    $('div.o_form_nosheet.o_shipstation_ept').parents('div.modal-content').addClass('on_board_custom_form');
+                    $('div.o_inner_group').addClass('o_settings_container_shopify_config');
+                    $('div.o_inner_group').removeClass('grid');
+                    $('div.o_cell').addClass('o_shopify_cell');
+                    });
+                </script>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_shipstation_cron_configuration_ept" model="ir.actions.act_window">
+        <field name="name">Scheduled Actions Configuration</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shipstation.cron.configuration.ept</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

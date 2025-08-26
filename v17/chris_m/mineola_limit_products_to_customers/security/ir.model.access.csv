@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+website_sale.access_product_template_public,Block Non-Portal Users from Seeing Products,product.model_product_template,base.group_portal,1,0,0,0
+custom_prod_list_access,Mineola: Custom Products List Tree,model_custom_prod_list,,1,1,1,1

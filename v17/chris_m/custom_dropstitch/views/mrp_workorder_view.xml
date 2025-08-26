@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="mrp_production_workorder_tree_view_custom" model="ir.ui.view">
+			<field name="name">mrp.production.work.order.tree.custom</field>
+			<field name="model">mrp.workorder</field>
+			<field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view"/>
+			<field name="arch" type="xml">
+				<field name="workcenter_id" position="after">
+					<field name="custom_color_2"/>
+	                <field name="custom_color_3"/>
+	                <field name="custom_color_4"/>
+	                <field name="custom_color_5"/>
+	                <field name="custom_color_6"/>
+	                <field name="custom_color_7"/>
+				</field>
+			</field>
+		</record>
+    </data>
+</odoo>

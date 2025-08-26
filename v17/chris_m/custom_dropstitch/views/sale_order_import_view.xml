@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_order_processing_form" model="ir.ui.view">
+        <field name="name">custom.order.processing.import.form</field>
+        <field name="model">custom.order.processing.import</field>
+        <field name="arch" type="xml">
+            <form string="Mass Import - Sales Order">
+                <header>
+                    <button name="action_create_order" type="object" string="Create Order" class="btn-primary" invisible="state in ('done','error') or file_name == False"/>
+                    <button name="action_create_order" type="object" string="Reprocess Order" class="btn-primary" invisible="state != 'error' or file_name == False"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,error"/>
+                </header>
+                <sheet>
+                     <div class="oe_button_box" name="button_box">
+                        <button name="action_show_sale_order_count" type="object" string="Sale Orders"
+                                icon="fa-list" class="oe_stat_button"  invisible="sale_order_count==0">
+                        <field name="sale_order_count" widget="statinfo" string="Sale Order"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"  readonly="state == 'done'" domain="[('custom_sale_order_template_flag','=',True),('custom_mass_imp_val','!=','na')]" required="1"/>
+                            <field name="order_date" readonly="state == 'done'" required="1"/>
+                            <field name="template_csv" filename="template_name" widget="file" readonly="state == 'done'" />
+                            <field name="template_name" invisible="1" readonly="1" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="import_csv" filename="file_name" readonly="state == 'done'" widget="binary" />
+                            <field name="file_name" invisible="1" readonly="1" force_save="1"/>
+                            <field name="custom_mass_imp_val" invisible="1"/>
+                            <field name="reference" readonly="state == 'done'" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="error_message"  invisible="state in ('draft','done')" />
+                    </group>
+                    <notebook>
+                        <page string="Order Lines">
+                            <field name="order_lines" readonly="state == 'done'">
+                                <tree editable="bottom"  decoration-danger="error_status == True" >
+                                    <field name="import_order_id"/>
+                                    <field name="ship_to" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="company_atten" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="address" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="address_2" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="city" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="state" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="country" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="zip" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="customer_ref"/>
+                                    <field name="product"/>
+                                    <field name="colorway" column_invisible="parent.custom_mass_imp_val not in ['size','i2g']"/>
+                                    <field name="alphabets" column_invisible="parent.custom_mass_imp_val not in ['size','i2g']"/>
+                                    <field name="size" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="font_case" column_invisible="parent.custom_mass_imp_val not in ['size','i2g']"/>
+                                    <field name="font" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="personalize_line_1"/>
+                                    <field name="personalize_line_2" column_invisible="parent.custom_mass_imp_val not in ['i2g','design']"/>
+                                    <field name="personalize_line_3" column_invisible="parent.custom_mass_imp_val not in ['i2g']"/>
+                                    <field name="open_text" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="custom_color_3" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="custom_color_6" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="custom_color_7" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="custom_design" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="etail_ticket_no" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="quantity"/>
+                                    <field name="custom_gift_mess" column_invisible="1"/>
+                                    <field name="error_status" column_invisible="1"/>
+                                    <field name="error_message" column_invisible="1"/>
+                                    <button name="action_show_gift_message" type="object" string="Gift Message" class="btn-primary" invisible="custom_gift_mess == False"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Error Order Lines" invisible="state != 'error'">
+                            <field name="error_order_lines" readonly="state == 'done'" no_create="1" options="{'no_create': True}">
+                                <tree editable="bottom" decoration-danger="error_status == True">
+                                    <field name="import_order_id"/>
+                                   	<field name="ship_to" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="company_atten" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="address" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="address_2" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="city" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="state" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="country" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="zip" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="customer_ref"/>
+                                    <field name="product"/>
+                                    <field name="colorway" column_invisible="parent.custom_mass_imp_val not in ['size','i2g']"/>
+                                    <field name="alphabets" column_invisible="parent.custom_mass_imp_val not in ['size','i2g']"/>
+                                    <field name="size" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="font_case" column_invisible="parent.custom_mass_imp_val not in ['size','i2g']"/>
+                                    <field name="font" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="personalize_line_1"/>
+                                    <field name="personalize_line_2" column_invisible="parent.custom_mass_imp_val not in ['i2g','design']"/>
+                                    <field name="personalize_line_3" column_invisible="parent.custom_mass_imp_val not in ['i2g']"/>
+                                    <field name="open_text" column_invisible="parent.custom_mass_imp_val not in ['size']"/>
+                                    <field name="custom_color_3" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="custom_color_6" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="custom_color_7" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="custom_design" column_invisible="parent.custom_mass_imp_val not in ['design']"/>
+                                    <field name="quantity"/>
+                                    <field name="error_status" column_invisible="1"/>
+                                    <field name="error_message" column_invisible="1"/>
+                                    <button name="action_show_error" type="object" string="Show Error" class="btn-primary" invisible="error_status == False"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_order_processing_tree" model="ir.ui.view">
+        <field name="name">custom.order.processing.import.tree</field>
+        <field name="model">custom.order.processing.import</field>
+        <field name="arch" type="xml">
+            <tree string="Mass Import - Sales Order" decoration-success="state == 'done'" 
+            										 decoration-muted="state == 'draft'" 
+            										 decoration-danger="state == 'error'">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="order_date"/>
+                <field name="reference"/>
+                <field name="order_lines"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_order_processing" model="ir.actions.act_window">
+        <field name="name">Mass Import - Sales Order</field>
+        <field name="res_model">custom.order.processing.import</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="seq_custom_order_processing_import" model="ir.sequence">
+        <field name="name">Mass Import - Sales Order Sequence</field>
+        <field name="code">custom.order.processing.import</field>
+        <field name="prefix">IMP-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <menuitem id="menu_order_custom_processing_root" name="Mass Import - Sales Order"
+              parent="custom_dropstitch.menu_sale_customizaion" action="action_order_processing" sequence="10"/>
+</odoo>

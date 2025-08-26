@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="order_create_error_log_view_form" model="ir.ui.view">
+        <field name="name">order.create.error.log.view.form</field>
+        <field name="model">order.create.error.log</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group> 
+                            <field name="name" />
+                            <field name="batch_id" readonly="1"/>
+                            <field name="partner_sku" readonly="1"/>
+                            <field name="order_number" readonly="1"/>
+                            <field name="order_log_id" readonly="1"/>
+                        </group> 
+                    </group>
+                    <notebook>
+                        <page string="Error Msg">
+                            <group>
+                                <field name="error_log" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="order_create_error_log_view_tree" model="ir.ui.view">
+        <field name="name">order.create.error.log.view.tree</field>
+        <field name="model">order.create.error.log</field> 
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="create_date" readonly="1" optional="show"/>
+                <field name="batch_id" readonly="1" optional="show"/>
+                <field name="order_number" readonly="1" optional="show"/>
+                <field name="partner_sku" readonly="1" optional="show"/>
+                <field name="error_log" readonly="1" optional="show"/>
+            </tree>
+        </field>
+    </record>
+    <record id="order_create_log_action" model="ir.actions.act_window">
+        <field name="name">Order Logs</field>
+        <field name="res_model">order.create.error.log</field>
+        <field name="view_mode">tree,form</field> 
+    </record>
+    <menuitem id="menu_order_create_log_view" name="Pmall Order Error Logs" action="pmall_integration.order_create_log_action" 
+        parent="pmall_integration.pmall_config_view_main_menu" sequence="3"/>
+</odoo>

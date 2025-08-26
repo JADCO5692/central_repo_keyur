@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="shopify_instance_form_view_ept_custom" model="ir.ui.view">
+            <field name="name">Shopify Instance Custom</field>
+            <field name="model">shopify.instance.ept</field>
+			<field name="inherit_id" ref="shopify_ept.shopify_instance_form_view_ept"/>
+			<field name="arch" type="xml">
+				<xpath expr="//notebook" position='inside'>
+					<page string="Custom configs">
+						<group>
+							<group>
+								<field name="custom_label_template_id"/>
+								<field name="custom_policy"/>
+								<field name="custom_from_address_id"/>
+							</group>
+							<group></group>
+						</group>
+                	</page>
+            	</xpath>
+			</field>
+		</record>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sale_order_portal_temp" inherit_id="sale.sale_order_portal_template">
+        <xpath expr="//div[@id='payment_method']//h3" position="after">
+            <div class="custom-control custom-switch">
+                <table class="table">
+                    <tr t-if="sale_order.partner_id.allow_partial_payment">
+                        <td style="width: 50%;" class="sale_order_partial_payment_switch_button">
+                            <input type="checkbox" name="payment_sale_order_checkbox" class="custom-control-input" id="payment_sale_order_checkbox"/>
+                            <label class="custom-control-label" for="payment_sale_order_checkbox">Down Payment</label>
+                            <input type="text" id="payment_values_val" name="payment_values_val"
+                                   t-att-value='"{0:.2f}".format(sale_order.amount_total or 0)'
+                                   style="width: 20%;margin-left: 7px;text-align: right;"
+                                   t-att-data-max="sale_order.amount_total"/>
+                            <input type="hidden" t-att-value="sale_order.id" id="sale_order_id"/>
+                            <input type="hidden" t-att-value="sale_order.amount_total" id="amount_total"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

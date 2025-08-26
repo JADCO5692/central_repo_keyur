@@ -1,0 +1,14 @@
+body{
+   #overlay-loadar{
+        z-index: 1; 
+        height: 100%;
+        width: 100%;
+        background: #eeeeee3e;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+                width: 75px;
+        }
+   }
+}

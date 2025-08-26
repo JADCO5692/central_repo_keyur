@@ -1,0 +1,59 @@
+.o_action_manager{
+    .o_stock_report_list_view_view{
+        .o_search_panel{
+            .o_search_panel_field{
+                .o_search_panel_label{
+                    .o_search_panel_label_title{
+                        white-space: break-spaces !important;
+                    }
+                }
+            }
+        }
+    }
+}
+#product_detail{
+    #o-carousel-product{
+        background-color: #fff;
+    }
+    
+    .image_upload_preview{
+        height: 400px;
+        min-height: 400px;
+        width: 400px;
+        background-position: top;
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: none;
+        @media (max-width: 768px) {
+            height: 250px;
+            min-height: 250px;
+            width: 250px;
+        }
+    }
+}
+.yarn-component-container{
+    position: sticky;
+    top: 500px;
+    .yarn-component-image{
+        height: 65px;
+        width: 65px;
+        img{
+            height: 65px;
+            width: 65px;
+            border-radius: 50%;
+            object-fit: fill;
+        }
+    }
+}
+
+.o_portal_sidebar{
+    #portal_sale_content{
+        section#details{
+            tr#bb-none{
+                td{
+                    border-bottom: 0px !important;
+                }
+            } 
+        }
+    }
+}

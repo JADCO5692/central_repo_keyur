@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_custom_design_tif_tree" model="ir.ui.view">
+	    <field name="name">Design - TIF</field>
+	    <field name="model">custom.design.tif</field>
+	    <field name="arch" type="xml">
+        	<tree string="Design - TIF" editable="bottom">
+                <field name="custom_attribute_id"  />
+	            <field name="custom_design_id" domain="[('attribute_id', '=', custom_attribute_id)]"  />
+	            <field name="custom_prod_size"  />
+	            <field name="custom_tiff_file_url" />
+        	</tree>
+		</field>
+	</record>
+
+	<record id="view_custom_design_tif_search" model="ir.ui.view">
+		<field name="name">custom.design.tif.search</field>
+		<field name="model">custom.design.tif</field>
+		<field name="arch" type="xml">
+			<search>
+		    	<field name="custom_attribute_id" filter_domain="[('custom_attribute_id', 'ilike', self)]"/>
+                <field name="custom_design_id" filter_domain="[('custom_design_id', 'ilike', self)]"/>
+		    	<field name="custom_prod_size" filter_domain="[('custom_prod_size', 'ilike', self)]"/>
+		        <field name="custom_tiff_file_url" filter_domain="[('custom_tiff_file_url', 'ilike', self)]"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_custom_design_tif" model="ir.actions.act_window">
+    	<field name="name">Design - TIF</field>
+        <field name="res_model">custom.design.tif</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_custom_design_tif_search"/>
+        <field name="view_id" ref="view_custom_design_tif_tree"/>
+        <field name="help" type="html">
+        	<p class="o_view_nocontent_smiling_face">
+            	Upload Design TIF for a particular size
+			</p>
+		</field>
+        <field name="context">{}</field>
+	</record>
+	
+    <menuitem
+	    id="menu_custom_design_tif"
+	    name="Design - TIF"
+	    action="action_custom_design_tif"
+	    parent="custom_dropstitch.menu_sale_customizaion" 
+	    sequence="9"/>
+</odoo>

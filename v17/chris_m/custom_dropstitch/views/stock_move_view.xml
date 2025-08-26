@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="view_move_line_tree_detailed_custom" model="ir.ui.view">
+			<field name="name">stock.move.line.tree.detailed.custom</field>
+			<field name="model">stock.move.line</field>
+			<field name="inherit_id" ref="stock.view_move_line_tree_detailed"/>
+			<field name="arch" type="xml">
+				<field name="state" position="after">
+					<field name="custom_move_state" readonly="1" optional="show"/>
+                    <field name="custom_production_id" readonly="1" optional="show"/>
+				</field>
+			</field>
+		</record>
+    </data>
+</odoo>

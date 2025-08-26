@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="web_layout_inherit" inherit_id="web.frontend_layout" name="Web Layout">
+        <xpath expr="//div[@id='wrapwrap']" position="before">
+            <div id="overlay-loadar" class="position-absolute" >
+                <img src="/portal_bulk_payment/static/images/loading.gif" alt="Loading" /> 
+            </div>
+        </xpath>
+    </template>
+</odoo>

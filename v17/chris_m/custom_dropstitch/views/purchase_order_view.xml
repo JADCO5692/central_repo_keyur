@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="custom_view_purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">custom.purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                	<field name="custom_allowed_supplier_ids" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('supplier_rank','&gt;', 0)]</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='products']/field[@name='order_line']/tree[1]/field[@name='product_id']" position="attributes">
+                 <attribute name="domain">[('purchase_ok','=',True),'|',('seller_ids.partner_id','=',parent.partner_id),('seller_ids.partner_id','in',parent.custom_allowed_supplier_ids)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='picking_type_id']" position="attributes">
+                <attribute name="string">For Account</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

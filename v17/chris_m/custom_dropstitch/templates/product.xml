@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="product_custom" inherit_id="website_sale.product" name="Product">
+        <xpath expr="//t[@t-call='website_sale.product_price']" position="after">
+            <div class="row m-auto">
+                <div class="px-0 col-12 col-md-6">
+                    <t t-set="partner" t-value="request.env.user.partner_id"/>
+                    <t t-if="partner.custom_capture_image">
+                        <div class="img-file-upload mb-2">
+                            <strong class="d-block">Upload Image in JPEG/PNG</strong>
+                            <input type="file" name="image_upload" accept=".jpeg, .jpg, .png"/>
+                        </div>
+                    </t>
+                    <t t-if="partner.custom_capture_tiff_file">
+                        <div class="tiff-file-upload d-block mb-2">
+                            <strong class="d-block">Upload TIF file</strong>
+                            <input type="file" name="tiff_upload" />
+                        </div>
+                    </t>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="o-line-ref d-block mb-2">
+                        <strong class="d-block">Order line reference</strong>
+                        <input type="text" name="order_line_reference" class="form-control form-input o-line-reference"/>
+                    </div>
+                </div>
+                <div class="col-12 py-1"/>
+                <div class="o-line-custom_prod_size col-12 col-md-3 px-1 d-flex mb-2">
+                    <div class="mb-2 pe-3">
+                        <t t-if="product.custom_prod_size">Size : </t>
+                        <t t-esc="product.custom_prod_size"/>
+                    </div>
+                </div> 
+                <div class="o-line-weight col-12 col-md-3 px-1 d-flex mb-2">
+                    <div class="mb-2 pe-3">
+                        <t t-if="product.weight">Weight : </t>
+                        <t t-esc="product.weight"/>
+                    </div>
+                </div> 
+                <div class="o-line-custom_fiber col-12 col-md-6 px-1 d-flex mb-2">
+                    <div class=" mb-2 pe-3">
+                        <t t-if="product.custom_fiber">Fiber : </t>
+                        <t t-esc="product.custom_fiber"/>
+                    </div>
+                </div>
+                <div class="col-12 py-1"/>
+            </div>
+        </xpath>
+        <xpath expr="//t[@t-call='website_sale.shop_product_images']" position="after">
+            <div class="image_upload_preview container"> 
+            </div>
+            <div class="align-items-center yarn-component-container d-flex justify-content-center"> 
+            </div>
+        </xpath>
+    </template>
+    <template id="shop_product_image_custom"> 
+        <t t-if="not mto_attribute_id">  
+            <div t-if="product_image._name == 'product.image' and product_image.embed_code" t-att-class="image_classes + ' ratio ratio-16x9'">
+                <t t-out="product_image.embed_code"/>
+            </div>
+            <div t-elif="len(product_images) == 1 and website.product_page_image_layout != 'grid'"
+                class="position-relative d-inline-flex overflow-hidden m-auto h-100" >
+                <span t-attf-class="o_ribbon #{ribbon['html_class']} z-index-1"
+                    t-attf-style="#{text_color and ('color: %s; ' % text_color)}#{bg_color and 'background-color:' + bg_color}"
+                    t-out="ribbon['html'] or ''"
+                />
+                <div t-field="product_image.image_1920"
+                    class="d-flex align-items-start justify-content-center h-100 oe_unmovable"
+                    t-options='{"widget": "image", "preview_image": "image_1024", "class": "oe_unmovable product_detail_img mh-100", "alt-field": "name", "zoom": product_image.can_image_1024_be_zoomed and "image_1920"}'
+                />
+            </div>
+            <div t-else="" t-field="product_image.image_1920" t-att-class="image_classes + ' oe_unmovable'" t-options='{"widget": "image", "preview_image": "image_1024", "class": "oe_unmovable product_detail_img mh-100", "alt-field": "name", "zoom": product_image.can_image_1024_be_zoomed and "image_1920"}'/>
+        </t> 
+        <t t-else=""> 
+            <t t-set="mto_attr" t-value="request.env['product.attribute.value'].browse(mto_attribute_id)"/>
+            <div t-field="mto_attr.custom_design_image"
+                class="d-flex align-items-start justify-content-center h-100 oe_unmovable"
+                t-options='{"widget": "image", "preview_image": "custom_design_image", "class": "oe_unmovable product_detail_img mh-100", "alt-field": "name", "zoom": mto_attr.custom_design_image and "custom_design_image"}'
+        />
+        </t>
+    </template>
+
+    <template id="shop_product_carousel_custom" inherit_id="website_sale.shop_product_carousel" name="template_name">
+        <xpath expr="//t[@t-call='website_sale.shop_product_image']" position="replace">
+            <t t-call="custom_dropstitch.shop_product_image_custom"/>
+        </xpath>
+    </template>
+    <template id="yarn_compoentn_images" name="Yarn Components">
+        <t t-if="yarn_components and len(yarn_components)" >
+            <t t-foreach="yarn_components" t-as="component">
+                <div class="yarn-component-image mx-2">
+                    <t t-set="cimage" t-value="request.env['product.product'].sudo().browse(component[0])"/>
+                    <img t-if="cimage.image_1920" t-attf-src="{{'data:image/png;base64,%s' % cimage.image_1920.decode('utf-8')}}" t-att-title="cimage.display_name"/>
+                </div>
+            </t>
+        </t>
+    </template> 
+
+</odoo>

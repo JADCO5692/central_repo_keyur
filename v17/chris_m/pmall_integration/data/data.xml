@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data> 
+        <record id="shipping_status_shipped" model="shipping.status">
+            <field name="name">Shipped</field>
+            <field name="tech_name">Shipped</field>
+        </record>
+        <record id="shipping_status_shipped" model="shipping.status">
+            <field name="name">Shipped</field>
+            <field name="tech_name">Shipped</field>
+        </record>
+        <record id="shipping_status_in_progress" model="shipping.status">
+            <field name="name">In-Progress</field>
+            <field name="tech_name">In-Progress</field>
+        </record>
+        <record id="shipping_status_cancelled" model="shipping.status">
+            <field name="name">Cancelled</field>
+            <field name="tech_name">Cancelled</field>
+        </record>
+    </data>  
+</odoo>

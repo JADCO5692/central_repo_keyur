@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pmall_order_logs_view_form" model="ir.ui.view">
+        <field name="name">pmall.order.logs.view.form</field>
+        <field name="model">pmall.order.logs</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="sync_to_odoo" invisible="order_id" string="Sync In Odoo" type="object" class="oe_highlight"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet> 
+                    <!-- <div class="oe_button_box" name="button_box">
+                        <button name="action_order_logs" type="object" class="oe_stat_button"
+                                icon="fa-pencil-square-o" invisible="orders_count == 0">
+                            <field name="orders_count" widget="statinfo" string="Order Logs"/>
+                        </button>
+                    </div> -->
+                     <div class="oe_button_box" name="button_box">
+                        <button name="action_order_error_logs" type="object" class="oe_stat_button" icon="fa-warning" invisible="error_logs_count == 0">
+                            <field name="error_logs_count" widget="statinfo" string="Order Error Logs"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="pmall_config_id" readonly="1"/>
+                            <field name="batch_number" readonly="1"/>
+                            <field name="order_number" readonly="1"/>
+                            <field name="ship_status" readonly="1"/>
+                            <field name="order_id" readonly="1"/>
+                            <field name="error_logs_count"/>
+                        </group> 
+                    </group>
+                    <notebook>
+                        <page string="Pmall Order context">
+                            <group>
+                                <field name="pmall_order_context" readonly="1"/>   
+                            </group>
+                        </page>
+                    </notebook> 
+                </sheet>
+                <div class="oe_chatter"> 
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/> 
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="pmall_order_logs_view_tree" model="ir.ui.view">
+        <field name="name">pmall.order.logs.view.tree</field>
+        <field name="model">pmall.order.logs</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml"> 
+            <tree>
+                <field name="name" readonly="1" optional="show"/>
+                <field name="pmall_config_id" readonly="1" optional="hide"/>
+                <field name="order_id" readonly="1" optional="show"/>
+                <field name="batch_number" readonly="1" optional="show"/>
+                <field name="order_number" readonly="1" optional="show"/>
+                <field name="status" readonly="1" optional="show"/>
+                <field name="ship_status" readonly="1" optional="show"/>
+            </tree>
+        </field>
+    </record>
+    <record id="pmall_order_logs_view_action" model="ir.actions.act_window">
+        <field name="name">Pmall Orders Log</field>
+        <field name="res_model">pmall.order.logs</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="pmall_order_logs_view_tree"></field> 
+    </record>
+    <menuitem id="pmall_orders_log_menu" name="Pmall Orders Log" action="pmall_integration.pmall_order_logs_view_action"
+        parent="pmall_integration.pmall_config_view_main_menu" sequence="2"/>
+</odoo>

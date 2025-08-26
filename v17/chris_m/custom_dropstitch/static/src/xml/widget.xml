@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="custom_dropstitch.StockMoveProductsWidget" owl="1">
+        <div class="stock_move_products_widget" t-if="moveIds.length">
+            <t t-foreach="state.products" t-as="product" t-key="product.id">
+                <div class="d-inline-block text-center m-2" style="width: 90px;">
+                    <img t-att-src="product.product_image"
+                         class="rounded mb-1"
+                         style="width: 48px; height: 48px; object-fit: cover;"
+                         t-att-alt="product.product_name"
+                         onerror="this.src='/web/static/img/placeholder.png'"/>
+                    <div class="fw-bold small" style="max-width: 80px; word-break: break-word; white-space: normal;" t-esc="product.product_name"/>
+                </div>
+            </t>
+        </div>
+        <div t-else="" class="text-muted small">No products</div>
+    </t>
+</templates>

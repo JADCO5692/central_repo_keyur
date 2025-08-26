@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="stock_report_delivery_document_inherit_customer_sku" inherit_id="stock.report_delivery_document">
+        <xpath expr="//th[@name='th_sm_product']" position="before">
+            <th name="th_sm_customer_order_ref" class="text-left">
+                <strong>Order Ref</strong>
+            </th>
+        </xpath>
+        <xpath expr="//th[@name='th_sm_product']" position="after">
+            <th name="th_sm_customer_sku">
+                <strong>Customer SKU</strong>
+            </th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[1]" position="before">
+            <td>
+                <t t-if="o.custom_client_order_ref and move.sale_line_id.custom_order_no">
+                    <t t-set="final_ref" t-value="o.custom_client_order_ref+'/'+move.sale_line_id.custom_order_no"/>
+                    <span t-esc="final_ref"></span>
+                </t>
+                <t t-else="">
+                    <t t-if="move.sale_line_id.custom_order_no">
+                        <span t-esc="move.sale_line_id.custom_order_no"></span>
+                    </t>
+                    <t t-if="o.custom_client_order_ref">
+                        <span t-esc="o.custom_client_order_ref"></span>
+                    </t>
+                </t>
+            </td>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[2]" position="after">
+            <td>
+                <span t-field="move.sale_line_id.custom_customer_product"></span>
+            </td>
+        </xpath>
+        <xpath expr="//div[@name='partner_header']" position="replace">
+            <t t-if="o.sale_id.custom_dropship_order">
+                <div>
+                    <t t-esc="o.sale_id.custom_from"/>
+                </div>
+            </t>
+            <t t-else="">
+                <div t-if="show_partner" name="partner_header">
+                    <div t-field="partner.commercial_partner_id"
+                         t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-set='address']" position="before">
+            <t t-set="custom_dropship_order" t-value="o.sale_id.custom_dropship_order"/>
+            <t t-set="partner" t-value="o.sale_id.partner_id"/>
+            <t t-set="shopify_instance" t-value="o.sale_id.shopify_instance_id"/>
+        </xpath>
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <div class="row">
+                <t t-if="custom_dropship_order and o.sale_id.custom_from">
+                    <div class="col-4">
+                        <strong>From Address:</strong>
+                        <div t-field="o.sale_id.custom_from"
+                             t-options='{"widget": "contact", "fields": ["name"], "no_marker": True}'/>
+                    </div>
+                </t>
+                <t t-elif="custom_dropship_order and not o.sale_id.custom_from">
+                    <div class="col-4">
+                        <strong>From Address:</strong>
+                        <div t-field="o.sale_id.partner_id"
+                             t-options='{"widget": "contact", "fields": ["name"], "no_marker": True}'/>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="col-4" name="invoice_address_block">
+                        <strong>Invoice Address:</strong>
+                        <div t-field="o.partner_id"
+                             t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    </div>
+                </t>
+                <div name="outgoing_delivery_address" class="col-4">
+                    <span>
+                        <strong>Delivery Address:</strong>
+                    </span>
+                    <div t-out="o.move_ids[0].partner_id or o.partner_id"
+                         t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                </div>
+                <div class="col-4">
+                    <table style="padding: 0 10px; width: 100%;border-collapse: collapse;"
+                           class="table table-sm table-borderless">
+                        <tr>
+                            <center>
+                                <strong>
+                                    <span t-field="o.name" style="font-size:18px !important"/>
+                                </strong>
+                            </center>
+                        </tr>
+                        <tr t-if="o.scheduled_date">
+                            <td>Shipping Date:</td>
+                            <td>
+                                <span t-field="o.scheduled_date"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.origin">
+                            <td>Source:</td>
+                            <td>
+                                <span t-field="o.origin"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.custom_client_order_ref">
+                            <td>Customer Order Ref:</td>
+                            <td>
+                                <span t-field="o.custom_client_order_ref"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.carrier_id">
+                            <td>Carrier:</td>
+                            <td>
+                                <span t-field="o.carrier_id.name"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.weight">
+                            <td>Weight:</td>
+                            <td>
+                                <span t-field="o.weight"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: none !important"># of Boxes:</td>
+                            <td style="border: none !important">
+                                <span>1</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]/h2" position="attributes">
+            <attribute name="style">display:none</attribute>
+        </xpath>
+        <xpath expr="//div[@name='div_origin']/.." position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//t[@t-set='o']" position="after">
+            <style>
+                * {
+                font-size: 14px !important;
+                }
+            </style>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_line_table']/thead" position="replace">
+            <thead>
+                <tr>
+                    <th name="th_sm_product" class="text-left">
+                        <strong>Product</strong>
+                    </th>
+                    <th name="th_sm_description" class="text-left">
+                        <strong>Description</strong>
+                    </th>
+                    <th name="th_sm_customer_order_ref" class="text-left">
+                        <strong>Order Ref</strong>
+                    </th>
+                    <th name="th_sm_customer_sku" class="text-left">
+                        <strong>Customer SKU</strong>
+                    </th>
+                    <th name="th_sm_ordered">
+                        <strong>Ordered</strong>
+                    </th>
+                    <th name="th_sm_quantity">
+                        <strong>Delivered</strong>
+                    </th>
+                </tr>
+            </thead>
+        </xpath>
+    </template>
+    <template id="external_layout_striped_inherit" inherit_id="web.external_layout_striped">
+        <xpath expr="//span[@t-field='company.company_details']" position="replace">
+            <t t-if="custom_dropship_order">
+                <t t-if="not shopify_instance">
+                    <img t-if="partner.custom_customer_logo"
+                         t-att-src="image_data_uri(partner.custom_customer_logo)" class="float-start"
+                         alt="Logo"/>
+                    <div class="float-start company_address">
+                        <div t-field="partner.commercial_partner_id"
+                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                    </div>
+                </t>
+                <t t-elif="shopify_instance">
+                    <img t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
+                         t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
+                         class="float-start"
+                         alt="Logo"/>
+                    <div class="float-start company_address">
+                        <div t-esc="shopify_instance.custom_from_address_id"
+                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                    </div>
+                </t>
+            </t>
+            <t t-else="">
+                <span t-field="company.company_details">
+                    <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                        <strong>Company details block</strong>
+                        <div>Contains the company details.</div>
+                    </div>
+                </span>
+            </t>
+        </xpath>
+    </template>
+    <template id="stock_report_delivery_has_serial_move_line"
+              inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <xpath expr="//td[1]" position="replace">
+            <td>
+                <span t-esc="aggregated_lines[line]['name']"/>
+            </td>
+            <td>
+                <p t-if="aggregated_lines[line]['description']">
+                    <span t-esc="aggregated_lines[line]['description']" t-options="{'widget': 'text'}"/>
+                </p>
+                <p t-else="">
+                    <span t-esc="aggregated_lines[line]['name']"/>
+                </p>
+            </td>
+            <td>
+                <p t-if="aggregated_lines[line].get('order_ref')">
+                    <span t-esc="aggregated_lines[line]['order_ref']" t-options="{'widget': 'text'}"/>
+                </p>
+            </td>
+            <td>
+                <p t-if="aggregated_lines[line].get('customer_sku')">
+                    <span t-esc="aggregated_lines[line]['customer_sku']" t-options="{'widget': 'text'}"/>
+                </p>
+            </td>
+        </xpath>
+    </template>
+</odoo>

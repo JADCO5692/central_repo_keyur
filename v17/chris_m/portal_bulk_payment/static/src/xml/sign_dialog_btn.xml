@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+ 
+    <t t-name="sign_dialog_btn" >
+        <a role="button" id="o_sale_portal_sign" data-bs-toggle="modal" data-bs-target="#modalaccept" href="javascript:;" >
+            <i class="fa fa-check"/>Accept &amp; Pay
+        </a> 
+    </t>
+    <t t-name="pay_dialog_btn" >
+        <a role="button" class="order_accept" id="o_sale_portal_pay" href="javascript:;" >
+            <i class="fa fa-check"/>Accept &amp; Pay
+        </a> 
+    </t>
+</templates>

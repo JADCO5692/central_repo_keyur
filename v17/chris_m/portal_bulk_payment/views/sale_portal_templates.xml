@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_quotations_vk" name="Portal layout : sales menu entries" inherit_id="sale.portal_my_quotations" priority="20"> 
+        <xpath expr="//t[@t-if='quotations']//tr/th[1]" position="before">
+            <td><input type="checkbox" name="select_all" class="select_all" title="Select All" /><span class="selected_ord ps-1 text-600"></span></td>
+        </xpath>
+        <xpath expr="//t[@t-foreach='quotations']/tr/td[1]" position="before">
+            <td colspan="1">
+                <t t-if="quotation._has_to_be_paid()" >
+                    <input t-if="sale_order_ids and quotation.id in sale_order_ids" type="checkbox" checked="checked" name="quotes" id="order_to_pay" t-att-data-oid="quotation.id" t-attf-data-sign="{{1 if quotation.require_signature else 0}}"/>
+                    <input t-if="sale_order_ids and not quotation.id in sale_order_ids" type="checkbox" name="quotes" id="order_to_pay" t-att-data-oid="quotation.id" t-attf-data-sign="{{1 if quotation.require_signature else 0}}"/>
+                    <input t-if="not sale_order_ids" type="checkbox" name="quotes" id="order_to_pay" t-att-data-oid="quotation.id" t-attf-data-sign="{{1 if quotation.require_signature else 0}}"/>
+                </t> 
+                <i t-else="" class="fa fa-square-o text-400"> </i>
+            </td>
+        </xpath>
+        <xpath expr="//t[@t-call='portal.portal_searchbar']" position="after">
+            <t t-set="user" t-value="request.env.user.sudo()"/> 
+            <t t-set="params" t-value="request.params" /> 
+            <div class="container-fluid">  
+                <div class="flex-column gap-2 payment-bins d-flex">
+                    <div t-if="not params.get('message') == 'sign_ok'" class="sign-form-dialog"></div> 
+                    <div class="pay-form-dilog">
+                        <a t-if="params.get('allow_payment')" role="button" id="o_sale_portal_paynow" data-bs-toggle="modal" data-bs-target="#modalpayment" href="javascript:;" >
+                            <i class="fa fa-check"/> Pay Now
+                        </a>
+                    </div>
+                </div> 
+                <t t-set="params" t-value="request.params" />
+                <div role="dialog" class="modal fade d-none" id="modalaccept" >
+                    <div class="modal-dialog" >
+                        <form id="accept" method="POST" class="js_accept_json modal-content js_website_submit_form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <header class="modal-header">
+                                <h4 class="modal-title">Validate Orders</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </header>
+                            <main class="modal-body" id="sign-dialog">
+                                <p>
+                                    <span>By signing this proposal, I agree to the following terms:</span>
+                                    <ul>
+                                        <li>
+                                            <span>Accepted on the behalf of: <t t-esc="user.name"/></span> 
+                                        </li>
+                                        <li>
+                                            <div>For an amount of: <span class="amount_to_pay"/></div>  
+                                        </li>
+                                        <!-- <li >
+                                            <span>With payment terms:</span>  
+                                        </li> -->
+                                    </ul>
+                                </p> 
+                                <div class="o_sign_form">
+                                    <t t-set="customer" t-value="request.env.user" />
+                                    <t t-set="signature_form_props" t-value="{
+                                        'callUrl': '/my/orders_sign/accept?access_token='+ request.csrf_token(),
+                                        'defaultName': customer.name,
+                                        'mode': 'mode',
+                                        'sendLabel': 'Sign&amp;Pay',
+                                        'signatureRatio': 3,
+                                        'signatureType': 'signature_type',
+                                        'fontColor': font_color
+                                    }"/>
+                                    <owl-component name="portal_bulk_payment.SignatureForm" t-att-props="json.dumps(signature_form_props)"/>
+                                </div>
+                            </main>
+                        </form>
+                    </div> 
+                </div>
+                <div t-if="sale_order" role="dialog" class="modal fade" id="modalpayment" >
+                    <div class="modal-dialog" >
+                        <div class="modal-content">
+                            <header class="modal-header">
+                                <h4 class="modal-title">Validate Order</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </header>
+                            <main class="modal-body" id="payment-dialog">
+                                <!-- <t t-set="order_ids" t-value="request.params.get('oid').split(',') if request.params.get('oid') else False"/>
+                                <t t-set="sale_order" t-value="request.env['sale.order'].sudo().browse([int(id) for id in order_ids])[0]"/> -->
+                                <!-- <t t-set="prepayment_amount" t-value="sale_orders[0]._get_prepayment_required_amount()"/>
+                                <t t-set="prepayment_available" t-value="sale_orders[0].prepayment_percent and sale_order.prepayment_percent != 1.0"/> -->
+                                <!-- <t t-esc="sale_order" /> -->
+                                <div t-if="prepayment_available"
+                                    id="o_sale_portal_prepayment_buttons"
+                                    class="d-flex justify-content-center d-grid gap-2 btn-group"
+                                >
+                                    <button name="o_sale_portal_amount_prepayment_button" class="btn btn-primary rounded">
+                                        Down payment <br/>
+                                        <span t-esc="prepayment_amount" class="fw-bold"
+                                            t-options="{'widget': 'monetary', 'display_currency': currency_id}"/>
+                                    </button>
+                                    <button name="o_sale_portal_amount_total_button" class="btn btn-primary rounded">
+                                        Full amount <br/>
+                                        <span t-esc="sale_amount_total" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/>
+                                    </button>
+                                </div>
+                                <p> 
+                                    <div id="o_sale_portal_use_amount_total">
+                                        By paying this proposal, I agree to the following terms:
+                                    </div>
+                                    <!-- <div t-if="prepayment_available" id="o_sale_portal_use_amount_prepayment" >
+                                        By paying this <u>down payment</u> of
+                                        <span t-esc="prepayment_amount" class="fw-bold"
+                                            t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                                        (<b t-esc="sale_order.prepayment_percent * 100"/> %)
+                                        for this proposal, I agree to the following terms:
+                                    </div> -->
+                                    <ul>
+                                        <li>
+                                            <span>Accepted on the behalf of:</span> <b t-esc="payment_on_behalf"/>
+                                        </li>
+                                        <li>
+                                            <span>For an amount of:</span> <b data-id="sale_amount_total" t-esc="sale_amount_total"/>
+                                        </li>
+                                        <li t-if="sale_order.payment_term_id">
+                                            <span>With payment terms:</span> <b t-field="sale_order.payment_term_id.note"/>
+                                        </li>
+                                    </ul>
+                                </p>
+                                <!-- <div t-if="company_mismatch">
+                                    <t t-call="payment.company_mismatch_warning"/>
+                                </div> -->
+                                <!-- <div t-elif="not sale_order._has_to_be_paid()" class="alert alert-danger">
+                                    The order is not in a state requiring customer payment.
+                                </div>
+                                <div t-elif="not payment_methods_sudo and not tokens_sudo" class="alert alert-warning">
+                                    <strong>No suitable payment option could be found.</strong><br/>
+                                    If you believe that it is an error, please contact the website administrator.
+                                </div> --> 
+                                <div t-if="payment_methods_sudo or tokens_sudo" id="payment_method" class="text-start">
+                                    <h3>Pay with</h3>
+                                    <t t-call="payment.form">
+                                        <!-- <t t-set="sale_order_id" t-value="sale_order.id"/> -->
+                                    </t>
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <template id="sign_dialog_btn" name="Sign Dialog">
+        <a role="button" id="o_sale_portal_sign" data-bs-toggle="modal" data-bs-target="#modalaccept" href="javascript:;" >
+            <i class="fa fa-check"/> Pay Now
+        </a> 
+    </template>
+    <template id="payment_dialog_body" name="sign_form"> 
+        <div t-if="prepayment_available"
+                id="o_sale_portal_prepayment_buttons"
+                class="d-flex justify-content-center d-grid gap-2 btn-group"
+        >
+            <button name="o_sale_portal_amount_prepayment_button" class="btn btn-primary rounded">
+                Down payment <br/>
+                <span t-esc="prepayment_amount" class="fw-bold"
+                        t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+            </button>
+            <button name="o_sale_portal_amount_total_button" class="btn btn-primary rounded">
+                Full amount <br/>
+                <span t-field="sale_order.amount_total"/>
+            </button>
+        </div>
+        <p>
+            <!-- The widget associated with this modal will hide and show divs in function of the amount selected. -->
+            <div id="o_sale_portal_use_amount_total">
+                By paying this proposal, I agree to the following terms:
+            </div>
+            <div t-if="prepayment_available"
+                    id="o_sale_portal_use_amount_prepayment"
+            >
+                By paying this <u>down payment</u> of
+                <span t-esc="prepayment_amount" class="fw-bold"
+                        t-options="{'widget': 'monetary', 'display_currency': sale_order.currency_id}"/>
+                (<b t-esc="sale_order.prepayment_percent * 100"/> %)
+                for this proposal, I agree to the following terms:
+            </div>
+            <ul>
+                <li>
+                    <span>Accepted on the behalf of:</span> <b t-field="sale_order.partner_id.commercial_partner_id"/>
+                </li>
+                <li>
+                    <span>For an amount of:</span> <b data-id="total_amount" t-field="sale_order.amount_total"/>
+                </li>
+                <li t-if="sale_order.payment_term_id">
+                    <span>With payment terms:</span> <b t-field="sale_order.payment_term_id.note"/>
+                </li>
+            </ul>
+        </p> 
+        <div t-if="payment_methods_sudo" id="payment_method" class="text-start">
+            <h3>Pay with</h3> 
+            <t t-call="payment.form"> 
+            </t>
+        </div>
+    </template>
+    <template id="portal_layout_inherit" inherit_id="portal.portal_layout" name="portal layout" >
+        <xpath expr="//div[@id='wrap']" position="before">
+            <div t-if="is_loader" id="overlay-loadar" class="position-absolute" >
+                <img src="/portal_bulk_payment/static/images/loading.gif" alt="Loading" /> 
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="choose_delivery_carrier_view_form" model="ir.ui.view">
+        <field name="name">choose.delivery.carrier.form</field>
+        <field name="model">choose.delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.choose_delivery_carrier_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Remove the groups to show the weight when stock is installed -->
+            <field name="carrier_id" position="after">
+            	<field name="custom_hide_button" invisible="1"/>
+            	<field name="custom_picking_id" invisible="1"/>
+            </field>
+            <xpath expr="//form[1]/footer[1]/button[1]" position="attributes">
+                <attribute name="invisible">custom_hide_button or not context.get('carrier_recompute') or  context.get('default_backorder_flag')</attribute>
+            </xpath>
+            <xpath expr="//form[1]/footer[1]/button[2]" position="attributes">
+                <attribute name="invisible">custom_hide_button or context.get('carrier_recompute')  or  context.get('default_backorder_flag')</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

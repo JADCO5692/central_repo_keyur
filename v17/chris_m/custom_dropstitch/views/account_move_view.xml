@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_custom_move_form_inherit" model="ir.ui.view">
+            <field name="name">account.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='invoice_tab']/field/tree/field[@name='name']" position="after">
+                    <field name="custom_item_image" widget="image" options="{'zoom': true}" />
+                </xpath>
+                <xpath expr="//page[@id='other_tab']//group[@name='sale_info_group']//label[@for='ref']" position="replace">
+                </xpath>
+                 <xpath expr="//page[@id='other_tab']//group[@name='sale_info_group']//field[@name='ref']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='delivery_date']" position="after">
+                    <field name="ref" string="Customer Order Ref"/>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <button string="Load Previous Bill" type="object" name="action_load_previous_bill" invisible="state != 'draft' or move_type != 'in_invoice'"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

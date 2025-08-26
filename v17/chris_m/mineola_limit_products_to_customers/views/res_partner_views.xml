@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id='mineola_partner_form_custom_prod_list_ids' model='ir.ui.view' >
+        <field name='name'>Mineola: Partner Form Custom Products List IDs</field>
+        <field name='model'>res.partner</field>
+        <field name='inherit_id' ref='base.view_partner_form'/>
+        <field name='arch' type='xml'>
+            <xpath expr='//field[@name="category_id"]' position='after'>
+                <field name='custom_prod_list_id'/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

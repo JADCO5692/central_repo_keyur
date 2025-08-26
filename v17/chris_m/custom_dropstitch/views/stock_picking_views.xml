@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_picking_form_custom" model="ir.ui.view">
+			<field name="name">stock.picking.form.custom</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='name']" position="after">
+					<field name="custom_delivery_set" invisible="1"/>
+					<field name="custom_invoice_state" invisible="1"/>
+					<field name="custom_invoice_payment_state" invisible="1"/>
+					<field name="custom_invoice_move_type" invisible="1"/>
+					<field name="custom_order_policy" invisible="1"/>
+					<field name="custom_order_payment_term" invisible="1"/>
+					<field name="custom_auto_export_to_shipstation" invisible="1"/>
+				</xpath>
+				<xpath expr="//field[@name='carrier_id']" position="replace">
+					<field name="carrier_id" readonly="picking_type_code == 'outgoing'" options="{'no_create': True, 'no_open': True}"/>
+				</xpath>
+				<xpath expr="//field[@name='origin']" position="after">
+					<field filename="custom_shipping_label_name" name="custom_shipping_label" options="{'accepted_file_extensions': '.pdf'}" invisible="picking_type_code != 'outgoing'" widget="file" />
+					<field name="custom_shipping_label_name" invisible="1" />
+					<field name="custom_client_order_ref" string="Customer Order Ref" readonly="1"/>
+					<label for="custom_gift_mess" decoration-danger="state not in ('draft')" invisible="custom_gift_mess == False"/>
+					<div class="o_row" invisible="custom_gift_mess == False">
+						<h1>
+							<field name="custom_gift_mess" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_gift_mess == False"/>
+						</h1>
+					</div>
+					<label for="custom_so_special_inst" decoration-danger="state not in ('draft')" invisible="custom_so_special_inst == False"/>
+					<div class="o_row" invisible="custom_so_special_inst == False">
+						<h1>
+							<field name="custom_so_special_inst" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_so_special_inst == False"/>
+						</h1>
+					</div>
+				</xpath>
+				<xpath expr="//form[1]/header" position="inside">
+					<button string="Add Delivery" type="object" name="action_open_delivery_stock_wizard" class="oe_highlight" invisible="picking_type_code != 'outgoing' or state not in ('assigned')"/>
+					<button name="action_register_payment_custom" type="object" class="oe_highlight" invisible="picking_type_code != 'outgoing' or custom_invoice_state != 'posted' or custom_invoice_payment_state not in ('not_paid', 'partial') or custom_invoice_move_type not in ('out_invoice') or is_shopify_delivery_order or state in ('done') or custom_order_policy!='intent' or custom_order_payment_term != 'PrePayment'" context="{'dont_redirect_to_payments': True, 'display_account_trust': True}" string="Register Payment"/>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='partner_id']" position="after">
+				    <field name="custom_customer_id" invisible="picking_type_code != 'outgoing'"/>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='partner_id']" position="attributes">
+					<attribute name="context">{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}</attribute>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='date_deadline']" position="attributes">
+					<attribute name="string">Expected</attribute>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='operations']/field[@name='move_ids_without_package']/tree[1]/field[@name='date_deadline']" position="attributes">
+					<attribute name="string">Expected</attribute>
+				</xpath>
+				<xpath expr="////form[1]/header/button[@name='button_validate']" position="replace">
+					<button name="button_validate" invisible="(state in ('draft','waiting', 'confirmed','assigned', 'done', 'cancel','invoice_sent') and custom_order_policy == 'intent' and custom_order_payment_term == 'PrePayment') or (state in ('draft','waiting', 'confirmed','assigned', 'done', 'cancel') and custom_order_policy == 'intent') or  (custom_order_policy != 'intent' and state in ('draft', 'confirmed', 'done', 'cancel'))" string="Validate" type="object" class="oe_highlight" groups="stock.group_stock_user" data-hotkey="v"/>
+				</xpath>
+				<xpath expr="////form[1]/header/button[@class='o_btn_validate']" position="replace">
+					<button name="button_validate" invisible="(state in ('draft','waiting', 'confirmed', 'assigned', 'done', 'cancel', 'invoice_sent', 'ready_to_be_sent') and custom_order_policy == 'intent' and custom_order_payment_term == 'PrePayment') or (state in ('draft','waiting', 'confirmed','assigned', 'done','invoice_sent', 'ready_to_be_sent','cancel') and custom_order_policy == 'intent') or  (custom_order_policy != 'intent' and state in ('waiting', 'assigned', 'done','confirmed', 'cancel', 'ready_to_be_sent'))" string="Validate" type="object" groups="stock.group_stock_user" class="o_btn_validate" data-hotkey="v"/>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='operations']/field[@name='move_ids_without_package']/tree[1]/field[@name='quantity']" position="attributes">
+					<attribute name="readonly">(parent.state in ('invoice_sent', 'ready_to_be_sent'))</attribute>
+				</xpath>
+				<xpath expr="//form[1]/header" position="inside">
+					<button string="Gift Card" type="object" name="action_download_gift_label" invisible="custom_gift_mess == False"/>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='operations']/field[@name='move_ids_without_package']/tree[1]/field[@name='product_id']" position="after">
+					<field name="custom_item_image" widget="image" options="{'zoom': true}" invisible="parent.picking_type_code != 'outgoing'"/>
+				</xpath>
+				<button name="action_put_in_pack" position="attributes">
+					<attribute name="invisible">state not in ('ready_to_be_sent')</attribute>
+				</button>
+				<field name="carrier_tracking_ref" position="attributes">
+					<attribute name="readonly">0</attribute>
+				</field>
+			</field>
+		</record>
+		
+		<record id="view_picking_tree_custom" model="ir.ui.view">
+            <field name="name">stock.picking.tree.custom</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="custom_customer_id"/>
+                </xpath>
+				<xpath expr="//field[@name='origin']" position="after">
+					<field name="amount_residual"/>
+				</xpath>
+            </field>
+        </record>
+
+		<record id="shipstation_stock_picking_form_view_ept_custom" model="ir.ui.view">
+			<field name="name">shipstation.stock.picking.form.view.ept.custom</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="shipstation_ept.shipstation_stock_picking_form_view_ept"/>
+			<field name="arch" type="xml">
+				<button name="export_order_to_shipstation" position="attributes">
+					<attribute name="invisible">state not in ['ready_to_be_sent'] or is_get_shipping_label or custom_auto_export_to_shipstation or is_exported_to_shipstation or (not export_order) or (not shipstation_instance_id) or (not shipstation_store_id)</attribute>
+				</button>
+			</field>
+		</record>
+
+		<record id="custom_view_picking_internal_search" model="ir.ui.view">
+			<field name="name">custom.stock.picking.internal.search</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_internal_search"/>
+			<field name="arch" type="xml">
+				<filter name="draft" position="after">
+					<filter name="invoice_sent" string="Invoice Sent" domain="[('state', '=', 'invoice_sent')]"/>
+					<filter name="ready_to_be_sent" string="Ready to be Sent" domain="[('state', '=', 'ready_to_be_sent')]"/>
+				</filter>
+				<filter name="picking_type" position="after">
+					<filter string="Contact" name="custom_contact" domain="[]" context="{'group_by': 'partner_id'}"/>
+				</filter>
+			</field>
+		</record>
+
+		<record id="stock.action_picking_tree_ready" model="ir.actions.act_window">
+			<field name="context">{'contact_display': 'partner_address', 'search_default_available': 1, 'search_default_ready_to_be_sent': True, 'search_default_invoice_sent': True, 'search_default_status': 1}</field>
+		</record>
+
+		<!-- Inherit stock_picking_kanban to add partner and product info -->
+		<record id="stock_picking_kanban_inherit_custom" model="ir.ui.view">
+			<field name="name">stock.picking.kanban.inherit.custom</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.stock_picking_kanban"/>
+			<field name="arch" type="xml">
+				<!-- Add the field for the widget -->
+				<xpath expr="//field[@name='partner_id']" position="after">
+					<field name="custom_customer_name"/>
+					<field name="move_ids_without_package"/>
+				</xpath>
+
+				<!-- Use the custom widget in kanban content -->
+				<xpath expr="//div[hasclass('o_kanban_record_body')]" position="inside">
+					<div class="mt-3" t-if="record.custom_customer_name.raw_value">
+						<span class="text-muted small">Customer:</span>
+						<strong>
+							<field name="custom_customer_name"/>
+						</strong>
+					</div>
+					<div class="mt-3">
+						<field name="move_ids_without_package" widget="stock_move_products"/>
+					</div>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

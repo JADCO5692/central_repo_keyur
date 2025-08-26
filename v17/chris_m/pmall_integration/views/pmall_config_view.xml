@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pmall_config_view_form" model="ir.ui.view">
+            <field name="name">pmall.config.form.view</field>
+            <field name="model">pmall.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="generate_access_token" string="Generate Access Token" type="object" class="oe_highlight"/>
+                        <button name="sync_pmall_orders" string="Sync Pmall Orders" type="object"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_order_logs" type="object" class="oe_stat_button"
+                                    icon="fa-pencil-square-o" invisible="orders_count == 0">
+                                <field name="orders_count" widget="statinfo" string="Order Logs"/>
+                            </button>
+                        </div>
+                        <group> 
+                            <field name="name" placeholder="Name" required="1"/> 
+                        </group> 
+                        <group></group>
+                        <group>
+                            <group>
+                                <field name="auth_api_url" required="1"></field>
+                                <field name="pmall_dropship_api_url" required="1"></field>
+                                <field name="client_id" required="1"></field>
+                                <field name="client_secret" required="1"></field>
+                                <field name="client_access_token" readonly="1"></field>
+                            </group>
+                            <group>
+                                <field name="fetch_orders_from_past_days"/>
+                                <field name="for_partner_id" required="1"/>
+                                <field name="shipping_status" widget="many2many_tags" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter"> 
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/> 
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="pmall_config_view_tree" model="ir.ui.view">
+            <field name="name">pmall.config.tree.view</field>
+            <field name="model">pmall.config</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"></field>
+                    <field name="pmall_dropship_api_url"></field>
+                    <!-- <field name="order_api_url"></field> -->
+                </tree>
+            </field>
+        </record>
+        <record id="pmall_config_view_action" model="ir.actions.act_window">
+            <field name="name">Pmall Configuration</field>
+            <field name="res_model">pmall.config</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="pmall_config_view_tree" /> 
+        </record>
+        <menuitem id="pmall_config_view_main_menu" name="Pmall Integration" parent="sale.sale_menu_root" sequence="60"/>
+        <menuitem id="pmall_config_view_menu" name="Pmall Configuration" action="pmall_config_view_action" 
+         parent="pmall_integration.pmall_config_view_main_menu" sequence="1"/>
+    </data>
+</odoo>

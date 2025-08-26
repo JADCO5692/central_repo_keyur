@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="mrp_production_form_view_custom" model="ir.ui.view">
+			<field name="name">mrp.production.form.custom</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form[1]/header/button[@name='action_open_label_type']" position="after">
+					<button string="Traveller Ticket" type="object" name="action_download_travel_ticket"/>
+					<button string="TIF File" type="object" name="action_download_tiff_file" invisible="custom_tiff_file_url == ''"/>
+					<button string="TIF File" type="object" name="action_download_custom_tiff_file" invisible="custom_tiff_file_url != ''"/>
+            	</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']" position="before">
+ 					<page string="Packaging Notes" name="custom_pack_notes" groups="custom_dropstitch.cust_group_sew">
+	 					<group>
+							<group>
+								<field name="custom_label_type" readonly="1"/>
+								<field name="custom_brand_label" readonly="1"/>
+								<field name="custom_care_label" readonly="1"/>
+								<field name="custom_label_placement" readonly="1"/>
+								<field name="custom_instruction" readonly="1"/>
+								<field name="custom_pack_instr" readonly="1"/>
+							</group>
+							<group>
+								<field name="custom_bag_info" readonly="1"/>
+								<field name="custom_box_info" readonly="1"/>
+								<field name="custom_label_image" widget="image" options="{'zoom': true}" readonly="1"/>
+							</group>
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']" position="after">
+					<page string="Production Info">
+						<group>
+							<group>
+								<field name="custom_machine_no" readonly="1"/>
+								<field name="custom_is_binding"/>
+								<field name="custom_is_wash"/>
+								<field name="custom_is_dry"/>
+								<field name="custom_is_press"/>
+							</group>
+							<group>
+								<field name="custom_is_scrap_mo" invisible="1"/>
+								<field name="custom_scrap_mrp_id" readonly="1" invisible="custom_is_scrap_mo == True"/>
+
+								<field name="custom_is_parent_mo" invisible="1"/>
+								<field name="custom_mrp_parent_id" readonly="1" invisible="custom_is_parent_mo == True"/>
+							</group>
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//group[@name='group_extra_info']/label[@for='date_start']" position="replace"/>
+				<xpath expr="//form[1]/sheet[1]/group[1]/group[@name='group_extra_info']/label[1]" position="replace"/>
+				<xpath expr="//group[@name='group_extra_info']/div[1]" position="replace"/>
+				<xpath expr="//form[1]/sheet[1]/group[1]/group[@name='group_extra_info']/field[@name='date_finished']" position="replace"/>
+				<field name="components_availability" position="replace"/>
+				<field name="user_id" position="replace"/>
+				
+				<field name="product_id" position="after"> 
+					<field name="custom_released" invisible="1"/>
+                    <field name="custom_traveler_printed" invisible="1"/>
+					<field name="custom_partner" readonly="1"/>
+					<field name="custom_order_no" readonly="1" invisible="custom_order_no == False"/>
+					<field name="origin"/>
+					<field name="custom_needle" readonly="1"/>
+					<field name="custom_prod_size" readonly="1"/>
+					<field name="custom_attribute_1" readonly="1"  invisible="custom_prod_type not in ('special_mtp_var','special_mtp_prod')"/>/>
+					<label for="date_start" string="Scheduled Date" invisible="state in ['progress', 'to_close', 'done', 'cancel']"/>
+                    <label for="date_start" string="Start Date" invisible="state not in ['progress', 'to_close', 'done', 'cancel']"/>
+                    <div class="o_row">
+                        <field name="date_start" readonly="state in ['done', 'to_close', 'cancel']" decoration-warning="state not in ('done', 'cancel') and date_start &lt; now" decoration-danger="state not in ('done', 'cancel') and date_start &lt; current_date" decoration-bf="state not in ('done', 'cancel') and (date_start &lt; current_date or date_start &lt; now)"/>
+                        <field name="delay_alert_date" invisible="1"/>
+                        <field nolabel="1" name="json_popover" widget="stock_rescheduling_popover" invisible="not json_popover"/>
+                    </div>
+                    <field name="date_finished"/>
+                    <field name="components_availability" invisible="state not in ['confirmed', 'progress']" decoration-success="reservation_state == 'assigned' or components_availability_state == 'available'" decoration-warning="reservation_state != 'assigned' and components_availability_state in ('expected', 'available')" decoration-danger="reservation_state != 'assigned' and components_availability_state in ('late', 'unavailable')"/>
+                    <field name="user_id" widget="many2one_avatar" readonly="state in ['cancel', 'done']"/>
+				</field>
+				<field name="product_description_variants" position="replace"/>
+				<group name="group_extra_info" position="inside">
+					<field name="custom_prod_type" invisible="1"/>
+					<field name="custom_opentext" invisible="1"/>
+					<field name="custom_etail_ticket_no" invisible="1"/>
+					<field name="custom_customer_product" invisible="1"/>
+					<field name="custom_tiff_file_url" widget="url" groups="mrp.group_mrp_manager" readonly="state in ('done','cancel')" invisible="custom_tiff_file" required="not custom_tiff_file"/>
+					<field name="custom_tiff_file_url" widget="url" groups="!mrp.group_mrp_manager" readonly="state != 'draft'" invisible="custom_tiff_file" required="not custom_tiff_file"/>
+					<field name="custom_tiff_file_name" invisible="1"/>
+					<field name="custom_tiff_file" readonly="1" invisible="custom_tiff_file == False" filename="custom_tiff_file_name"/>			
+					<label for="custom_personalize" decoration-danger="state not in ('draft')" invisible="custom_personalize == False"/>
+					<div class="o_row" invisible="custom_personalize == False">
+						<h1>
+							<field name="custom_personalize" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_personalize == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_line1" decoration-danger="state not in ('draft')" invisible="custom_line1 == False"/>
+					<div class="o_row" invisible="custom_line1 == False">
+						<h1>
+							<field name="custom_line1" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_line1 == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_line2" decoration-danger="state not in ('draft')" invisible="custom_line2 == False"/>
+					<div class="o_row" invisible="custom_line2 == False">
+						<h1>
+							<field name="custom_line2" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_line2 == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_line3" decoration-danger="state not in ('draft')" invisible="custom_line3 == False"/>
+					<div class="o_row" invisible="custom_line3 == False">
+						<h1>
+							<field name="custom_line3" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_line3 == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_initials" decoration-danger="state not in ('draft')" invisible="custom_initials == False"/>
+					<div class="o_row" invisible="custom_initials == False">
+						<h1>
+							<field name="custom_initials" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_initials == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_font" decoration-danger="state not in ('draft')" invisible="custom_font == False"/>
+					<div class="o_row" invisible="custom_font == False">
+						<h1>
+							<field name="custom_font" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_font == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_fontcase" decoration-danger="state not in ('draft')" invisible="custom_fontcase == False"/>
+					<div class="o_row" invisible="custom_fontcase == False">
+						<h1>
+							<field name="custom_fontcase" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_fontcase == False"/>
+						</h1>                                
+					</div>
+					<field name="custom_prod_var_image" widget="image" invisible="custom_prod_type in ('mtp','special_mtp_var','special_mtp_prod')"/>
+					<field name="custom_item_image" widget="image" invisible="custom_prod_type == 'pre_set'" readonly="1"/>
+				</group>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']/field[@name='move_raw_ids']/tree[1]/field[@name='product_id']" position="before">
+					<field name="custom_color_no" readonly="1"/>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']/field[@name='move_raw_ids']/tree[1]/field[@name='product_id']" position="after">
+					<field name="custom_variant_item_image" options="{&quot;size&quot;:[0,90]}" widget="image"/>
+					<field name="custom_bom_item_image" options="{&quot;size&quot;:[0,90]}" widget="image" invisible="1"/>
+				</xpath>
+				<button name="action_confirm" position="replace">
+					<button name="custom_action_confirm" invisible="state != 'draft'" string="Confirm" type="object" class="oe_highlight" data-hotkey="v"/>
+				</button>
+				<div name="bom_div" position="after">
+					<label for="custom_so_special_inst" decoration-danger="state not in ('draft')" invisible="custom_so_special_inst == False"/>
+					<div class="o_row" invisible="custom_so_special_inst == False">
+						<h1>
+							<field name="custom_so_special_inst" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_so_special_inst == False"/>
+						</h1>                                
+					</div>
+					<label for="custom_special_notation_tag_ids" decoration-danger="state not in ('draft')" invisible="custom_special_notation_tag_ids == False"/>
+					<div class="o_row" invisible="custom_special_notation_tag_ids == False">
+						<h1>
+							<field name="custom_special_notation_tag_ids" widget="many2many_tags" readonly="1" decoration-danger="state not in ('draft')" invisible="custom_special_notation_tag_ids == False" options="{'color_field': 'custom_color_1'}"/>
+						</h1>                                
+					</div>
+					<field name="traveler_batch_count"/>
+				</div>
+				<xpath expr="//form[1]/header[1]/button[@name='button_mark_done'][1]" position="attributes">
+					<attribute name="groups">mrp.group_mrp_manager,custom_dropstitch.cust_group_sew</attribute>
+				</xpath>
+				<xpath expr="//form[1]/header[1]/button[@name='button_mark_done'][2]" position="attributes">
+					<attribute name="groups">mrp.group_mrp_manager,custom_dropstitch.cust_group_sew</attribute>
+				</xpath>
+				<xpath expr="//form[1]/header[1]/button[@name='button_mark_done'][3]" position="attributes">
+					<attribute name="groups">mrp.group_mrp_manager,custom_dropstitch.cust_group_sew</attribute>
+				</xpath>
+				<xpath expr="//form[1]/header[1]/button[@name='button_mark_done'][4]" position="attributes">
+					<attribute name="groups">mrp.group_mrp_manager,custom_dropstitch.cust_group_sew</attribute>
+				</xpath>
+				<xpath expr="//field[@name='qty_producing']" position="replace">
+					<h1>
+						<field name="qty_producing" class="text-start" decoration-danger="1" readonly="state == 'cancel' or (state == 'done' and is_locked)" on_change="1" field_id="qty_producing_0"/>
+					</h1>
+				</xpath>
+				<xpath expr="//field[@name='product_qty'][1]" position="replace">
+					<h1> 
+						<span class="me-3" invisible="state not in ('done')">/</span>
+						<span invisible="state in ('draft','done')">/</span>
+						<field name="product_qty" decoration-danger="1" invisible="state not in ('draft', 'done')" class="oe_inline text-start"  readonly="state != 'draft'"/>
+					</h1> 
+				</xpath> 
+				<xpath expr="//button[@name='401']/field[@name='product_qty']" position="replace">
+					<h1>
+						<field name="product_qty" decoration-danger="1"  class="oe_inline" readonly="state != 'draft'"/>
+					</h1> 
+				</xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']/field[@name='move_raw_ids']/tree[1]" position="attributes">
+                    <attribute name="default_order">custom_color_no</attribute>
+                </xpath>
+			</field>
+		</record>
+		
+		<record id="mrp_production_tree_view_custom" model="ir.ui.view">
+			<field name="name">mrp.production.tree.custom</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+			<field name="arch" type="xml">
+				<field name="activity_ids" position="replace"/>
+				<field name="product_uom_id" position="replace"/>
+				<field name="duration_expected" position="replace"/>
+				<field name="duration" position="replace"/>
+				<xpath expr="//tree[1]/field[@name='name']" position="after">
+					<field name="custom_sale_order_date" optional="show"/>
+                    <field name="custom_partner" optional="show"/>
+					<field name="custom_color_2" optional="show"/>
+	                <field name="custom_color_3" optional="show"/>
+	                <field name="custom_color_4" optional="show"/>
+	                <field name="custom_color_5" optional="show"/>
+	                <field name="custom_color_6" optional="show"/>
+	                <field name="custom_color_7" optional="show"/>
+	                <field name="custom_machine_no" optional="show"/>
+	                <field name="custom_needle" optional="show"/>
+	                <field name="custom_prod_size" optional="show"/>
+				</xpath>
+				<xpath expr="//header" position="inside">
+					<button name="action_confirm_orders" type="object" string="Confirm Orders"/>
+					<button name="action_print_mass_traveller_tickets" type="object" string="Traveller Tickets"/>
+				</xpath>
+                <xpath expr="//tree[1]" position="attributes">
+                    <attribute name="default_order">priority desc, custom_sale_order_date asc</attribute>
+                </xpath>
+			</field>
+		</record>
+		
+        <record id="mrp_production_custom_filter" model="ir.ui.view">
+            <field name="name">mrp.production.custom.select</field>
+            <field name="model">mrp.production</field>
+            <field name="mode">primary</field>
+            <field name="priority">1000</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter" />
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='procurement_group_id']" position="replace">
+                    <filter string="Customer" name="customer_id" domain="[]" context="{'group_by': 'custom_partner'}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="mrp.mrp_production_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Orders</field>
+            <field name="res_model">mrp.production</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="custom_dropstitch.mrp_production_custom_filter"/>
+            <field name="context">{'search_default_todo': True, 'default_company_id': allowed_company_ids[0], 'display_default_code': False}</field>
+            <field name="domain">[('picking_type_id.active', '=', True)]</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No manufacturing order found. Let's create one.
+              </p><p>
+                Use Manufacturing Orders (MO) to build finished products while consuming components: i.e. 1 Table = 4 Table Legs + 1 Table Top
+              </p>
+            </field>
+        </record>
+    </data>
+</odoo>

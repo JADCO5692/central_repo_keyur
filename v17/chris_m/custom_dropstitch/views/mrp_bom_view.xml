@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="mrp_bom_form_view_custom" model="ir.ui.view">
+			<field name="name">mrp.bom.form.custom</field>
+			<field name="model">mrp.bom</field>
+			<field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']" position="after">
+					<field name="custom_bom_item_image" widget="image" options="{&quot;size&quot;:[0,90]}" optional="hide"/>
+					<field name="custom_var_image" widget="image" options="{&quot;size&quot;:[0,90]}" readonly="1"/>
+				</xpath>
+				<xpath expr="//field[@name='type']" position="after">
+					<field name="custom_bom_id" readonly="1" invisible="custom_bom_id == False"/>
+				</xpath>
+			</field>
+		</record>
+    </data>
+</odoo>

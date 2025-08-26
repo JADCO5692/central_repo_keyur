@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_sale_product" inherit_id="website_sale.product">
+        <!-- <xpath expr="//section[@id='product_detail']//div[@id='product_detail_main']//h1[@t-field='product.name']" position="after">
+            <t t-if="product.product_variant_count >= 12" >
+                <span class="custom_customer_sku">
+                    <t t-if="product_variant.custom_customer_sku">Customer SKU : </t>
+                    <t t-esc="product_variant.custom_customer_sku"/>
+                </span>
+            </t>
+        </xpath> -->
+        <xpath expr="//div[@id='product_detail_main']//form[@action='/shop/cart/update']" position="before">
+            <div class="custom_customer_sku">
+                <t t-if="product.custom_customer_sku">Customer SKU : </t>
+                <t t-esc="product.custom_customer_sku"/>
+            </div>
+        </xpath>
+    </template> 
+</odoo>

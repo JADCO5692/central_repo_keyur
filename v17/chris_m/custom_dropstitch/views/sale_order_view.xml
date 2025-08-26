@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="view_order_form_custom" model="ir.ui.view">
+			<field name="name">sale.order.form.custom</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+ 					<page string="Packaging Notes" name="custom_pack_notes">
+	 					<group>
+							<group>
+								<field name="custom_label_type"/>
+								<field name="custom_brand_label"/>
+								<field name="custom_care_label"/>
+								<field name="custom_label_placement"/>
+								<field name="custom_instruction"/>
+								<field name="custom_pack_instr"/>
+								<field name="custom_allowed_customer_ids" invisible="1"/>
+							</group>
+							<group>
+								<field name="custom_bag_info"/>
+								<field name="custom_box_info"/>
+								<field name="custom_label_image" widget="image" options="{'zoom': true}"/>
+							</group>
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_information']/group[1]/group[1]/field[@name='client_order_ref']" position="replace">
+				</xpath>
+				
+				<xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='payment_term_id']" position="after">
+					<field name="custom_shipping_fees" required="1" invisible="shopify_order_id != False"/>
+					<field name="custom_gift_mess" readonly="state in ['cancel']"/>
+					<field name="client_order_ref" string="Customer Order Ref" readonly="state in ['cancel']"/>
+					<field name="custom_policy" widget="radio" force_save="1" readonly="1" />
+				</xpath>
+				
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='name']" position="before">
+					<field name="custom_order_no" optional="hide"/>
+				</xpath>
+
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='name']" position="after">
+	                <field name="custom_color_2" column_invisible="True"/>
+	                <field name="custom_color_3" column_invisible="True"/>
+	                <field name="custom_color_4" column_invisible="True"/>
+	                <field name="custom_color_5" column_invisible="True"/>
+	                <field name="custom_color_6" column_invisible="True"/>
+	                <field name="custom_color_7" column_invisible="True"/>
+	                <field name="custom_attribute_1" column_invisible="True"/>
+	                <field name="custom_prod_type" column_invisible="True"/>
+	                <field name="custom_personalize" column_invisible="True"/>
+	                <field name="custom_line1" optional="hide"/>
+	                <field name="custom_line2" optional="hide"/>
+	                <field name="custom_line3" optional="hide"/>
+	                <field name="custom_initials" column_invisible="True"/>
+	                <field name="custom_font" optional="hide"/>
+	                <field name="custom_fontcase" optional="hide"/>
+	                <field name="custom_opentext" optional="hide"/>
+	                <field name="custom_etail_ticket_no" optional="hide"/>
+					<field name="custom_customer_product" />
+	                <field name="custom_item_image" widget="image" options="{'zoom': true}" readonly="custom_prod_type == 'pre_set'" force_save="1"/>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='product_id']" position="attributes">
+	                <attribute name="domain">[('sale_ok','=',True),'|','|','|',('custom_allowed_customer_ids','=',parent.partner_id),('custom_link_customer','=',False),('custom_link_customer','=',parent.partner_id),('custom_link_customer','in',parent.custom_allowed_customer_ids)]</attribute>
+	            </xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='product_template_id']" position="attributes">
+	                <attribute name="domain">[('sale_ok','=',True),'|','|','|',('custom_allowed_customer_ids','=',parent.partner_id),('custom_link_customer','=',False),('custom_link_customer','=',parent.partner_id),('custom_link_customer','in',parent.custom_allowed_customer_ids)]</attribute>
+	            </xpath>
+				<xpath expr="//field[@name='partner_id']" position="attributes">
+	                <attribute name="domain">[('is_company', '=', True),('company_id', 'in', (False, company_id)),('customer_rank', '&gt;', 0),('shopify_instance_id', '=', False)]</attribute>
+	            </xpath>
+				<field name="partner_invoice_id" position="attributes">
+                    <attribute name="domain">[('type','=','invoice'),'|',('id', '=', partner_id),('parent_id', '=', partner_id)]</attribute>
+                </field>
+                <field name="partner_shipping_id" position="attributes">
+                    <attribute name="domain">[('type','=','delivery'),'|',('id', '=', partner_id),('parent_id', '=', partner_id)]</attribute>
+                </field>
+                <field name="date_order" position="after">
+                    <label for="commitment_date" string="Expected"/>
+					<div class="o_row">
+						<field name="commitment_date" on_change="1" field_id="commitment_date_0"/>
+						<span class="text-muted" invisible="effective_date and commitment_date">
+						System Expected: 
+							<field name="expected_date" class="oe_inline" widget="date" on_change="1" field_id="expected_date_0"/>
+							<field name="show_json_popover" invisible="1" field_id="show_json_popover_0"/>
+							<field string=" " name="json_popover" widget="stock_rescheduling_popover" invisible="not show_json_popover" field_id="json_popover_0"/>
+						</span>
+					</div>
+					<field name="effective_date" invisible="not effective_date" field_id="effective_date_0"/>
+                </field>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/control[1]" position="replace">
+				    <control>
+                	<create name="add_product_control" string="Add a product"/>
+                    <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                    <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                    </control>
+            	</xpath>
+            	<field name="partner_shipping_id" position="attributes">
+    				<attribute name="context">{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}</attribute>
+  				</field >
+				<xpath expr="//field[@name='payment_term_id']" position="attributes">
+					<attribute name="required">True</attribute>
+				</xpath>
+				<xpath expr="//field[@name='tag_ids']" position="after">
+					<field name="custom_import_id" readonly="1" invisible="custom_import_id == False"/>
+				</xpath>
+				<xpath expr="//field[@name='partner_shipping_id']" position="after">
+					<field name="custom_so_special_inst"/>
+                    <field name="custom_dropship_order" readonly="state in ['cancel','sale']"/>
+                    <field name="custom_hide_register_button" invisible="1"/>
+                    <field name="custom_from" invisible="custom_dropship_order == False"/>
+				</xpath>
+                <xpath expr="//field[@name='validity_date']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//form[1]/header[1]/button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//form[1]/header[1]/button[@name='action_confirm']" position="replace">
+                    <button name="custom_action_confirm" string="Confirm" class="btn-primary" type="object" invisible="state in ['sale','cancel']"/>
+                    <button class="btn btn-primary" name="custom_register_payment" type="object"
+                        string="Register Payment" invisible="custom_hide_register_button"
+                    />
+                </xpath>
+                <xpath expr="//form[1]/header[1]/button[@id='create_invoice']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//form[1]/header[1]/button[@id='create_invoice_percentage']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+			</field>
+		</record>
+
+		<record id="view_quotation_tree_inherit" model="ir.ui.view">
+			<field name="name">mrp.production.tree.custom</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_quotation_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr="//header" position="inside">
+					<button name="action_confirm_orders" type="object" string="Confirm Orders"/>
+				</xpath>
+			</field>
+		</record>
+    </data>
+</odoo>

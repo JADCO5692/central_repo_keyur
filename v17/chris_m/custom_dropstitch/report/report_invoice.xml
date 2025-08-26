@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_invoice_document_inherit_customer_sku" inherit_id="account.report_invoice_document">
+        <xpath expr="//th[@name='th_description']" position="after">
+            <th name="th_sm_customer_sku">
+                <strong>Customer SKU</strong>
+            </th>
+            <th name="th_sm_image_sku">
+                <strong>Product Image</strong>
+            </th>
+        </xpath>
+        <xpath expr="//td[@name='account_invoice_line_name']" position="after">
+            <td>
+                <span t-field="line.custom_order_line_id.custom_customer_product"/>
+            </td>
+            <td>
+                <img t-if="line.custom_item_image" class="h-25 w-50 mw-50"
+                     t-attf-src="{{'data:image/png;base64,%s' % line.custom_item_image.decode('utf-8')}}"
+                     t-att-title="line.product_id.name"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//div[@id='informations']/div[@name='reference']" position="replace">
+            <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2" t-if="o.ref"
+                 name="reference">
+                <strong>Customer Order Ref:</strong>
+                <br/>
+                <span t-field="o.ref">INV/2023/00001</span>
+            </div>
+        </xpath>
+        <xpath expr="//t[@t-if='o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)']/.."
+               position="replace">
+            <div class="row">
+
+                <!-- Invoice Address Block -->
+                <div t-att-class="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and 'col-4' or 'col-6'">
+                    <div name="invoice_address_block">
+                        <strong>Invoice Address:</strong>
+                        <div t-field="o.partner_id"
+                             t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    </div>
+                </div>
+
+                <!-- Shipping Address Block (only shown if different) -->
+                <div t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)" t-att-class="'col-4'">
+                    <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
+                        <strong>Shipping Address:</strong>
+                        <div t-field="o.partner_shipping_id"
+                             t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    </div>
+                </div>
+
+                <!-- Invoice Info Block -->
+                <div t-att-class="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and 'col-4' or 'col-6'">
+                    <table style="width: 100%;border-collapse: collapse; margin-top:-6px"
+                           class="table table-sm table-borderless">
+                        <tr>
+                            <center>
+                                <strong>
+                                    <span t-field="o.name" style="font-size:18px !important"/>
+                                </strong>
+                            </center>
+                        </tr>
+                        <tr t-if="o.invoice_date">
+                            <td style="padding: 0px">Invoice Date:</td>
+                            <td style="padding: 0px">
+                                <span t-field="o.invoice_date"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.invoice_origin">
+                            <td style="padding: 0px">Sale Order:</td>
+                            <td style="padding: 0px">
+                                <span t-field="o.invoice_origin"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.ref">
+                            <td style="padding: 0px">Customer Order Ref:</td>
+                            <td style="padding: 0px">
+                                <span t-field="o.ref"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.invoice_payment_term_id">
+                            <td style="padding: 0px">Payment Term:</td>
+                            <td style="padding: 0px">
+                                <span t-field="o.invoice_payment_term_id"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.invoice_date_due">
+                            <td style="border: none !important;padding: 0px !important;">Due Date:</td>
+                            <td style="border: none !important">
+                                <span t-field="o.invoice_date_due"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="attributes">
+            <attribute name="style">display:none</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]/h2" position="attributes">
+            <attribute name="style">display:none</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]/.." position="attributes">
+            <attribute name="class">clearfix</attribute>
+        </xpath>
+        <xpath expr="//table[@name='invoice_line_table']" position="replace">
+            <table class="table table-sm o_main_table table-borderless" name="invoice_line_table">
+                <thead>
+                    <tr>
+                        <th name="th_description" class="text-start">
+                            <span>Product | Description</span>
+                        </th>
+                        <th name="sku_order_id" class="text-start">
+                            <span>Customer SKU | Order ID</span>
+                        </th>
+                        <th name="item_image" class="text-start">
+                            <span>Item Image</span>
+                        </th>
+                        <th name="th_quantity" class="text-end">
+                            <span>Quantity</span>
+                        </th>
+                        <th name="th_priceunit"
+                            t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                            <span>Unit $</span>
+                        </th>
+                        <th name="th_subtotal" class="text-end">
+                            <span>Amount</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="invoice_tbody">
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-set="current_total" t-value="0"/>
+                    <t t-set="lines"
+                       t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+
+                    <t t-foreach="lines" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                        <t t-set="current_total" t-value="current_total + line.price_total"/>
+
+                        <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <t t-if="line.display_type == 'product'" name="account_invoice_line_accountable">
+                                <td name="account_invoice_line_name">
+                                    <span t-field="line.product_id.name" t-options="{'widget': 'product_name'}"/>
+                                    <br/>
+                                    <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}"/>
+                                    <br/>
+                                    <span t-if="line.product_id.custom_prod_size and line.product_id.custom_prod_size != 'na'"
+                                          t-field="line.product_id.custom_prod_size"/>
+                                    <span t-if="(line.product_id.custom_prod_size and line.product_id.custom_prod_size != 'na') and (line.product_id.custom_fiber and line.product_id.custom_fiber != 'na')">
+                                        |
+                                    </span>
+                                    <span t-if="line.product_id.custom_fiber and line.product_id.custom_fiber != 'na'"
+                                          t-field="line.product_id.custom_fiber"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.custom_order_line_id.custom_customer_product"/>
+                                    <br/>
+                                    <span t-field="line.custom_order_line_id.custom_order_no"/>
+                                </td>
+                                <td>
+                                    <img t-if="line.custom_item_image" width="100"
+                                         t-attf-src="{{'data:image/png;base64,%s' % line.custom_item_image.decode('utf-8')}}"
+                                         t-att-title="line.product_id.name"/>
+                                </td>
+                                <td name="td_quantity" class="text-end">
+                                    <span t-esc="int(line.quantity)"/>
+                                </td>
+                                <td name="td_price_unit"
+                                    t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                    <span class="text-nowrap" t-field="line.price_unit"/>
+                                </td>
+                                <td name="td_subtotal" class="text-end o_price_total">
+                                    <span class="text-nowrap" t-field="line.price_subtotal"/>
+                                </td>
+                            </t>
+                            <t t-elif="line.display_type == 'line_section'">
+                                <td colspan="99">
+                                    <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-elif="line.display_type == 'line_note'">
+                                <td colspan="99">
+                                    <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}"/>
+                                </td>
+                            </t>
+                        </tr>
+
+                        <t t-if="current_section and (line_last or lines[line_index+1].display_type == 'line_section')">
+                            <tr class="is-subtotal text-end">
+                                <td colspan="99">
+                                    <strong class="mr16">Subtotal</strong>
+                                    <span t-out="current_subtotal"
+                                          t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+        </xpath>
+        <xpath expr="//div[@id='payment_term']" position="attributes">
+            <attribute name="style">display:none</attribute>
+        </xpath>
+        <xpath expr="//div[@id='payment_term']" position="after">
+            <div>
+                <ul>
+                    <li>
+                        Carrier:
+                        <span t-field="o.invoice_line_ids.custom_order_line_id.order_id.picking_ids[-1].carrier_id.name"
+                              t-options="{'widget': 'text'}"/>
+                    </li>
+                    <li>
+                        Tracking Number:
+                        <span t-field="o.invoice_line_ids.custom_order_line_id.order_id.picking_ids[-1].carrier_tracking_ref"
+                              t-options="{'widget': 'text'}"/>
+                    </li>
+                </ul>
+            </div>
+            <div class="text-muted mb-3"
+                 t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}"
+                 t-if="not is_html_empty(o.narration)" name="comment">
+                <span t-field="o.narration"/>
+            </div>
+
+        </xpath>
+        <xpath expr="//t[@t-set='o']" position="after">
+            <style>
+                * {
+                font-size: 14px !important;
+                }
+            </style>
+        </xpath>
+        <xpath expr="//t[@t-if='len(payments_vals) > 0']/tr" position="replace">
+            <tr class="border-black fw-bold">
+                <td>
+                    <span style="color:#ae9393; font-size:16px !important">Balance Due</span>
+                </td>
+                <td class="text-end">
+                    <span style="font-size:16px !important" t-field="o.amount_residual"/>
+                </td>
+            </tr>
+        </xpath>
+    </template>
+
+    <template id="document_tax_totals_template_innherit" inherit_id="account.document_tax_totals_template">
+        <xpath expr="//tr[@class='border-black o_total']/td" position="replace">
+            <td>
+                <strong>
+                    <span style="color:#ae9393">Total</span>
+                </strong>
+            </td>
+        </xpath>
+    </template>
+</odoo>

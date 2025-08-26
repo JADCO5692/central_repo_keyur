@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_inherit_sale_order_form" model="ir.ui.view">
+        <field name="name">view.inherit.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name='tax_totals' position="after">
+                <field name="partial_pay_amount" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_inherit_res_partner_form" model="ir.ui.view">
+        <field name="name">view.inherit.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']/group" position="inside">
+                <group string="Website" name="partial_payment_allow" priority="5">
+                    <field name="allow_partial_payment"/>
+                </group>
+            </xpath>
+            <xpath expr="//sheet//notebook" position="inside">
+                <page name="partial_payment" string="Partial Payment" invisible="allow_partial_payment != True">
+                    <group col="4">
+                        <field name="min_order_amount"/>
+                        <field name="adv_payment_amount"/>
+                        <field name="min_payment_term"/>
+                        <field name="max_partial_order"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

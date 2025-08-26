@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View -->
+        <record id="stock_location_view_form_inherit" model="ir.ui.view">
+            <field name="name">stock.location.view.inherit.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <field name="return_location" position="after">
+                    <field name="prevent_intrimed_entries" />
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

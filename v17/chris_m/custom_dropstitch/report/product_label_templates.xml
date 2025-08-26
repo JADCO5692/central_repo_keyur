@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_travel_ticket_label_102X45">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="manu_order">
+                    <!-- Check if product_qty is greater than 5 -->
+                    <t t-if="manu_order.product_qty &lt; 5">
+                        <!-- Print only one label -->
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="p-1 ml32 mt-2" style="font-size:12px !important;">
+                                        <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_current_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                        <br/> 
+                                        <b><t t-esc="manu_order.name"/></b><br/>
+                                        <b>M #<t t-esc="manu_order.custom_machine_no"/></b>
+                                        <b>N <t class="ml32" t-esc="manu_order.custom_needle"/></b>
+                                        <br/>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-1 ml32 mt-2" style="font-size:12px !important;">
+                                        <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_stock_picking_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                        <br/> 
+                                        <b>Bundle 1/1</b><br/>
+                                        <b>Qty <t t-esc="int(manu_order.product_qty)"/>/<t t-esc="int(manu_order.product_qty)"/></b>
+                                        <br/> 
+                                        <b>SO# <t t-esc="manu_order.origin"/></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            	<div class="text-center">
+                                    <t t-esc="manu_order.custom_line1"/> <t t-if="manu_order.custom_line2">/</t> <t t-esc="manu_order.custom_line2"/> <t t-if="manu_order.custom_line3">/</t> <t t-esc="manu_order.custom_line3"/>
+                                </div>                            	
+                            </div>
+                        </div>
+                        <p style="page-break-after:always;"/>
+                    </t>
+                    <t t-else="">
+                        <!-- Print labels equal to product_qty -->
+                        <t t-foreach="range(int(ceil(manu_order.product_qty/manu_order.traveler_batch_count)))" t-as="qty_prod">
+                            <div class="page">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="p-1 ml32 mt-4" style="font-size:12px !important;">
+                                            <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_current_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                            <br/> 
+                                            <b><t t-esc="manu_order.name"/></b><br/>
+                                            <b>M #<t t-esc="manu_order.custom_machine_no"/></b>
+                                            <b>N <t class="ml32" t-esc="manu_order.custom_needle"/></b>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-1 ml32 mt-4" style="font-size:12px !important;">
+                                            <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_stock_picking_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                            <br/>
+                                            <b>Bundle <t t-esc="qty_prod+1"/>/<t t-esc="ceil(manu_order.product_qty/manu_order.traveler_batch_count)"/></b><br/>
+                                            <t t-if="qty_prod+1 == (int(ceil(manu_order.product_qty/manu_order.traveler_batch_count)))">
+                                            	<b>Qty <t t-esc="int(manu_order.product_qty)-(manu_order.traveler_batch_count*qty_prod)"/>/<t t-esc="int(manu_order.product_qty)"/></b>
+                                            </t>
+                                            <t t-else="">
+                                            	<b>Qty <t t-esc="manu_order.traveler_batch_count"/>/<t t-esc="int(manu_order.product_qty)"/></b>
+                                            </t>
+                                            <br/> 
+                                            <b>SO# <t t-esc="manu_order.origin"/></b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+	                            	<div class="text-center">
+	                                    <t t-esc="manu_order.custom_line1"/> <t t-if="manu_order.custom_line2">/</t> <t t-esc="manu_order.custom_line2"/> <t t-if="manu_order.custom_line3">/</t> <t t-esc="manu_order.custom_line3"/>
+	                                </div>                            	
+	                            </div>
+                            </div>
+                            <p style="page-break-after:always;"/>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="report_mass_travel_ticket_label_102X45">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="manu_order">
+                    <!-- Check if product_qty is greater than 5 -->
+                    <t t-if="manu_order.product_qty &lt; 5">
+                        <!-- Print only one label -->
+                        <div class="page">
+                            <div class="row d-flex align-items-start">
+                                <div class="col-6">
+                                    <div class="p-1 ml32 mt-2" style="font-size:12px !important;">
+                                        <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_current_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                        <br/>
+                                        <b><t t-esc="manu_order.name"/></b><br/>
+                                        <b>M #<t t-esc="manu_order.custom_machine_no"/></b>
+                                        <b>N <t class="ml32" t-esc="manu_order.custom_needle"/></b>
+                                        <br/>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-1 ml32 mt-2" style="font-size:12px !important;">
+                                        <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_stock_picking_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                        <br/>
+                                        <b>Bundle 1/1</b><br/>
+                                        <b>Qty <t t-esc="int(manu_order.product_qty)"/>/<t t-esc="int(manu_order.product_qty)"/></b>
+                                        <br/> 
+                                        <b>SO# <t t-esc="manu_order.origin"/></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            	<div class="text-center">
+                                    <t t-esc="manu_order.custom_line1"/> <t t-if="manu_order.custom_line2">/</t> <t t-esc="manu_order.custom_line2"/> <t t-if="manu_order.custom_line3">/</t> <t t-esc="manu_order.custom_line3"/>
+                                </div>                            	
+                            </div>
+                        </div>
+                        <p style="page-break-after:always;"/>
+                    </t>
+                    <t t-else="">
+                        <!-- Print labels equal to product_qty -->
+                        <t t-foreach="range(int(ceil(manu_order.product_qty/manu_order.traveler_batch_count)))" t-as="qty_prod">
+                            <div class="page">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="p-1 ml32 mt-4" style="font-size:12px !important;">
+                                            <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_current_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                            <br/>
+                                            <b><t t-esc="manu_order.name"/></b><br/>
+                                            <b>M #<t t-esc="manu_order.custom_machine_no"/></b>
+                                            <b>N <t class="ml32" t-esc="manu_order.custom_needle"/></b>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-1 ml32 mt-4" style="font-size:12px !important;">
+                                            <img class="mb-2" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(manu_order.custom_stock_picking_url), 95, 95)" style="height:90px; width:90px;" alt="QR Code"/>
+                                            <br/> 
+                                            <b>Bundle <t t-esc="qty_prod+1"/>/<t t-esc="ceil(manu_order.product_qty/manu_order.traveler_batch_count)"/></b><br/>
+                                            <t t-if="qty_prod+1 == (int(ceil(manu_order.product_qty/manu_order.traveler_batch_count)))">
+                                            	<b>Qty <t t-esc="int(manu_order.product_qty)-(manu_order.traveler_batch_count*qty_prod)"/>/<t t-esc="int(manu_order.product_qty)"/></b>
+                                            </t>
+                                            <t t-else="">
+                                            	<b>Qty <t t-esc="manu_order.traveler_batch_count"/>/<t t-esc="int(manu_order.product_qty)"/></b>
+                                            </t>
+                                            <br/> 
+                                            <b>SO# <t t-esc="manu_order.origin"/></b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+	                            	<div class="text-center">
+	                                    <t t-esc="manu_order.custom_line1"/> <t t-if="manu_order.custom_line2">/</t> <t t-esc="manu_order.custom_line2"/> <t t-if="manu_order.custom_line3">/</t> <t t-esc="manu_order.custom_line3"/>
+	                                </div>                            	
+	                            </div>
+                            </div>
+                            <p style="page-break-after:always;"/>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+    
+</odoo>

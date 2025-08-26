@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        
+        <record id="action_report_label_workorder" model="ir.actions.report">
+            <field name="name">Shipping Label</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_dropstitch_reports.template_report_label_workorder</field>
+            <field name="report_file">custom_dropstitch_reports.template_report_label_workorder</field>
+            <field name="paperformat_id" ref="custom_dropstitch_reports.mrp_paperformat_report_label"/>
+            <field name="binding_model_id" ref="model_mrp_production"/>
+            <field name="print_report_name">'Shipping Label'</field>
+        </record>
+
+        <template id="template_report_label_workorder">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <t t-if="o.custom_etail_ticket_no">
+                                <t t-set="heigth" t-value="'38px'"/>
+                            </t> 
+                            <t t-else="">
+                                <t t-set="heigth" t-value="'58px'"/>
+                            </t>
+                            <t t-set="barcode_size" t-value="'width: 300px;height:'+heigth+';'"/>
+                            <t t-set="barcode_size1" t-value="'width: 100%;height:'+heigth+';'"/>
+                            <div class="row mb-1" t-if="o.custom_etail_ticket_no">
+                                <div class="col-12" style="text-align:center;padding:2px 0px;">
+                                    <!-- to print cust order -->
+                                    <div class="o_label_full w-100">
+                                        <div t-out="o.custom_etail_ticket_no" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size1}"/>
+                                    </div>
+                                    <div class="mt-1"> <t t-out="o.custom_etail_ticket_no"/></div> 
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-6" style="text-align:center;padding:2px 0px;">
+                                    <!-- to print cust order -->
+                                    <div class="o_label_full w-100">
+                                        <div t-out="o.custom_order_no" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>
+                                    </div>
+                                    <div class="mt-1"> <t t-out="o.custom_order_no"/></div> 
+                                </div>
+                                <div class="col-6" style="text-align:center;padding:2px 0px;">
+                                    <!-- to print cust reference -->
+                                    <div class="o_label_full">
+                                        <div t-out="o.custom_customer_product" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>
+                                    </div>
+                                    <div class="mt-1"> <t t-out="o.custom_customer_product"/></div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-12" style="text-align:center;padding-top:1px;">
+                                    <div class="">
+                                        <t t-esc="o.sudo().get_order_date()"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-12" style="text-align:center;padding:2px 0px;">
+                                    <!-- to print product colorway personalisation -->
+                                    <div class="">
+                                        <t t-esc="o.sudo().get_display_name()"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mt-1">
+                                <div class="col-12" style="text-align:center;padding:0px 0px;">
+                                    <!-- method to get open_text barcode value -->
+                                    <!-- <t t-set="open_text" t-value="o.get_open_text()"/> -->
+                                    <div class="o_label_full">
+                                        <div t-out="o.sudo().custom_opentext" style="padding:0px" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size1}"/>
+                                        <!--<img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(o.custom_opentext), 100, 100)" style="height:50px; width:100px;" alt="QR Code"/>-->
+                                    </div>
+                                    <div> <t t-out="o.sudo().custom_opentext"/></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="page-break-after:always;"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+        
+    </data>
+</odoo>

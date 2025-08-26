@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="cust_group_knit_dept" model="res.groups">
+        <field name="name">Knit Department</field>
+    </record>   
+    
+    <record id="cust_group_sew" model="res.groups">
+        <field name="name">Sew Department</field>
+    </record>
+</odoo>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="view_partner_form_custom" model="ir.ui.view">
+			<field name="name">res.partner.form.custom</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='internal_notes']" position="after">
+ 					<page string="Packaging Notes" name="custom_pack_notes" invisible="parent_id">
+	 					<group>
+							<group>
+								<field name="custom_label_template_id"/>
+							</group>
+							<group>
+							</group>
+							<group>
+								<field name="custom_label_type" required="customer_rank > 0"/>
+								<field name="custom_brand_label" required="customer_rank > 0"/>
+								<field name="custom_care_label" required="customer_rank > 0"/>
+								<field name="custom_label_placement" required="customer_rank > 0"/>
+								<field name="custom_instruction" required="customer_rank > 0"/>
+								<field name="custom_pack_instr" required="customer_rank > 0"/>
+							</group>
+							<group>
+								<field name="custom_bag_info" required="customer_rank > 0"/>
+								<field name="custom_box_info" required="customer_rank > 0"/>
+								<field name="custom_label_image" widget="image" options="{'zoom': true}" required="customer_rank > 0"/>
+							</group>
+						</group>
+					</page>
+					<page string="Mass Import" name="custom_mass_import">
+						<group>
+							<group>
+								<field name="custom_sale_order_template_id" filename="custom_sale_order_template_name" invisible="customer_rank &lt; 1"/>
+								<field name="custom_sale_order_template_name" invisible="1" force_save="1"/>
+								<field name="custom_sale_order_template_flag" invisible="1" force_save="1"/>
+							</group>
+							<group>
+								<field name="custom_mass_imp_val" required="customer_rank > 0"/>
+								<field name="custom_mass_imp_colorway" required="custom_mass_imp_val != 'na'"/>
+							</group>
+						</group>
+					</page>
+				</xpath>
+				<group name="sale" position="inside">
+					<field name="custom_allowed_shipping_ids" invisible="customer_rank &lt; 1 or parent_id" widget="many2many_tags"/>
+					<field name="custom_allowed_customer_ids" invisible="customer_rank &lt; 1" widget="many2many_tags"/>
+					<field name="custom_auto_pay_limit" invisible="customer_rank &lt; 1 or parent_id" required="customer_rank > 0 and not parent_id"/>
+					<field name="custom_policy" required="1" readonly="1" widget="radio"/>
+					<field name="custom_dropship_order" invisible="parent_id"/>
+					<field name="customer_rank"/>
+					<field name="custom_capture_tiff_file" invisible="parent_id"/>
+					<field name="custom_capture_image" invisible="parent_id"/>
+					<field name="custom_shipping_fees" required="customer_rank > 0 and not parent_id" invisible="parent_id"/>
+					<field name="custom_generate_type"/>
+					<field name="shipstation_store_id"/>
+					<field name="custom_customer_logo" widget="image" invisible="parent_id"/>
+					<label for="custom_require_payment" invisible="parent_id"/>
+					<div id="custom_require_payment" class="o_row" invisible="parent_id">
+						<field name="custom_require_payment" class="oe_inline"/>
+						<span invisible="not custom_require_payment">of</span>
+						<field name="custom_prepayment_percent" invisible="not custom_require_payment" widget="percentage" class="oe_inline"/>
+					</div>
+				</group>
+				<group name="purchase" position="inside">
+					<field name='custom_receipt_type_id'/>
+					<field name="supplier_rank"/>
+				</group>
+				<xpath expr='//field[@name="category_id"]' position='after'>
+					<field name="custom_allowed_supplier_ids" invisible="supplier_rank==0" widget="many2many_tags"/>
+				</xpath>
+				<xpath expr="//field[@name='property_payment_term_id']" position="attributes">
+					<attribute name="required">customer_rank > 0 and not parent_id</attribute>
+					<attribute name="invisible">parent_id</attribute>
+				</xpath>
+				<xpath expr="//field[@name='property_product_pricelist']" position="attributes">
+					<attribute name="required">customer_rank > 0 and not parent_id</attribute>
+					<attribute name="invisible">parent_id</attribute>
+				</xpath>
+				<xpath expr="//field[@name='property_delivery_carrier_id']" position="attributes">
+					<attribute name="required">customer_rank > 0 and not parent_id</attribute>
+					<attribute name="invisible">parent_id</attribute>
+				</xpath>
+				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="attributes">
+					<attribute name="required">customer_rank > 0 and not parent_id</attribute>
+					<attribute name="invisible">parent_id</attribute>
+				</xpath>
+
+				<xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+					<page string="Contacts To Notify" name="custom_contacts_notify" invisible="company_type != 'company'">
+						<group>
+							<group>
+								<field name="custom_order_confirmation_ids" domain="[('id','in',child_ids)]" widget="many2many_tags"/>
+							</group>
+							<group>
+								<field name="custom_shipping_confirmation_ids" domain="[('id','in',child_ids)]" widget="many2many_tags"/>
+							</group>
+							<group>
+								<field name="custom_invoice_generated_ids" domain="[('id','in',child_ids)]" widget="many2many_tags"/>
+							</group>
+							<group>
+								<field name="custom_payment_completed_ids" domain="[('id','in',child_ids)]" widget="many2many_tags"/>
+							</group>
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_partner_expense_account_form_custom" model="ir.ui.view">
+			<field name="name">res.partner.form.expense.account.custom</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="account.view_partner_property_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='property_account_payable_id']" position="after">
+					<field name="custom_property_expense_account_id" class="o_field_widget o_field_many2one"/>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

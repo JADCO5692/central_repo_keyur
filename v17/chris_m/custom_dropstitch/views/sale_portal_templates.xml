@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_order_portal_content_custom" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//section[@id='details']//th[@id='product_qty_header']" position="after">
+            <th class="text-center" id="cust_product_image_header">Product Image</th>
+        </xpath>
+        <xpath expr="//section[@id='details']//td[@id='quote_qty_td']" position="after">
+        	<td>
+                <img class="product_detail_img h-25 w-100 mw-100" t-att-src="'/custom/image/sale_order_line/%s' % line.id" style="width:50px;" /> 
+            </td>
+        </xpath>
+        <xpath expr="//section[@id='details']//th[@id='product_qty_header']" position="before">
+            <th class="text-start" id="cust_product_image_header">Customer SKU</th>
+        </xpath>
+         <xpath expr="//section[@id='details']//td[@id='quote_qty_td']" position="before">
+        	<td>
+	            <div t-field="line.custom_customer_product"/>
+            </td> 
+        </xpath>
+        <xpath expr="//tbody[@class='sale_tbody']//t[@t-foreach='lines_to_report']/tr[1]" position="before">
+            <t t-set="line_mo" t-value="sale_order.mrp_production_ids.filtered(lambda a:a.custom_sale_order_line.id == line.id and not a.custom_is_scrap_mo)"/>
+        </xpath>
+        <xpath expr="//tbody[@class='sale_tbody']//t[@t-foreach='lines_to_report']/tr[1]" position="attributes">
+            <attribute name="t-attf-id">#{'bb-none' if line_mo else ''}</attribute>
+        </xpath>
+
+        <xpath expr="//tbody[@class='sale_tbody']//t[@t-foreach='lines_to_report']/tr[1]" position="after">
+            <tr t-attf-id="#{'bt-none' if line_mo else ''}" t-if="line_mo">
+                <td colspan="7">  
+                    <div class="w-100 d-flex align-items-center">
+                        <span t-if="line_mo" t-field="line_mo.name" />
+                        <div class="small badge text-bg-success ms-3">
+                            <span t-field="line_mo.state" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </xpath>
+
+         <xpath expr="//div[@id='sale_info']/table/tbody[@id='sale_info_table']/tr[@t-if='sale_order.client_order_ref']" position="replace">
+        	<tr t-if="sale_order.client_order_ref">
+                <th class="ps-0 pb-0">Customer Order Ref:</th>
+                <td class="w-100 pb-0 text-wrap"><span t-field="sale_order.client_order_ref"/></td>
+            </tr>
+            <tr t-if="sale_order.custom_so_special_inst">
+                <th class="ps-0 pb-0">Special Instructions:</th>
+                <td class="w-100 pb-0 text-wrap"><span t-field="sale_order.custom_so_special_inst"/></td>
+            </tr>
+        </xpath>
+        <xpath expr="//td[@id='product_name']" position="replace">
+            <td id="product_name">
+                <span t-field="line.name"/> 
+                <t t-if="line.custom_color_2"><t t-esc="line.custom_color_2.display_name"/><br/></t>
+                <t t-if="line.custom_color_3"><t t-esc="line.custom_color_3.display_name"/><br/></t>
+                <t t-if="line.custom_color_4" ><t t-esc="line.custom_color_4.display_name"/><br/></t>
+                <t t-if="line.custom_color_5"><t t-esc="line.custom_color_5.display_name"/><br/></t>
+                <t t-if="line.custom_color_6" ><t t-esc="line.custom_color_6.display_name"/></t>
+                <br/>
+                <t t-if="line.custom_attribute_1" t-esc="line.custom_attribute_1.display_name"></t>
+                <br/>
+                <t t-if="line.custom_tiff_file_name">
+                    Tiff file: <t t-esc="line.custom_tiff_file_name"></t>
+                </t> 
+            </td>
+        </xpath>
+    </template>
+    
+   <template id="report_saleorder_document_Custom" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[hasclass('page')]/table/thead/tr/th[@name='th_description']" position="after">
+            <th class="text-center" id="cust_product_image_header">Product Image</th>
+        </xpath>
+        
+        <xpath expr="//div[hasclass('page')]/table/tbody[hasclass('sale_tbody')]/t/tr/t/td[@name='td_name']" position="after">
+            <td> 
+                <div style="width:50px;" t-field="line.sudo().custom_item_image" class="d-flex align-items-start justify-content-center"
+	                 t-options='{"widget": "image", "class": "product_detail_img h-25 w-100 mw-100", "alt-field": "name"}'/>
+            </td>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]/div[@id='informations']/div[@name='informations_reference']" position="replace">
+        	<div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2" name="informations_reference">
+                <strong>Customer Order Ref:</strong><br/>
+                <span class="m-0" t-field="doc.client_order_ref">SO0000</span>
+            </div>
+        </xpath>
+        <xpath expr="//td[@name='td_name']" position="replace">
+            <td name="td_name">
+                <span t-field="line.name"/>
+                <t t-if="line.custom_color_2"><t t-esc="line.custom_color_2.display_name"/><br/></t>
+                <t t-if="line.custom_color_3"><t t-esc="line.custom_color_3.display_name"/><br/></t>
+                <t t-if="line.custom_color_4" ><t t-esc="line.custom_color_4.display_name"/><br/></t>
+                <t t-if="line.custom_color_5"><t t-esc="line.custom_color_5.display_name"/><br/></t>
+                <t t-if="line.custom_color_6" ><t t-esc="line.custom_color_6.display_name"/></t>
+                <br/>
+                <t t-if="line.custom_attribute_1" t-esc="line.custom_attribute_1.display_name"></t>
+                <br/>
+                <t t-if="line.custom_tiff_file_name">
+                    Tiff file: <t t-esc="line.custom_tiff_file_name"></t>
+                </t>
+            </td>
+        </xpath>
+   </template>
+
+    <template id="report_delivery_document_inherit_sale_stock_custom" inherit_id="sale_stock.report_delivery_document_inherit_sale_stock">
+        <xpath expr="//div[@t-if='o.sudo().sale_id.client_order_ref']" position="replace">
+            <div class="col-auto justify-content-end" t-if="o.sudo().sale_id.client_order_ref">
+                <strong>Customer Order Ref:</strong>
+                <p t-field="o.sudo().sale_id.client_order_ref">Customer reference</p>
+            </div>
+        </xpath>
+    </template> 
+    <template id="sale_order_portal_content_inherit_sale_mrp" inherit_id="sale_mrp.sale_order_portal_content_inherit_sale_mrp" name="MRP">
+        <xpath expr="//t[@t-if='mrp_productions']" position="replace">
+        </xpath>
+    </template>
+    <template id="sale_order_portal_inherit_dropstitch" inherit_id="sale.sale_order_portal_template">
+        <xpath expr="//div[contains(@class,'custom-control')]" position="replace">
+        </xpath>
+    </template>
+</odoo>

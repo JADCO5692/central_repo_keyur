@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_custom_product_warehouse_tree" model="ir.ui.view">
+	    <field name="name">Product Warehouse</field>
+	    <field name="model">custom.product.warehouse</field>
+	    <field name="arch" type="xml">
+        	<tree string="Product Warehouse" editable="bottom">
+	            <field name="custom_customer_id"  />
+	            <field name="custom_product_id"  />
+	            <field name="custom_warehouse_id" />
+	            <field name="custom_location_id" domain="[('warehouse_id', '=', custom_warehouse_id)]"  />
+        	</tree>
+		</field>
+	</record>
+
+	<record id="view_custom_product_warehouse_search" model="ir.ui.view">
+		<field name="name">custom.product.warehouse.search</field>
+		<field name="model">custom.product.warehouse</field>
+		<field name="arch" type="xml">
+			<search>
+		    	<field name="custom_customer_id" filter_domain="[('custom_customer_id', 'ilike', self)]"/>
+		    	<field name="custom_product_id" filter_domain="[('custom_product_id', 'ilike', self)]"/>
+		        <field name="custom_warehouse_id" filter_domain="[('custom_warehouse_id', 'ilike', self)]"/>
+		        <field name="custom_location_id" filter_domain="[('custom_location_id', 'ilike', self)]"/>
+			</search>
+		</field>
+	</record>
+
+	<record id="action_custom_product_warehouse" model="ir.actions.act_window">
+    	<field name="name">Product Warehouse</field>
+        <field name="res_model">custom.product.warehouse</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_custom_product_warehouse_search"/>
+        <field name="view_id" ref="view_custom_product_warehouse_tree"/>
+        <field name="help" type="html">
+        	<p class="o_view_nocontent_smiling_face">
+            	Upload Product Warehouse Location
+			</p>
+		</field>
+        <field name="context">{}</field>
+	</record>
+	
+	<menuitem id="menu_sale_customizaion" name="Customization" parent="sale.menu_sale_config" sequence="50"/>
+
+    <menuitem
+	    id="menu_custom_product_warehouse"
+	    name="Product Warehouse Location"
+	    action="action_custom_product_warehouse"
+	    parent="custom_dropstitch.menu_sale_customizaion" 
+	    sequence="9"/>
+</odoo>

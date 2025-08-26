@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="checkout_layout_custom" inherit_id="website_sale.checkout_layout" name="Checkout Custom">
+        <xpath expr="//div[@id='o_cart_summary']//div[hasclass('card-body')]/t[@t-call='website_sale.total']" position="before">
+            <div class="w-100 img-file-upload mb-2 border-bottom pb-4">
+                <label class="d-block">Customer Order Reference *</label>           
+                <input class="w-100 form-control" type="text" name="customer_ord_ref" required="1" t-att-value="website_sale_order and website_sale_order.client_order_ref"/>
+            </div>
+            <div class="w-100 img-file-upload mb-2 border-bottom pb-4">
+                <label class="d-block">Special Instructions</label>           
+                <input class="w-100 form-control" type="text" name="customer_special_instructions" t-att-value="website_sale_order and website_sale_order.custom_so_special_inst"/>
+            </div>
+        </xpath>
+    </template>
+    <template id="navigation_buttons_custom" inherit_id="website_sale.navigation_buttons" name="template_name">
+        <xpath expr="//a[@name='website_sale_main_button']" position="attributes">
+            <attribute name="t-att-data-soid">website_sale_order and website_sale_order.id</attribute>
+        </xpath>
+    </template>
+    <template id="cart_lines_inherit" inherit_id="website_sale.cart_lines" name="cart lines">
+        <xpath expr="//div[contains(@class,'flex-grow-1')]" position="replace">
+            <div class="flex-grow-1">
+                <t t-call="website_sale.cart_line_product_link">
+                    <h6 t-field="line.name_short" class="d-inline align-top h6 fw-bold"/>
+                </t> 
+                <t t-call="website_sale.cart_line_description_following_lines">
+                    <t t-set="div_class" t-value="''"/>
+                </t>
+                <div class="text-muted small" t-if="line.custom_color_2" t-esc="line.custom_color_2.display_name"></div>
+                <div class="text-muted small" t-if="line.custom_color_3" t-esc="line.custom_color_3.display_name"></div>
+                <div class="text-muted small" t-if="line.custom_color_4" t-esc="line.custom_color_4.display_name"></div>
+                <div class="text-muted small" t-if="line.custom_color_5" t-esc="line.custom_color_5.display_name"></div>
+                <div class="text-muted small" t-if="line.custom_color_6" t-esc="line.custom_color_6.display_name"></div>
+                <div class="text-muted small" t-if="line.custom_attribute_1" t-esc="line.custom_attribute_1.display_name"></div>
+                <t t-if="line.custom_tiff_file_name">
+                    <div class="text-muted small">Tiff file name: <t t-esc="line.custom_tiff_file_name"></t></div>
+                </t> 
+                <div>
+                    <a href='#'
+                        class="js_delete_product d-none d-md-inline-block small"
+                        aria-label="Remove from cart"
+                        title="Remove from cart">Remove</a>
+                    <button class="js_delete_product btn btn-light d-inline-block d-md-none"
+                            title="remove">
+                        <i class="fa fa-trash-o"/>
+                    </button>
+                </div>
+            </div>
+            <t t-set="yarn_component_images" t-value="line.get_yarn_component_images()" />
+            <t t-if="yarn_component_images">
+                <div class="yarn-component-container d-flex align-items-start" t-out="yarn_component_images"></div>
+            </t> 
+        </xpath>
+        <xpath expr="//t[@t-if='line.product_id']/div[1]" position="replace">
+            <div style="width: 64px">
+                <t t-if="not line.custom_item_image"> 
+                    <img t-if="line._is_not_sellable_line() and line.product_id.image_128"
+                        t-att-src="image_data_uri(line.product_id.image_128)"
+                        class="o_image_64_max img rounded"
+                        t-att-alt="line.name_short"
+                    />
+                    <div t-else="" t-field="line.product_id.image_128"
+                        t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'o_image_64_max rounded',}"/>
+                </t>
+                <t t-else="">
+                    <img t-if="line.custom_item_image"
+                        t-att-src="image_data_uri(line.custom_item_image)"
+                        class="o_image_64_max img rounded"
+                        t-att-alt="line.name_short"
+                    />
+                </t>
+            </div>
+        </xpath>
+    </template>
+    <template id="payment_delivery_methods" inherit_id="website_sale.payment_delivery_methods" name="Delivery method">
+        <xpath expr="//span[@name='price']" position="replace">
+            <span  t-attf-class="o_wsale_delivery_badge_price float-end fw-bold 
+                #{'d-none' if delivery.hide_price_from_ecom else ''}" name="price">Select to compute delivery rate</span>
+        </xpath>
+    </template>
+    <template id="navigation_buttons_inherit" inherit_id="website_sale.navigation_buttons" name="Nav Buttons">
+        <xpath expr="//div[@name='o_website_sale_free_cart']" position="attributes">
+            <attribute name="t-if">not errors and (not website_sale_order.amount_total or website_sale_order.get_discount_amount() == 0)</attribute>
+        </xpath>
+        <xpath expr="//div[@name='o_website_sale_free_cart']" position="before">
+            <t t-if="website_sale_order.get_discount_amount() == 0" t-set="hide_payment_button" t-value="False"/>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <data>
+        <record id="partial_payment_res_config_settings_form_inherit" model="ir.ui.view">
+            <field name="name">website.setting.form.view</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//block[@id='website_settings'][2]" position="after">
+                    <block title="Partial Payment" id="website_terms_condition_setting">
+                        <setting>
+                            <div class="content-group">
+                                <div class="row mt4">
+                                    <label class="col-lg-6" string="Minimum Order Amount" for="min_order_amount"/>
+                                    <field name="min_order_amount"/>
+                                </div>
+                            </div>
+
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label class="col-lg-6" string="Advance Payment Amount(%)" for="adv_payment_amount"/>
+                                    <field name="adv_payment_amount"/>
+                                </div>
+                            </div>
+
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label class="col-lg-6" string="Minimum Payment Term" for="min_payment_term"/>
+                                    <field name="min_payment_term"/>
+                                </div>
+                            </div>
+
+                            <div class="content-group">
+                                <div class="row mt8">
+                                    <label class="col-lg-6" string="Maximum Partial Payment" for="max_partial_order"/>
+                                    <field name="max_partial_order"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+
+</odoo>

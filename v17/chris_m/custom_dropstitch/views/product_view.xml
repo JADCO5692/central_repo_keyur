@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>     
+        <record id="product_template_only_form_view_custom" model="ir.ui.view">
+			<field name="name">product.template.product.form.custom</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_only_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//sheet[@name='product_form']/notebook[1]" position="inside">
+					<page string="Production Info">
+						<group>
+							<group>
+								<field name="custom_machine_no" invisible="product_variant_count &gt; 1" required="product_variant_count == 1"/>
+								<field name="custom_is_binding"/>
+								<field name="custom_is_wash"/>
+								<field name="custom_is_dry"/>
+								<field name="custom_is_press"/>
+							</group>
+							<group>
+							</group>
+						</group>
+					</page>
+				</xpath>
+				<field name="categ_id" position="after">
+	                <field name="custom_tiff_file_url" widget="url" invisible="product_variant_count &gt; 1"/>
+	                <field name="custom_needle" invisible="product_variant_count &gt; 1"/>
+	                <field name="custom_prod_size" invisible="product_variant_count &gt; 1"/>
+	                <field name="custom_color_count" invisible="product_variant_count &gt; 1" required="product_variant_count == 1"/>
+	                <field name="custom_prod_time" widget="float_time"  invisible="product_variant_count &gt; 1"/>
+	                <field name="custom_customer_sku"  invisible="product_variant_count &gt; 1"/>
+	                <field name="custom_link_customer" domain="[('company_id', 'in', (False, company_id)),('customer_rank', '&gt;', 0),('shopify_instance_id', '=', False)]"/>
+                    <field name="custom_allowed_customer_ids" widget="many2many_tags" domain="[('company_id', 'in', (False, company_id)),('customer_rank', '&gt;', 0),('shopify_instance_id', '=', False)]"/>
+	                <field name="custom_fiber"  invisible="product_variant_count &gt; 1" required="product_variant_count == 1"/>
+	                <field name="custom_mrp_confirm"  invisible="product_variant_count &gt; 1"/>
+	                <field name="custom_prod_type" required="1"/>
+	                
+	                <field name="custom_color_2" invisible="custom_prod_type not in ('mtp','special_mtp_prod')" />
+	                <field name="custom_color_3" invisible="custom_prod_type not in ('mtp','special_mtp_prod')" />
+	                <field name="custom_color_4" invisible="custom_prod_type not in ('mtp','special_mtp_prod')" />
+	                <field name="custom_color_5" invisible="custom_prod_type not in ('mtp','special_mtp_prod')" />
+	                <field name="custom_color_6" invisible="custom_prod_type not in ('mtp','special_mtp_prod')" />
+	                <field name="custom_color_7" invisible="custom_prod_type not in ('mtp','special_mtp_prod')" />	                
+	            </field>
+				<xpath expr="//field[@name='tic_category_id']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+				<xpath expr="//field[@name='responsible_id']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+				<xpath expr="//field[@name='hs_code']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+				<xpath expr="//field[@name='country_of_origin']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+                <xpath expr="//field[@name='barcode']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='product_tag_ids']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//page[@name='sales']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//group[@name='stock_property']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//form[@name='Product Template']/sheet[@name='product_form']/notebook[1]/page[@name='inventory']/group[not(@name)][1]" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//button[@name='162']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+			</field>
+		</record>
+		
+		<record id="product_normal_form_view_custom" model="ir.ui.view">
+			<field name="name">product.product.form.custom</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="product.product_normal_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//sheet[@name='product_form']/notebook[1]" position="inside">
+					<page string="Production Info">
+						<group>
+							<group>
+								<field name="custom_machine_no" required="1"/>
+								<field name="custom_is_binding"/>
+								<field name="custom_is_wash"/>
+								<field name="custom_is_dry"/>
+								<field name="custom_is_press"/>
+								<field name="custom_special_notation_tag_ids" widget="many2many_tags" context="{'product_variant_id': id}"/>
+							</group>
+							<group>
+							</group>
+						</group>
+					</page>
+				</xpath>
+				<xpath expr="//div[@name='standard_price_uom']" position="after">
+	                <field name="custom_machine_no" required="1"/>
+	                <field name="custom_tiff_file_url" widget="url"/>
+	                <field name="custom_needle"/>
+	                <field name="custom_prod_size"/>
+	                <field name="custom_color_count" required="1"/>
+	                <field name="custom_prod_time" widget="float_time"/>
+	                <field name="custom_customer_sku"/>
+	                <field name="custom_link_customer" domain="[('company_id', 'in', (False, company_id)),('customer_rank', '&gt;', 0),('shopify_instance_id', '=', False)]"/>
+	                <field name="custom_fiber" required="product_variant_count == 1"/>
+	                <field name="custom_mrp_confirm"/>
+	                <field name="custom_prod_type" required="1"/>
+	                
+	                <field name="custom_color_2" invisible="custom_prod_type not in ('mtp','special_mtp_var')" />
+	                <field name="custom_color_3" invisible="custom_prod_type not in ('mtp','special_mtp_var')" />
+	                <field name="custom_color_4" invisible="custom_prod_type not in ('mtp','special_mtp_var')" />
+	                <field name="custom_color_5" invisible="custom_prod_type not in ('mtp','special_mtp_var')" />
+	                <field name="custom_color_6" invisible="custom_prod_type not in ('mtp','special_mtp_var')" />
+	                <field name="custom_color_7" invisible="custom_prod_type not in ('mtp','special_mtp_var')" />
+	            </xpath>
+                <xpath expr="//field[@name='tic_category_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='product_tag_ids']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='additional_product_tag_ids']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//button[@name='162']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//page[@name='sales']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//group[@name='stock_property']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//form[1]/sheet[@name='product_form']/notebook[1]/page[@name='inventory']/group[not(@name)][1]" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+			 </field>
+		</record>
+		
+		<record id="product_variant_easy_edit_view_custom" model="ir.ui.view">
+			<field name="name">product.product.view.form.easy.custom</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+			<field name="arch" type="xml">
+				<field name="default_code" position="after">
+	                <field name="custom_machine_no" required="1"/>
+	                <field name="custom_tiff_file_url" widget="url"/>
+	                <field name="custom_needle"/>
+	                <field name="custom_prod_size"/>
+	                <field name="custom_color_count" required="1"/>
+	                <field name="custom_prod_time" widget="float_time"/>
+	                <field name="custom_customer_sku"/>
+	                <field name="custom_link_customer" domain="[('company_id', 'in', (False, company_id)),('customer_rank', '&gt;', 0),('shopify_instance_id', '=', False)]"/>
+	                <field name="custom_fiber" required="product_variant_count == 1"/>
+	                <field name="custom_mrp_confirm"/>
+	                <field name="custom_prod_type" required="1"/>
+	            </field>
+                <xpath expr="//group[@name='tags']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+			</field>
+		</record>
+		
+		<record id="product_attribute_view_form_custom" model="ir.ui.view">
+			<field name="name">product.attribute.form.custom</field>
+			<field name="model">product.attribute</field>
+			<field name="inherit_id" ref="product.product_attribute_view_form"/>
+			<field name="arch" type="xml">
+                <xpath expr="//field[@name='create_variant']" position="after">
+                    <field name="is_special_mto_attr"></field>
+                    <field name="is_personalize"></field>
+                    <field name="show_yarn_component_image"></field>
+                    <field name="custom_show_image"></field>
+                </xpath>
+				<xpath expr="//field[@name='html_color']" position="after">
+					<field name="line_number" column_invisible="parent.is_personalize == False"/>
+					<field name="custom_product_component" column_invisible="parent.show_yarn_component_image == False"/>
+	                <field name="custom_color_2" column_invisible="parent.is_special_mto_attr == False"/>
+	                <field name="custom_color_3" column_invisible="parent.is_special_mto_attr == False"/>
+	                <field name="custom_color_4" column_invisible="parent.is_special_mto_attr == False"/>
+	                <field name="custom_color_5" column_invisible="parent.is_special_mto_attr == False"/>
+	                <field name="custom_color_6" column_invisible="parent.is_special_mto_attr == False"/>
+	                <field name="custom_color_7" column_invisible="parent.is_special_mto_attr == False"/>
+	                <field name="custom_design_image" widget="image" options="{'zoom': true}" column_invisible="parent.custom_show_image == False and parent.is_special_mto_attr == False"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id="sale.product_template_action" model="ir.actions.act_window">
+            <field name="context">{"search_default_filter_to_sell":1, "sale_multi_pricelist_product_template": 1, "default_sale_delay": 14, "default_weight": 3, "default_purchase_ok": False}</field>
+        </record>
+        
+		<record id="custom_product_template_search_view" model="ir.ui.view">
+            <field name="name">custom.product.template.search</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field string="Customer" name="custom_link_customer"/>
+                </xpath>
+                <xpath expr="//search[1]/group[1]/filter[@name='categ_id']" position="after">
+					<filter name="group_custom_link_customer" string="Customer" context="{'group_by': 'custom_link_customer'}"/>
+				</xpath>
+            </field>
+        </record>
+        
+        <record id="custom_product_variant_search_view" model="ir.ui.view">
+            <field name="name">custom.product.variant.search</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field string="Customer" name="custom_link_customer"/>
+                </xpath>
+                <xpath expr="//search[1]/group[1]/filter[@name='categ_id']" position="after">
+					<filter name="group_custom_link_customer" string="Customer" context="{'group_by': 'custom_link_customer'}"/>
+				</xpath>
+            </field>
+        </record>
+		<record id="product_product_stock_kanban_view" model="ir.ui.view">
+            <field name="name">product.product.kanban.stock</field>
+            <field name="inherit_id" ref="product.product_kanban_view"/>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[contains(@class,'o_kanban_tags_section')]" position="after">
+                    <div class="d-flex">
+						<strong class="o_stat_text me-1">On Hand</strong>
+						<span class="o_stat_value d-flex gap-1">
+							<strong>
+								<field name="qty_available" class="oe_inline"/>
+								<field name="uom_name" class="oe_inline ms-1"/>
+							</strong>
+						</span>
+					</div>
+                </xpath>
+            </field>
+        </record>
+
+		<record id="product_view_view_type_view_inherit" model="ir.ui.view">
+			<field name="name">product.view.view_type.view.inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="stock.product_product_stock_tree"/>
+			<field name="arch" type="xml">
+				<field name="virtual_available" position="replace">
+					<field name="virtual_available" string="Forecasted" sum="Total Forecasted"/>
+				</field>
+			</field>
+		</record>
+    </data>
+</odoo>
