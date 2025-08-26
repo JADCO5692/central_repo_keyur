@@ -25,7 +25,7 @@ class CRMLead(models.Model):
     custom_sch_zoom_call_date = fields.Datetime("Scheduled zoom call", compute="_compute_custom_invoice_sent_date", store=True)
     custom_invoice_sent_date = fields.Datetime("Invoice Sent", compute="_compute_custom_invoice_sent_date", store=True)
     custom_contract_sent_date = fields.Datetime("Contract Sent", compute="_compute_custom_invoice_sent_date", store=True)
-    custom_all_contracts_signed1 = fields.Datetime("All contracts_signed", compute="_compute_custom_invoice_sent_date", store=True)
+    custom_all_contracts_signed1 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date", store=True)
     custom_stage_duration_hours = fields.Float(
         string="Hours in Current Stage",
         compute="_compute_custom_stage_duration_hours",
