@@ -9,6 +9,7 @@ class SaleOrder(models.Model):
     npc_fees_waiver_months = fields.Integer(default=0, string="NPC Fees - Waiver Months")
     
     npc_fees_waiver_days = fields.Integer(string="NPC Fees - Waiver Days", compute='_compute_npc_fees_waiver_days')
+    is_show_days = fields.Boolean(string="Show Days", compute='_compute_is_show_days')
 
     @api.depends("npc_fees_waiver_months",'date_order','start_date')
     def _compute_npc_fees_waiver_days(self):
@@ -20,6 +21,18 @@ class SaleOrder(models.Model):
             last_date = record.start_date + relativedelta(months=record.npc_fees_waiver_months)
             day_diff = (last_date - date.today()).days
             record.npc_fees_waiver_days = (day_diff - 1)
+
+    @api.depends("npc_fees_waiver_months", "start_date")
+    def _compute_is_show_days(self):
+        """Compute whether to show days field based on months interval including today."""
+        today = date.today()
+        for record in self:
+            record.is_show_days = False
+            if record.start_date and record.npc_fees_waiver_months:
+                last = record.start_date + relativedelta(months=record.npc_fees_waiver_months)
+                # Check if today is between start_date (inclusive) and last (inclusive)
+                if record.start_date <= today <= last:
+                    record.is_show_days = True
 
     @api.onchange('opportunity_id')
     def create_sale_lines(self): 
