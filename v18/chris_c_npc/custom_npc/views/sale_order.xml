@@ -8,9 +8,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="np_partner_id"/>
-                <field name="is_show_days" invisible="1"/>
-                <field name="npc_fees_waiver_months"/>
-                <field name="npc_fees_waiver_days" invisible="not is_show_days"/>
+                <field name="npc_fees_waiver_months" readonly="state != 'draft'"/>
+                <field name="npc_fees_waiver_days" invisible="not npc_fees_waiver_months"/>
             </xpath>
         </field>
     </record>
