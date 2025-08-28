@@ -1,8 +1,9 @@
 from odoo import models, fields, api,_
-from calendar import monthrange
+from calendar import monthrange,calendar
 from datetime import date
 from odoo.exceptions import ValidationError
 from collections import defaultdict
+import calendar
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -256,6 +257,33 @@ class AccountMove(models.Model):
 
         self.message_post(body=_("Created from in %s", vendor_bill._get_html_link()))
 
+    def _adjust_npc_fee_on_invoice(self, subscription):
+        for inv in self:
+            for line in inv.invoice_line_ids:
+                if line.product_id.is_np_fees_product and subscription.npc_fees_waiver_months:
+                    fee = line.price_unit
+                    inv_count = subscription.invoice_count
+
+                    if inv_count <= subscription.npc_fees_waiver_months:
+                        line.price_unit = 0.0
+                        # line.name = line.name + f" (NO of Days Waiver: {(day_diff - 1) })"
+                    elif inv_count == subscription.npc_fees_waiver_months + 1:
+                        dt = inv.invoice_date or date.today()
+                        days_in_month = calendar.monthrange(dt.year, dt.month)[1]
+                        used_days = days_in_month - dt.day + 1
+                        prorated = round(fee * used_days / days_in_month, 2)
+                        line.price_unit = prorated
+                        line.name = line.name + f" (Prorated for {used_days} days)"
+                    else:
+                        line.price_unit = fee
+
+    @api.model_create_multi
+    def create(self, vals):
+        records = super().create(vals)
+        """Create a new record with the given values."""
+        for record in records:
+            record._adjust_npc_fee_on_invoice(record.invoice_line_ids.subscription_id)
+        return records
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"

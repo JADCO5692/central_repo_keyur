@@ -9,6 +9,7 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="np_partner_id"/>
                 <field name="npc_fees_waiver_months"/>
+                <field name="npc_fees_waiver_days"/>
             </xpath>
         </field>
     </record>

@@ -1,4 +1,6 @@
 from odoo import models, api, fields
+from dateutil.relativedelta import relativedelta
+from datetime import date
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -6,13 +8,18 @@ class SaleOrder(models.Model):
     np_partner_id = fields.Many2one('res.partner','NP Partner')
     npc_fees_waiver_months = fields.Integer(default=0, string="NPC Fees - Waiver Months")
     
-    npc_fees_waiver_days = fields.Integer(string="NPC Fees - Waiver Days")
+    npc_fees_waiver_days = fields.Integer(string="NPC Fees - Waiver Days", compute='_compute_npc_fees_waiver_days')
 
-    @api.onchange("npc_fees_waiver_months")
-    def _onchange_npc_fees_waiver_months(self):
-        """Update waiver days when months change"""
+    @api.depends("npc_fees_waiver_months",'date_order','start_date')
+    def _compute_npc_fees_waiver_days(self):
+        """Compute waiver days based on months and start date"""
         for record in self:
-            record.npc_fees_waiver_days = npc_fees_waiver_months * 30
+            if not record.npc_fees_waiver_months:
+                record.npc_fees_waiver_days = 0
+                continue
+            last_date = record.start_date + relativedelta(months=record.npc_fees_waiver_months)
+            day_diff = (last_date - date.today()).days
+            record.npc_fees_waiver_days = (day_diff - 1)
 
     @api.onchange('opportunity_id')
     def create_sale_lines(self): 
