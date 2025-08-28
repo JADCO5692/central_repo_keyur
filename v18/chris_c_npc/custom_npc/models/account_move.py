@@ -296,3 +296,6 @@ class AccountMoveLine(models.Model):
             if line.move_id and line.move_id.custom_lead_id:
                 lead = line.move_id.custom_lead_id
                 line.lead_partner_ids = [(6,0,lead.physician_partner_ids.ids)]
+            elif line.move_id and line.move_id.custom_lead_id2:
+                lead = line.move_id.custom_lead_id2
+                line.lead_partner_ids = [(6,0,lead.physician_partner_ids.ids)]
