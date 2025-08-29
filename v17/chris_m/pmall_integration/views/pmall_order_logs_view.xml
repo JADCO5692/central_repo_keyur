@@ -25,7 +25,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="name"/>
+                            <field name="name" invisible="1"/>
                             <field name="pmall_config_id" readonly="1"/>
                             <field name="batch_number" readonly="1"/>
                             <field name="order_number" readonly="1"/>

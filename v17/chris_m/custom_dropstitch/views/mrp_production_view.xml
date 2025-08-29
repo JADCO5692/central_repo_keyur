@@ -7,7 +7,7 @@
 			<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
 			<field name="arch" type="xml">
 				<xpath expr="//form[1]/header/button[@name='action_open_label_type']" position="after">
-					<button string="Traveller Ticket" type="object" name="action_download_travel_ticket"/>
+					<button string="Traveler Ticket" type="object" name="action_download_travel_ticket"/>
 					<button string="TIF File" type="object" name="action_download_tiff_file" invisible="custom_tiff_file_url == ''"/>
 					<button string="TIF File" type="object" name="action_download_custom_tiff_file" invisible="custom_tiff_file_url != ''"/>
             	</xpath>
@@ -216,7 +216,7 @@
 				</xpath>
 				<xpath expr="//header" position="inside">
 					<button name="action_confirm_orders" type="object" string="Confirm Orders"/>
-					<button name="action_print_mass_traveller_tickets" type="object" string="Traveller Tickets"/>
+					<button name="action_print_mass_traveller_tickets" type="object" string="Traveler Ticket"/>
 				</xpath>
                 <xpath expr="//tree[1]" position="attributes">
                     <attribute name="default_order">priority desc, custom_sale_order_date asc</attribute>

@@ -2,37 +2,6 @@
 <odoo>
 
     <template id="stock_report_delivery_document_inherit_customer_sku" inherit_id="stock.report_delivery_document">
-        <xpath expr="//th[@name='th_sm_product']" position="before">
-            <th name="th_sm_customer_order_ref" class="text-left">
-                <strong>Order Ref</strong>
-            </th>
-        </xpath>
-        <xpath expr="//th[@name='th_sm_product']" position="after">
-            <th name="th_sm_customer_sku">
-                <strong>Customer SKU</strong>
-            </th>
-        </xpath>
-        <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[1]" position="before">
-            <td>
-                <t t-if="o.custom_client_order_ref and move.sale_line_id.custom_order_no">
-                    <t t-set="final_ref" t-value="o.custom_client_order_ref+'/'+move.sale_line_id.custom_order_no"/>
-                    <span t-esc="final_ref"></span>
-                </t>
-                <t t-else="">
-                    <t t-if="move.sale_line_id.custom_order_no">
-                        <span t-esc="move.sale_line_id.custom_order_no"></span>
-                    </t>
-                    <t t-if="o.custom_client_order_ref">
-                        <span t-esc="o.custom_client_order_ref"></span>
-                    </t>
-                </t>
-            </td>
-        </xpath>
-        <xpath expr="//table[@name='stock_move_table']/tbody/tr[1]/td[2]" position="after">
-            <td>
-                <span t-field="move.sale_line_id.custom_customer_product"></span>
-            </td>
-        </xpath>
         <xpath expr="//div[@name='partner_header']" position="replace">
             <t t-if="o.sale_id.custom_dropship_order">
                 <div>
@@ -92,13 +61,13 @@
                             </center>
                         </tr>
                         <tr t-if="o.scheduled_date">
-                            <td>Shipping Date:</td>
+                            <td>Ship Date:</td>
                             <td>
-                                <span t-field="o.scheduled_date"/>
+                                <span t-esc="o.scheduled_date.strftime('%d-%m-%Y')"/>
                             </td>
                         </tr>
                         <tr t-if="o.origin">
-                            <td>Source:</td>
+                            <td>Sales Order:</td>
                             <td>
                                 <span t-field="o.origin"/>
                             </td>
@@ -109,14 +78,8 @@
                                 <span t-field="o.custom_client_order_ref"/>
                             </td>
                         </tr>
-                        <tr t-if="o.carrier_id">
-                            <td>Carrier:</td>
-                            <td>
-                                <span t-field="o.carrier_id.name"/>
-                            </td>
-                        </tr>
                         <tr t-if="o.weight">
-                            <td>Weight:</td>
+                            <td>Shipment Weight:</td>
                             <td>
                                 <span t-field="o.weight"/>
                             </td>
@@ -125,6 +88,12 @@
                             <td style="border: none !important"># of Boxes:</td>
                             <td style="border: none !important">
                                 <span>1</span>
+                            </td>
+                        </tr>
+                        <tr t-if="o.carrier_id">
+                            <td>Carrier:</td>
+                            <td>
+                                <span t-field="o.carrier_id.name"/>
                             </td>
                         </tr>
                     </table>

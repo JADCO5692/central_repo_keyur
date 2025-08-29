@@ -318,6 +318,7 @@ class CustomResPartner(models.Model):
             'min_payment_term',
             'max_partial_order',
             'custom_allowed_shipping_ids',
+            'prevent_intrimed_entries',
         ]
         
         res = res + addtional_fields
