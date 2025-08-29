@@ -37,8 +37,11 @@ class Picking(models.Model):
         related="sale_id.custom_gift_mess", string="Gift Message"
     )
     custom_gift_label_print = fields.Boolean("Printed Gift Label ?")
-    custom_shipping_label_name = fields.Char(string="Shipping Label Name")
-    custom_shipping_label = fields.Binary(string="Shipping Label")
+    custom_shipping_label_name = fields.Char(string="Customer Shipping Label Name")
+    custom_shipping_label = fields.Binary(string="Customer Shipping Label")
+    
+    custom_packing_list_name = fields.Char(string="Customer Packing List Name")
+    custom_packing_list = fields.Binary(string="Customer Packing List")
 
     state = fields.Selection(
         selection_add=[

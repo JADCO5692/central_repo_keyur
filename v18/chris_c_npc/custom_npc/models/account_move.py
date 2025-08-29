@@ -70,6 +70,8 @@ class AccountMove(models.Model):
             if order and order.next_invoice_date:
                 rec.invoice_date = order.next_invoice_date
                 rec.invoice_date_due = order.next_invoice_date
+                rec._adjust_npc_fee_on_invoice(order)
+
         return invoices
         
     @api.onchange("custom_contract_end_date")
@@ -268,7 +270,7 @@ class AccountMove(models.Model):
                         line.price_unit = 0.0
                         # line.name = line.name + f" (NO of Days Waiver: {(day_diff - 1) })"
                     elif inv_count == subscription.npc_fees_waiver_months + 1:
-                        dt = inv.invoice_date or date.today()
+                        dt =  subscription.start_date
                         days_in_month = calendar.monthrange(dt.year, dt.month)[1]
                         used_days = days_in_month - dt.day + 1
                         prorated = round(fee * used_days / days_in_month, 2)
@@ -277,13 +279,6 @@ class AccountMove(models.Model):
                     else:
                         line.price_unit = fee
 
-    @api.model_create_multi
-    def create(self, vals):
-        records = super().create(vals)
-        """Create a new record with the given values."""
-        for record in records:
-            record._adjust_npc_fee_on_invoice(record.invoice_line_ids.subscription_id)
-        return records
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
@@ -300,4 +295,7 @@ class AccountMoveLine(models.Model):
             line.lead_partner_ids = False
             if line.move_id and line.move_id.custom_lead_id:
                 lead = line.move_id.custom_lead_id
+                line.lead_partner_ids = [(6,0,lead.physician_partner_ids.ids)]
+            elif line.move_id and line.move_id.custom_lead_id2:
+                lead = line.move_id.custom_lead_id2
                 line.lead_partner_ids = [(6,0,lead.physician_partner_ids.ids)]

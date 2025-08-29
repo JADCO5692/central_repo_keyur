@@ -3,14 +3,14 @@
     <data>
         
         <record id="action_report_label_workorder" model="ir.actions.report">
-            <field name="name">Shipping Label</field>
+            <field name="name">Bag Label</field>
             <field name="model">mrp.production</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">custom_dropstitch_reports.template_report_label_workorder</field>
             <field name="report_file">custom_dropstitch_reports.template_report_label_workorder</field>
             <field name="paperformat_id" ref="custom_dropstitch_reports.mrp_paperformat_report_label"/>
             <field name="binding_model_id" ref="model_mrp_production"/>
-            <field name="print_report_name">'Shipping Label'</field>
+            <field name="print_report_name">'Bag Label'</field>
         </record>
 
         <template id="template_report_label_workorder">
