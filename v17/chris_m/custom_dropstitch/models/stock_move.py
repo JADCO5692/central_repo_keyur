@@ -61,7 +61,6 @@ class StockMove(models.Model):
     def _account_entry_move(self, qty, description, svl_id, cost):
         self.ensure_one()
         customer = False
-
         if self.sale_line_id:
             customer = self.sale_line_id.order_id.partner_id
 
