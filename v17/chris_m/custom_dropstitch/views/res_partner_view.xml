@@ -62,6 +62,8 @@
 						<span invisible="not custom_require_payment">of</span>
 						<field name="custom_prepayment_percent" invisible="not custom_require_payment" widget="percentage" class="oe_inline"/>
 					</div>
+                    <field name="prevent_intrimed_entries" />
+
 				</group>
 				<group name="purchase" position="inside">
 					<field name='custom_receipt_type_id'/>
