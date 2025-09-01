@@ -225,7 +225,14 @@ class CustomResPartner(models.Model):
     )
     
     shipstation_store_id = fields.Many2one('shipstation.store.ept', string='Shipstation Store', copy=False)
-    
+
+
+    prevent_intrimed_entries = fields.Boolean(
+        string="Prevent Intrimed Entries",
+        help="If checked, Accounting entries for the stock output account and expense will not be generated for such moves",
+        default=False,
+    )
+
     @api.onchange("custom_label_template_id")
     def _onchange_custom_label_template(self):
         if self.custom_label_template_id:
@@ -311,6 +318,7 @@ class CustomResPartner(models.Model):
             'min_payment_term',
             'max_partial_order',
             'custom_allowed_shipping_ids',
+            'prevent_intrimed_entries',
         ]
         
         res = res + addtional_fields

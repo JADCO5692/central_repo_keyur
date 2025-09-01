@@ -268,7 +268,6 @@ class AccountMove(models.Model):
 
                     if inv_count <= subscription.npc_fees_waiver_months:
                         line.price_unit = 0.0
-                        # line.name = line.name + f" (NO of Days Waiver: {(day_diff - 1) })"
                     elif inv_count == subscription.npc_fees_waiver_months + 1:
                         dt =  subscription.start_date
                         days_in_month = calendar.monthrange(dt.year, dt.month)[1]

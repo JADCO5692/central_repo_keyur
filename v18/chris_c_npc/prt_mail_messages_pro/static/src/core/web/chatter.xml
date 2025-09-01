@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.Chatter" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o-mail-Chatter-topbar')]" position="after">
+            <ChatterButtonFilter
+                t-if="state.thread"
+                thread="state.thread"
+                onClickFilterNotification.bind="onClickFilterNotification"
+                onClickFilterNote.bind="onClickFilterNote"
+                onClickFilterMessage.bind="onClickFilterMessage"
+            />
+        </xpath>
+    </t>
+</templates>

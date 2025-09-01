@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t
+        t-name="prt_mail_messages_pro.ChatterPreview"
+        t-inherit="mail.Chatter"
+        t-inherit-mode="primary"
+    >
+        <xpath expr="//div[hasclass('o-mail-Chatter-top')]" position="replace" />
+        <xpath expr="//div[hasclass('o-mail-AttachmentBox')]" position="replace" />
+        <xpath expr="//t[@t-call='mail.ActivityList']" position="replace" />
+    </t>
+
+</templates>

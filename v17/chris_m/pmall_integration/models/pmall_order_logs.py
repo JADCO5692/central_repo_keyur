@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 class PmallOrderLogs(models.Model):
     _name = 'pmall.order.logs'
     _description = "Pmall order logs"
+    _rec_name = 'order_number'
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char('Name',default="Pmall Order log",tracking=True)
@@ -99,18 +100,28 @@ class PmallOrderLogs(models.Model):
                     
                 order_vals = {
                     'name': order_number,
-                    'pmall_order_number':order_number,
+                    'pmall_order_number': order_number,
                     'partner_id': rec.pmall_config_id.for_partner_id.id,
                     'pmall_order_date': order_context.get('orderDate'), 
-                    'pmall_order_log_id':rec.id, 
-                    'custom_policy':'order',
-                    'is_pmall_order':True,
+                    'pmall_order_log_id': rec.id, 
+                    'custom_policy': 'intent',
+                    'is_pmall_order': True,
+                    'custom_dropship_order': True, 
                     'custom_gift_mess': giftMessage,
                 }
 
                 order_lines = []
                 for item in order_context.get('orderItem', []):
-                    sku = item.get('partnerSku') or item.get('sku')
+                    sku = (item.get('partnerSku') or item.get('sku') or '').strip()
+                    field_value = next(
+                        (i for i in item.get('personalization', []) if i.get('fieldName') == "Choose Color"),
+                        None
+                    )
+                    field_value = (field_value.get('fieldValue') if field_value else '').strip()
+                
+                    # Only join if field_value exists
+                    sku = f"{sku} {field_value}".strip()
+
                     product = Product.search([('default_code', '=', sku.strip())], limit=1) 
                     if not len(product):
                         order_err_log_obj.create({
@@ -170,7 +181,7 @@ class PmallOrderLogs(models.Model):
                         SaleOrder._compute_prepayment_percent()
                         SaleOrder._onchange_custom_partner_id()
                         SaleOrder._compute_allowed_customer_ids()
-                        SaleOrder.custom_policy = 'order'
+                        SaleOrder.custom_policy = 'intent'
                         
                         SaleOrder.order_line = order_lines
                         

@@ -19,21 +19,21 @@ class SaleOrder(models.Model):
             self.action_confirm() 
             if date_order:
                 self.date_order = date_order
-            invoice = (
-                self.env["sale.advance.payment.inv"]
-                .with_context(
-                    {
-                        "active_model": "sale.order",
-                        "active_id": self.id,
-                    }
-                )
-                .create(
-                    {
-                        "advance_payment_method": "delivered",
-                    }
-                )
-                ._create_invoices(self)
-            )
-            invoice.action_post()
+            #invoice = (
+            #    self.env["sale.advance.payment.inv"]
+            #    .with_context(
+            #        {
+            #            "active_model": "sale.order",
+            #            "active_id": self.id,
+            #        }
+            #    )
+            #    .create(
+            #        {
+            #            "advance_payment_method": "delivered",
+            #        }
+            #    )
+            #    ._create_invoices(self)
+            #)
+            #invoice.action_post()
         except Exception as err:
             _logger.info("Error when BOM product explode: %s", err) 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="payment_method_form_npc" inherit_id="payment.method_form">
+        <xpath expr="//input[@name='o_payment_tokenize_checkbox']" position="attributes">
+            <attribute name="checked">checked</attribute>
+        </xpath>
+        <xpath expr="//input[@name='o_payment_automate_payments_new_token']" position="attributes">
+            <attribute name="checked">checked</attribute>
+        </xpath>
+    </template>
+    <template id="payment_token_form_npc" inherit_id="payment.token_form">
+        <xpath expr="//input[@name='o_payment_automate_payments_saved_token']" position="attributes">
+            <attribute name="checked">checked</attribute>
+        </xpath> 
+    </template>
+
+</odoo>

@@ -378,7 +378,7 @@ class Picking(models.Model):
             < sale_order_obj.amount_total
         ):
             self.write({"state": "invoice_sent"})
-        if sale_order_obj.payment_term_id.name != "PrePayment":
+        if sale_order_obj.payment_term_id.name != "PrePayment" or sale_order_obj.amount_total == 0:
             self.write({"state": "ready_to_be_sent"})
         if sale_order_obj.shopify_order_id:
             self.write({"state": "ready_to_be_sent"})

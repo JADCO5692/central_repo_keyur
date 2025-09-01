@@ -58,6 +58,28 @@ class StockMove(models.Model):
             vals["carrier_id"] = partners.property_delivery_carrier_id.id
         return vals
 
+    def _account_entry_move(self, qty, description, svl_id, cost):
+        self.ensure_one()
+        customer = False
+        if self.sale_line_id:
+            customer = self.sale_line_id.order_id.partner_id
+
+        elif self.picking_id and self.picking_id.partner_id:
+            customer = self.picking_id.partner_id
+
+        elif self.group_id:
+            sale = self.env['sale.order'].search([('procurement_group_id', '=', self.group_id.id)], limit=1)
+            if sale:
+                customer = sale.partner_id
+
+        if customer and customer.prevent_intrimed_entries:
+            return self.env['account.move']
+        mrp = self.env['mrp.production'].search([('name', '=', self.origin)], limit=1)
+
+        if mrp and mrp.custom_partner.prevent_intrimed_entries:
+            # return False
+            return self.env['account.move']
+        return super()._account_entry_move(qty, description, svl_id, cost)
 
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
