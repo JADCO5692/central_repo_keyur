@@ -25,7 +25,8 @@
                 <field name="custom_sch_zoom_call_date" optional="hide"/>
                 <field name="custom_contract_sent_date" optional="hide"/>
                 <field name="custom_invoice_sent_date" optional="hide"/>
-                <field name="custom_all_contracts_signed1" optional="hide"/>
+                <field name="custom_all_contracts_signed1" invisible="1" />
+                <field name="custom_all_contracts_signed2" />
                 <field name="active_status_label" optional="hide"/>
                 <field name="lost_reason_id" optional="hide"/>
             </list>

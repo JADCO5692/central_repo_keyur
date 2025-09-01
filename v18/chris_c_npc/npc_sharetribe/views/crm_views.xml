@@ -126,6 +126,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='user_id']" position="before">
                 <field name="practice_state_ids" optional="show" widget="many2many_tags"/>
+                <field name="custom_all_contracts_signed1" invisible="1"/>
+                <field name="custom_all_contracts_signed2" optional="show"/>
             </xpath>
         </field>
     </record>
@@ -161,6 +163,7 @@
             </xpath>
             <xpath expr="//field[@name='reg_date']" position="after">
                 <field name="availability_start_pub" optional="show"/>
+                <field name="custom_all_contracts_signed2" optional="show"/>
             </xpath>
         </field>
     </record>

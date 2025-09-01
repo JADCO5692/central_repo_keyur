@@ -26,6 +26,7 @@ class CRMLead(models.Model):
     custom_invoice_sent_date = fields.Datetime("Invoice Sent", compute="_compute_custom_invoice_sent_date", store=True)
     custom_contract_sent_date = fields.Datetime("Contract Sent", compute="_compute_custom_invoice_sent_date", store=True)
     custom_all_contracts_signed1 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date", store=True)
+    custom_all_contracts_signed2 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date")
     custom_stage_duration_hours = fields.Float(
         string="Hours in Current Stage",
         compute="_compute_custom_stage_duration_hours",
@@ -49,13 +50,12 @@ class CRMLead(models.Model):
         compute="_compute_active_status",
         store=False
     )
-    
+
     def _compute_active_status(self):
         for rec in self:
             rec.active_status_label = "ACTIVE" if rec.active else "LOST"
 
-
-    @api.depends('message_ids','custom_sch_zoom_call_date_alternative')
+    @api.depends('message_ids', 'custom_sch_zoom_call_date_alternative')
     def _compute_custom_invoice_sent_date(self):
         invoice_stage = self.env['crm.stage'].search([('name', '=', 'Invoice sent')], limit=1)
         contract_stage = self.env['crm.stage'].search([('name', '=', 'Contracts sent')], limit=1)
@@ -88,7 +88,8 @@ class CRMLead(models.Model):
                             break
                     if lead.custom_contract_sent_date:
                         break
-                        
+
+            # Scheduled Zoom Call Date
             if sch_zoom_call_stage:
                 for msg in messages:
                     for track in msg.tracking_value_ids:
@@ -97,15 +98,28 @@ class CRMLead(models.Model):
                             break
                     if lead.custom_sch_zoom_call_date:
                         break
-
             if not lead.custom_sch_zoom_call_date:
                 lead.custom_sch_zoom_call_date = lead.custom_sch_zoom_call_date_alternative
 
-            sign = self.env['sign.request.item'].search([('partner_id', '=', lead.partner_id.id)]).mapped(
-                'sign_request_id').filtered(lambda s: s.state == 'signed')
-            if len(sign) > 0:
-                lead.custom_all_contracts_signed1 = sign[-1].last_action_date
-    
+            # -------------- Adjusted Signing Logic Begins Here --------------
+
+            # Fetch all signed sign.request items for this partner
+            sign_items = self.env['sign.request.item'].search([('partner_id', '=', lead.partner_id.id)])
+            sign_requests = sign_items.mapped('sign_request_id')
+            signed_requests = sign_requests.filtered(lambda s: s.state == 'signed')
+            if sign_requests:
+                if any(x.state != 'signed' for x in sign_requests):
+                    lead.custom_all_contracts_signed2 = False
+
+            # Only set if all sign_request_ids are signed
+            # Option A: If at least one sign request exists and all are signed
+            if sign_requests and len(signed_requests) == len(sign_requests):
+                lead.custom_all_contracts_signed2 = signed_requests[-1].last_action_date
+                lead.custom_all_contracts_signed1 = signed_requests[-1].last_action_date
+            else:
+                lead.custom_all_contracts_signed2 = False
+                lead.custom_all_contracts_signed1 = False
+
     @api.depends('custom_last_stage_changed_date')
     def _compute_custom_stage_duration_hours(self):
         now = fields.Datetime.now()
