@@ -9,7 +9,6 @@ class SaleOrder(models.Model):
     npc_fees_waiver_months = fields.Integer(default=0, string="NPC Fees - Waiver Months")
     
     npc_fees_waiver_days = fields.Integer(string="NPC Fees - Waiver Days",compute='_compute_npc_fees_waiver_days', tracking=True)
-    # is_show_days = fields.Boolean(string="Show Days", compute='_compute_is_show_days')
 
     @api.depends('npc_fees_waiver_months', 'start_date', 'next_invoice_date')
     def _compute_npc_fees_waiver_days(self):

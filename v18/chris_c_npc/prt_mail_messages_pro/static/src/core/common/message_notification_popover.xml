@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="prt_mail_messages_pro.PopoverContentItem">
+        <div class="d-flex">
+            <strong class="me-2"><t t-esc="label" />:</strong>
+            <span t-if="value" t-esc="value" />
+            <div
+                t-if="recipients !== undefined and recipients.length > 0"
+                class="d-grid"
+            >
+                <span
+                    class="badge rounded-pill text-bg-primary o_tag mb-1"
+                    t-foreach="recipients"
+                    t-as="partner"
+                    t-key="partner.id"
+                >
+                    <div
+                        t-if="type === 'email'"
+                        class="o_tag_badge_text text-truncate"
+                        t-esc="partner.email"
+                    />
+                    <div
+                        t-else=""
+                        class="o_tag_badge_text text-truncate"
+                        t-esc="partner.name"
+                    />
+                </span>
+            </div>
+        </div>
+    </t>
+
+    <t t-inherit="mail.MessageNotificationPopover" t-inherit-mode="extension">
+        <xpath
+            expr="//div[@t-foreach='props.message.notifications']"
+            position="attributes"
+        >
+            <attribute name="t-if">
+                props.message.messageSendMode === "odoo" or props.message.isEmail
+            </attribute>
+        </xpath>
+        <xpath
+            expr="//div[hasclass('o-mail-MessageNotificationPopover')]"
+            position="inside"
+        >
+            <t t-if="props.message.messageSendMode == 'email' or props.message.isEmail">
+                <t t-call="prt_mail_messages_pro.PopoverContentItem">
+                    <t t-set="label" t-value="'Subject'" />
+                    <t t-set="value" t-value="props.message.subject" />
+                </t>
+                <t t-if="props.message.isEmail">
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.author"
+                    >
+                        <t t-set="label" t-value="'Author'" />
+                        <t
+                            t-set="value"
+                            t-value="props.message.author.nameOrDisplayName"
+                        />
+                    </t>
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.recipients.length > 0"
+                    >
+                        <t t-set="label" t-value="'Partners'" />
+                        <t t-set="recipients" t-value="props.message.recipients" />
+                        <t t-set="type" t-value="'email'" />
+                    </t>
+                    <t t-call="prt_mail_messages_pro.PopoverContentItem">
+                        <t t-set="label" t-value="'From'" />
+                        <t t-set="value" t-value="props.message.email_from" />
+                    </t>
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.originalToEmail"
+                    >
+                        <t t-set="label" t-value="'To'" />
+                        <t t-set="value" t-value="props.message.originalToEmail" />
+                    </t>
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.originalCcEmail"
+                    >
+                        <t t-set="label" t-value="'Cc'" />
+                        <t t-set="value" t-value="props.message.originalCcEmail" />
+                    </t>
+                </t>
+                <t t-else="">
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.recipients.length > 0"
+                    >
+                        <t t-set="label" t-value="'To'" />
+                        <t t-set="recipients" t-value="props.message.recipients" />
+                    </t>
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.partnerCc.length > 0"
+                    >
+                        <t t-set="label" t-value="'Cc'" />
+                        <t t-set="recipients" t-value="props.message.partnerCc" />
+                    </t>
+                    <t
+                        t-call="prt_mail_messages_pro.PopoverContentItem"
+                        t-if="props.message.partnerBcc.length > 0"
+                    >
+                        <t t-set="label" t-value="'Bcc'" />
+                        <t t-set="recipients" t-value="props.message.partnerBcc" />
+                    </t>
+                </t>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

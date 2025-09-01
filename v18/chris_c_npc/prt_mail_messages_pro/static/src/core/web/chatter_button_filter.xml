@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="prt_mail_messages_pro.Chatter.ButtonFilter">
+        <div
+            data-toggle="buttons"
+            class="o-Chatter-topbar-button-filters d-flex flex-shrink-0 flex-grow-0 px-3 overflow-x-auto"
+            title="Message Filters"
+        >
+            <div class="flex-grow-1 d-flex">
+                <span class="o-mail-Chatter-topbarGrow flex-grow-1 pe-2" />
+                <!-- Display Notifications -->
+                <label class="btn btn-link o_ChatterTopbar_buttonShowActions">
+                    <input
+                        type="checkbox"
+                        t-on-click="props.onClickFilterNotification"
+                        t-model="props.thread.displayNotifications"
+                        t-att-title="filterNotificationTitle"
+                    />
+                    <i
+                        class="fa fa-fw fa fa-info-circle"
+                        role="img"
+                        t-att-title="filterNotificationTitle"
+                    />
+                    <i
+                        t-if="props.thread.displayNotifications"
+                        class="fa fa-fw fa-check"
+                    />
+                    <i t-else="" class="fa fa-fw fa-times" />
+                </label>
+                <!-- Display Notes -->
+                <label class="btn btn-link o_ChatterTopbar_buttonShowActions">
+                    <input
+                        type="checkbox"
+                        t-on-click="props.onClickFilterNote"
+                        t-model="props.thread.displayNotes"
+                        t-att-title="filterNoteTitle"
+                    />
+                    <i
+                        class="fa fa-fw fa fa-edit"
+                        role="img"
+                        t-att-title="filterNoteTitle"
+                    />
+                    <i t-if="props.thread.displayNotes" class="fa fa-fw fa-check" />
+                    <i t-else="" class="fa fa-fw fa-times" />
+                </label>
+                <!-- Display Messages -->
+                <label class="btn btn-link o_ChatterTopbar_buttonShowActions">
+                    <input
+                        type="checkbox"
+                        t-on-click="props.onClickFilterMessage"
+                        t-model="props.thread.displayMessages"
+                        t-att-title="filterMessageTitle"
+                    />
+                    <i
+                        class="fa fa-fw fa fa-envelope"
+                        role="img"
+                        t-att-title="filterMessageTitle"
+                    />
+                    <i t-if="props.thread.displayMessages" class="fa fa-fw fa-check" />
+                    <i t-else="" class="fa fa-fw fa-times" />
+                </label>
+            </div>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.Message" t-inherit-mode="extension">
+        <xpath
+            expr="//div[@t-ref='messageContent']//small[hasclass('o-mail-Message-date')]"
+            position="after"
+        >
+            <span
+                t-if="message.cx_edit_message"
+                class="o-mail-Message_edit-author"
+                t-att-title="message.cx_edit_message"
+                t-esc="message.cx_edit_message"
+            />
+            <small
+                t-if="isOriginThread and isPreviewMessage"
+                t-on-click.prevent="openRecord"
+                class="text-500 mx-1"
+            >
+                <t t-if="message.thread.mode === 'discuss.channel'">
+                    (from <a t-att-href="message.resUrl">
+                    <t t-esc="message.thread?.prefix" />
+                    <t t-esc="message.thread?.displayName or 'channel'" />
+                </a>)
+                </t>
+                <t t-else="">
+                    on <a
+                    t-att-href="message.resUrl"
+                    t-esc="message.thread?.displayName or 'channel'"
+                />
+                </t>
+            </small>
+        </xpath>
+    </t>
+
+    <t t-inherit="mail.Message.notification" t-inherit-mode="extension">
+        <xpath
+            expr="//div[@t-if='message.thread?.eq(props.thread) and message.notifications.length > 0']"
+            position="after"
+        >
+            <div t-elif="message.messageSendMode or message.isEmail" class="mx-1">
+                <span
+                    class="o-mail-Message-notification cursor-pointer"
+                    role="button"
+                    tabindex="0"
+                    t-on-click="onClickNotification"
+                >
+                    <i
+                        t-att-class="message.getNotifyIconClass"
+                        role="img"
+                        aria-label="Delivery failure"
+                    />
+                </span>
+            </div>
+        </xpath>
+    </t>
+</templates>

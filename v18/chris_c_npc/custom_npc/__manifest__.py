@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC",
-    'version': '18.0.0.40',
+    'version': '18.0.0.48',
     'category': 'CRM',
     'summary': "Custom NPC",
     'description': """
@@ -16,14 +16,18 @@
         "views/sale_order.xml",
         "views/res_partner_view.xml",
         "views/project_task_type.xml",
-		'wizard/vendor_selection_view.xml'
+		'wizard/vendor_selection_view.xml',
+        'views/payment_form.xml',
+        'views/dashboard.xml'
     ], 
     'installable': True,
     'application': False,
     'assets': {
         'web.assets_backend': [
+            'custom_npc/static/plugins/*',
             'custom_npc/static/src/js/ChatterExt.js',
-            'custom_npc/static/src/xml/ChatterExt.xml'
+            'custom_npc/static/src/xml/ChatterExt.xml',
+            'custom_npc/static/src/dashboard/*'
         ],
     },
     'license': 'LGPL-3',
