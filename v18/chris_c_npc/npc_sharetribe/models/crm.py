@@ -25,7 +25,6 @@ class CRMLead(models.Model):
     custom_sch_zoom_call_date = fields.Datetime("Scheduled zoom call", compute="_compute_custom_invoice_sent_date", store=True)
     custom_invoice_sent_date = fields.Datetime("Invoice Sent", compute="_compute_custom_invoice_sent_date", store=True)
     custom_contract_sent_date = fields.Datetime("Contract Sent", compute="_compute_custom_invoice_sent_date", store=True)
-    custom_all_contracts_signed1 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date", store=True)
     custom_all_contracts_signed2 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date")
     custom_stage_duration_hours = fields.Float(
         string="Hours in Current Stage",
@@ -115,10 +114,8 @@ class CRMLead(models.Model):
             # Option A: If at least one sign request exists and all are signed
             if sign_requests and len(signed_requests) == len(sign_requests):
                 lead.custom_all_contracts_signed2 = signed_requests[-1].last_action_date
-                lead.custom_all_contracts_signed1 = signed_requests[-1].last_action_date
             else:
                 lead.custom_all_contracts_signed2 = False
-                lead.custom_all_contracts_signed1 = False
 
     @api.depends('custom_last_stage_changed_date')
     def _compute_custom_stage_duration_hours(self):

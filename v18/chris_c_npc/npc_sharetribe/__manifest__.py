@@ -2,7 +2,7 @@
 # noinspection PyStatementEffect
 {
     'name': "NP Collaborator Sharetribe Sync",
-    'version': '18.0.1.30',
+    'version': '18.0.1.31',
     'category': 'Technical',
     'summary': "Sync with Sharetribe",
     'description': """
