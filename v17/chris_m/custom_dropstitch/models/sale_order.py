@@ -259,6 +259,7 @@ class CustomSaleOrder(models.Model):
             "custom_label_image": partner.custom_label_image,
             "custom_policy": instance.custom_policy,
             "payment_term_id": instance.custom_sale_payment_term_id.id,
+            "custom_dropship_order": True,
         }
         
         order_vals.update(update_shopify_dict)
