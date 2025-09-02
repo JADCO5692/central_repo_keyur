@@ -242,7 +242,7 @@ class SaleOrderLine(models.Model):
                 elif line.order_id.custom_policy == "delivery":
                     line.qty_to_invoice = line.qty_delivered - line.qty_invoiced
                 elif line.order_id.custom_policy == "intent":
-                    if line.is_delivery:
+                    if line.is_delivery or line.product_id.detailed_type == "service":
                         line.qty_to_invoice = line.product_uom_qty - line.qty_invoiced
                     else:
                         line.qty_to_invoice = line.qty_to_intent

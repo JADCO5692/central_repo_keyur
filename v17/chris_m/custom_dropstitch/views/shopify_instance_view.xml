@@ -13,10 +13,19 @@
 								<field name="custom_label_template_id"/>
 								<field name="custom_policy"/>
 								<field name="custom_from_address_id"/>
+								<field name="custom_sale_payment_term_id"/>
 							</group>
 							<group></group>
 						</group>
                 	</page>
+                	<page string="Invoice Tag Mapping">
+                        <field name="custom_tag_invoice_ids" context="{'default_custom_shopify_instance_ept_id': active_id}">
+                            <tree editable="bottom">
+                                <field name="custom_tags"/>
+                                <field name="custom_invoice_partner"/>
+                            </tree>
+                        </field>
+                    </page>
             	</xpath>
 			</field>
 		</record>

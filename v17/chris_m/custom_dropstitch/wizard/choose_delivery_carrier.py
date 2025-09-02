@@ -124,7 +124,6 @@ class ChooseDeliveryCarrierCustom(models.TransientModel):
                     }
                 if sale_order_obj.shopify_order_id:
                     carrier_dict_update["state"] = "ready_to_be_sent"
-                #if picking_id.backorder_id or picking_id.batch_id:
                 if picking_id.backorder_id:
                     sale_order_obj._create_delivery_line(
                         self.carrier_id, self.delivery_price
@@ -156,8 +155,7 @@ class ChooseDeliveryCarrierCustom(models.TransientModel):
                         res = True
                     else:
                         res = super(ChooseDeliveryCarrierCustom, self).button_confirm()
-                if not picking_id.sale_id.shopify_order_id:
-                    picking_id._action_create_invoice_and_payment(sale_order_obj)
+                picking_id._action_create_invoice_and_payment(sale_order_obj)
         else:
             res = super(ChooseDeliveryCarrierCustom, self).button_confirm()
         return res

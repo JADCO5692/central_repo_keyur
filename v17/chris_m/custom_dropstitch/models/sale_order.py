@@ -5,7 +5,12 @@ from odoo.exceptions import UserError
 from odoo.addons.sale.models.sale_order_line import SaleOrderLine
 from odoo.tools.json import scriptsafe as json_scriptsafe
 import logging
-
+import json
+import logging
+from datetime import datetime, timedelta
+import time
+import pytz  
+from odoo.addons.shopify_ept import shopify 
 _logger = logging.getLogger(__name__)
 
 sel_custom_label_type = [
@@ -232,7 +237,7 @@ class CustomSaleOrder(models.Model):
         order_response,
         payment_gateway,
         workflow,
-    ):
+    ): 
         order_vals = super(CustomSaleOrder, self).prepare_shopify_order_vals(
             instance,
             partner,
@@ -253,8 +258,25 @@ class CustomSaleOrder(models.Model):
             "custom_pack_instr": partner.custom_pack_instr,
             "custom_label_image": partner.custom_label_image,
             "custom_policy": instance.custom_policy,
+            "payment_term_id": instance.custom_sale_payment_term_id.id,
         }
+        
         order_vals.update(update_shopify_dict)
+        
+        mapped_tag_ids = instance.custom_tag_invoice_ids.mapped("custom_tags").ids
+        order_tag_ids = order_vals.get("tag_ids", [])
+        matching_tags = set(order_tag_ids).intersection(set(mapped_tag_ids))
+        
+        if matching_tags:
+            # find the mapped invoice partner(s)
+            mapped_partner = instance.custom_tag_invoice_ids.filtered(
+                lambda r: r.custom_tags.id in matching_tags
+            ).custom_invoice_partner
+    
+            if mapped_partner:
+                # override invoice partner on order
+                order_vals["partner_invoice_id"] = mapped_partner.id
+
         return order_vals
 
     def prepare_vals_for_sale_order_line(self, product, product_name, price, quantity):
@@ -300,7 +322,7 @@ class CustomSaleOrder(models.Model):
             # Start Himanshu
             # order_lines = order.mapped('order_line').filtered(lambda l: l.product_id.invoice_policy == 'order')
             order_lines = order.mapped("order_line").filtered(
-                lambda l: l.order_id.custom_policy == "order"
+                lambda l: l.order_id.custom_policy == "intent"
             )
             # End Himanshu
             if not order_lines.filtered(
@@ -311,9 +333,51 @@ class CustomSaleOrder(models.Model):
                 )
             ):
                 continue
-            order.validate_and_paid_invoices_ept(work_flow_process_record)
+            # order.validate_and_paid_invoices_ept(work_flow_process_record)
+            order.custom_shopify_register_payment(work_flow_process_record)
         return True
 
+    def custom_shopify_register_payment(self,work_flow_process_record):
+        payment_provider = self.env['payment.provider'].sudo().search([('name', '=', 'Wire Transfer')], limit=1)
+        payment_method = self.env['payment.method'].sudo().search([('name', '=', 'Wire Transfer')], limit=1)
+        payment_method_line_id = False
+         
+        if work_flow_process_record.journal_id:
+            payment_method_line_id = work_flow_process_record.journal_id._get_available_payment_method_lines("inbound")
+            payment_method = payment_method_line_id.payment_method_id
+            if payment_method_line_id.payment_provider_id:
+                payment_provider = payment_method_line_id.payment_provider_id
+
+        payment_transaction = self.env['payment.transaction'].sudo().create({
+            'reference': self.name,
+            'provider_id': payment_provider and payment_provider.id,
+            'payment_method_id': payment_method and payment_method.id,
+            'sale_order_ids': [self.id],
+            'partner_id': self.partner_id.id,
+            'amount': self.amount_total,
+            'currency_id': self.company_id.currency_id.id,
+        })
+        payment_transaction.state = 'done'
+        
+        # Check partial 
+        payment = self.env['account.payment'].sudo().create({
+            'amount': self.amount_total,
+            'payment_type': 'inbound',
+            'partner_type': 'customer',
+            'journal_id': work_flow_process_record.journal_id and work_flow_process_record.journal_id.id,
+            'partner_id': self.partner_id.id,
+            'payment_transaction_id': payment_transaction and payment_transaction.id,
+            'payment_method_line_id': payment_method_line_id and payment_method_line_id.id,
+        })
+        payment.action_post()
+        payment_transaction.payment_id = payment.id
+        message = _("The payment related to the transaction with reference %(ref)s has been posted: %(link)s",
+                ref=self.name, link=payment._get_html_link(),
+            )
+        self.message_post(body=message)
+        # self.action_confirm()
+        self.custom_hide_register_button = True
+    
     def _action_cancel(self):
         result = super(CustomSaleOrder, self)._action_cancel()
         if result:
@@ -481,3 +545,177 @@ class CustomSaleOrder(models.Model):
             "res_id": message_id.id,
             "target": "new",
         }
+    
+
+    def import_shopify_orders(self, order_data_lines, instance):
+        """
+        This method used to create a sale orders in Odoo.
+        @author: Haresh Mori @Emipro Technologies Pvt. Ltd on date 11/11/2019.
+        Task Id : 157350
+        @change: By Maulik Barad on Date 21-Sep-2020.
+        @change: By Meera Sidapara on Date 27-Oct-2021 for Task Id : 179249.
+        """
+        order_risk_obj = self.env["shopify.order.risk"]
+        common_log_line_obj = self.env["common.log.lines.ept"]
+        order_ids = []
+        commit_count = 0
+
+        instance.connect_in_shopify()
+
+        for order_data_line in order_data_lines:
+            if commit_count == 5:
+                self._cr.commit()
+                commit_count = 0
+            commit_count += 1
+            order_data = order_data_line.order_data
+            order_response = json.loads(order_data)
+
+            order_number = order_response.get("order_number")
+            shopify_financial_status = order_response.get("financial_status")
+            _logger.info("Started processing Shopify order(%s) and order id is(%s)", order_number,
+                         order_response.get("id"))
+
+            date_order = self.convert_order_date(order_response)
+            if str(instance.import_order_after_date) > date_order:
+                message = "Order %s is not imported in Odoo due to configuration mismatch.\n Received order date is " \
+                          "%s. \n Please check the order after date in shopify configuration." % (order_number,
+                                                                                                  date_order)
+                _logger.info(message)
+                common_log_line_obj.create_common_log_line_ept(shopify_instance_id=instance.id, module="shopify_ept",
+                                                               message=message,
+                                                               model_name='sale.order',
+                                                               order_ref=order_response.get("name"),
+                                                               shopify_order_data_queue_line_id=order_data_line.id if order_data_line else False)
+                order_data_line.write({'state': 'failed', 'processed_at': datetime.now()})
+                continue
+
+            sale_order = self.search_existing_shopify_order(order_response, instance, order_number)
+
+            if sale_order:
+                order_data_line.write({"state": "done", "processed_at": datetime.now(),
+                                       "sale_order_id": sale_order.id, "order_data": False})
+                _logger.info("Done the Process of order Because Shopify Order(%s) is exist in Odoo and Odoo order is("
+                             "%s)", order_number, sale_order.name)
+                continue
+
+            pos_order = order_response.get("source_name", "") == "pos"
+            partner, delivery_address, invoice_address = self.prepare_shopify_customer_and_addresses(
+                order_response, pos_order, instance, order_data_line)
+            if not partner:
+                continue
+
+            lines = order_response.get("line_items")
+            if self.check_mismatch_details(lines, instance, order_number, order_data_line):
+                _logger.info("Mismatch details found in this Shopify Order(%s) and id (%s)", order_number,
+                             order_response.get("id"))
+                order_data_line.write({"state": "failed", "processed_at": datetime.now()})
+                continue
+
+            sale_order = self.shopify_create_order(instance, partner, delivery_address, invoice_address,
+                                                   order_data_line, order_response, lines, order_number)
+            if not sale_order:
+                message = "Configuration missing in Odoo while importing Shopify Order(%s) and id (%s)" % (
+                    order_number, order_response.get("id"))
+                _logger.info(message)
+                common_log_line_obj.create_common_log_line_ept(shopify_instance_id=instance.id, module="shopify_ept",
+                                                               message=message,
+                                                               model_name='sale.order',
+                                                               order_ref=order_response.get('name'),
+                                                               shopify_order_data_queue_line_id=order_data_line.id if order_data_line else False)
+                continue
+            order_ids.append(sale_order.id)
+
+            location_vals = self.set_shopify_location_and_warehouse(order_response, instance, pos_order, sale_order)
+
+            if instance.is_delivery_multi_warehouse:
+                warehouses = sale_order.order_line.filtered(lambda line_item: line_item.warehouse_id_ept).mapped(
+                    'warehouse_id_ept')
+                if warehouses and len(set(warehouses.ids)) == 1:
+                    location_vals.update({"warehouse_id": warehouses.id})
+
+            sale_order.write(location_vals)
+
+            if sale_order.shopify_order_status != "fulfilled":
+                risk_result = shopify.OrderRisk().find(order_id=order_response.get("id"))
+                if risk_result:
+                    order_risk_obj.shopify_create_risk_in_order(risk_result, sale_order)
+                    risk = sale_order.risk_ids.filtered(lambda x: x.recommendation != "accept")
+                    if risk:
+                        sale_order.is_risky_order = True
+
+            _logger.info("Starting auto workflow process for Odoo order(%s) and Shopify order is (%s)",
+                         sale_order.name, order_number)
+            message = ""
+            try:
+                context = dict(self.env.context)
+                if not self._context.get('shopify_order_financial_status'):
+                    context.update({'shopify_order_financial_status': order_response.get(
+                        "financial_status")})
+                context.update({'order_data_line': order_data_line})
+                self.env.context = context
+                if sale_order.shopify_order_status == "fulfilled":
+                    sale_order.auto_workflow_process_id.shipped_order_workflow_ept(sale_order)
+                    if order_data_line and order_data_line.shopify_order_data_queue_id.created_by == "scheduled_action":
+                        created_by = 'Scheduled Action'
+                    else:
+                        created_by = self.env.user.name
+                    # Below code add for create partially/fully refund
+                    message = self.create_shipped_order_refund(shopify_financial_status, order_response, sale_order,
+                                                               created_by)
+                elif not sale_order.is_risky_order:
+                    # CH:vishal Added condition check transactions
+                    if order_response.get('transaction'):
+                        if sale_order.shopify_order_status == "partial":
+                            sale_order.process_order_fullfield_qty(order_response)
+                            sale_order.with_context(shopify_order_financial_status=order_response.get(
+                                "financial_status")).process_orders_and_invoices_ept()
+                            if order_data_line and order_data_line.shopify_order_data_queue_id.created_by == \
+                                    "scheduled_action":
+                                created_by = 'Scheduled Action'
+                            else:
+                                created_by = self.env.user.name
+                            # Below code add for create partially/fully refund
+                            message = self.create_shipped_order_refund(shopify_financial_status, order_response, sale_order,
+                                                                    created_by)
+                        else:
+                            sale_order.with_context(shopify_order_financial_status=order_response.get(
+                                "financial_status")).process_orders_and_invoices_ept()
+                    else:
+                        sale_order.shopify_custom_confirm_order()
+
+
+            except Exception as error:
+                if order_data_line:
+                    order_data_line.write({"state": "failed", "processed_at": datetime.now(),
+                                           "sale_order_id": sale_order.id})
+                message = "Receive error while process auto invoice workflow, Error is:  (%s)" % (error)
+                _logger.info(message)
+                common_log_line_obj.create_common_log_line_ept(shopify_instance_id=instance.id, module="shopify_ept",
+                                                               message=message,
+                                                               model_name=self._name,
+                                                               order_ref=order_response.get("name"),
+                                                               shopify_order_data_queue_line_id=order_data_line.id if order_data_line else False)
+                continue
+            _logger.info("Done auto workflow process for Odoo order(%s) and Shopify order is (%s)", sale_order.name,
+                         order_number)
+
+            if message:
+                common_log_line_obj.create_common_log_line_ept(shopify_instance_id=instance.id, module="shopify_ept",
+                                                               message=message,
+                                                               model_name=self._name,
+                                                               order_ref=order_response.get("name"),
+                                                               shopify_order_data_queue_line_id=order_data_line.id if order_data_line else False)
+                order_data_line.write({'state': 'failed', 'processed_at': datetime.now()})
+            else:
+                order_data_line.write({"state": "done", "processed_at": datetime.now(),
+                                       "sale_order_id": sale_order.id, "order_data": False})
+            _logger.info("Processed the Odoo Order %s process and Shopify Order (%s)", sale_order.name, order_number)
+
+        return order_ids
+    
+    def shopify_custom_confirm_order(self):
+        work_flow_process_record = self.auto_workflow_process_id
+        if self.invoice_status == "invoiced":
+            return
+        if work_flow_process_record.validate_order:
+            self.validate_order_ept()
