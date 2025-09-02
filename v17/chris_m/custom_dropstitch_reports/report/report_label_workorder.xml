@@ -17,22 +17,23 @@
             <t t-call="web.html_container">
                 <t t-call="web.basic_layout">
                     <t t-foreach="docs" t-as="o">
-                        <div class="page">
+                        <div class="page" >
+<!--                            <br/>-->
                             <t t-if="o.custom_etail_ticket_no">
-                                <t t-set="heigth" t-value="'38px'"/>
-                            </t> 
-                            <t t-else="">
-                                <t t-set="heigth" t-value="'58px'"/>
+                                <t t-set="heigth" t-value="'45px'"/>
                             </t>
-                            <t t-set="barcode_size" t-value="'width: 300px;height:'+heigth+';'"/>
-                            <t t-set="barcode_size1" t-value="'width: 100%;height:'+heigth+';'"/>
+                            <t t-else="">
+                                <t t-set="heigth" t-value="'60px'"/>
+                            </t>
+                            <t t-set="barcode_size" t-value="'width: 300px; height:' + heigth + ';'"/>
+                            <t t-set="barcode_size1" t-value="'width: 100%; height:' + heigth + ';'"/>
                             <div class="row mb-1" t-if="o.custom_etail_ticket_no">
                                 <div class="col-12" style="text-align:center;padding:2px 0px;">
                                     <!-- to print cust order -->
                                     <div class="o_label_full w-100">
                                         <div t-out="o.custom_etail_ticket_no" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size1}"/>
                                     </div>
-                                    <div class="mt-1"> <t t-out="o.custom_etail_ticket_no"/></div> 
+                                    <div class="mt-1"> <t t-out="o.custom_etail_ticket_no"/></div>
                                 </div>
                             </div>
                             <div class="row ">
@@ -71,14 +72,14 @@
                                     <!-- method to get open_text barcode value -->
                                     <!-- <t t-set="open_text" t-value="o.get_open_text()"/> -->
                                     <div class="o_label_full">
-                                        <div t-out="o.sudo().custom_opentext" style="padding:0px" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size1}"/>
+                                        <div t-out="o.sudo().custom_opentext" style="padding:1px" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size1}"/>
                                         <!--<img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(o.custom_opentext), 100, 100)" style="height:50px; width:100px;" alt="QR Code"/>-->
                                     </div>
                                     <div> <t t-out="o.sudo().custom_opentext"/></div>
                                 </div>
                             </div>
                         </div>
-                        <p style="page-break-after:always;"/>
+<!--                        <p style="page-break-after:always;"/>-->
                     </t>
                 </t>
             </t>
