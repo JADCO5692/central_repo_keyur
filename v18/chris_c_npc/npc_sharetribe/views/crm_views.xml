@@ -193,6 +193,10 @@
                            widget="many2many_tags"
                            options="{'color_field': 'color'}"/>
                 </div>
+                <div t-if="record.custom_all_contracts_signed2.raw_value" title="All Contracts Signed" class="mt-1">
+                    <i class="fa fa-fw fa-lg text-muted fa-check-circle me-1 float-start"/>
+                    <field name="custom_all_contracts_signed2"/>
+                </div>
             </xpath>
             <xpath expr="templates//field[@name='partner_id']" position="replace"/>
             <xpath expr="//footer//field[@name='priority']" position="replace"/>
