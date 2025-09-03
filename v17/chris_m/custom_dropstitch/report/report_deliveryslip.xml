@@ -51,48 +51,49 @@
                          t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
                 </div>
                 <div class="col-4">
-                    <table style="padding: 0 10px; width: 100%;border-collapse: collapse;"
+                    <table style="padding: 0 10px; width: 100%; border-collapse: collapse;"
                            class="table table-sm table-borderless">
-                        <tr>
-                            <center>
-                                <strong>
+
+                           <span>
+                        <strong>
                                     <span t-field="o.name" style="font-size:18px !important"/>
                                 </strong>
-                            </center>
-                        </tr>
+                    </span>
+
                         <tr t-if="o.scheduled_date">
-                            <td>Ship Date:</td>
-                            <td>
+                            <td style="white-space: nowrap; width: 140px;">Ship Date:&#160;</td>
+                            <td style="white-space: nowrap;">
                                 <span t-esc="o.scheduled_date.strftime('%d-%m-%Y')"/>
                             </td>
                         </tr>
                         <tr t-if="o.origin">
-                            <td>Sales Order:</td>
-                            <td>
+                            <td style="white-space: nowrap; width: 140px;">Sales Order:&#160;</td>
+                            <td style="white-space: nowrap;">
                                 <span t-field="o.origin"/>
                             </td>
                         </tr>
                         <tr t-if="o.custom_client_order_ref">
-                            <td>Customer Order Ref:</td>
-                            <td>
+                            <td style="white-space: nowrap; width: 140px;">Customer Order Ref:&#160;</td>
+                            <td style="white-space: nowrap;">
                                 <span t-field="o.custom_client_order_ref"/>
                             </td>
                         </tr>
                         <tr t-if="o.weight">
-                            <td>Shipment Weight:</td>
-                            <td>
-                                <span t-field="o.weight"/>
+                            <td style="white-space: nowrap; width: 140px;">Shipment Weight (lbs):&#160;</td>
+                            <td style="white-space: nowrap;">
+                                <span t-field="o.weight"/> &#160; <span>lbs</span>
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: none !important"># of Boxes:</td>
-                            <td style="border: none !important">
+                            <td style="white-space: nowrap; width: 140px; border: none !important;">Box Count:&#160;
+                            </td>
+                            <td style="border: none !important; white-space: nowrap;">
                                 <span>1</span>
                             </td>
                         </tr>
                         <tr t-if="o.carrier_id">
-                            <td>Carrier:</td>
-                            <td>
+                            <td style="white-space: nowrap; width: 140px; vertical-align: top;">Carrier:&#160;</td>
+                            <td style="white-space: normal; word-break: break-word; max-width: 300px;">
                                 <span t-field="o.carrier_id.name"/>
                             </td>
                         </tr>
@@ -121,6 +122,9 @@
                     </th>
                     <th name="th_sm_description" class="text-left">
                         <strong>Description</strong>
+                    </th>
+                    <th name="th_sm_product_image" class="text-left">
+                        <strong>Product Image</strong>
                     </th>
                     <th name="th_sm_customer_order_ref" class="text-left">
                         <strong>Order Ref</strong>
@@ -175,7 +179,7 @@
               inherit_id="stock.stock_report_delivery_aggregated_move_lines">
         <xpath expr="//td[1]" position="replace">
             <td>
-                <span t-esc="aggregated_lines[line]['name']"/>
+                <span t-esc="aggregated_lines[line]['product'].name"/>
             </td>
             <td>
                 <p t-if="aggregated_lines[line]['description']">
@@ -184,6 +188,14 @@
                 <p t-else="">
                     <span t-esc="aggregated_lines[line]['name']"/>
                 </p>
+            </td>
+             <td >
+              <t t-if="aggregated_lines[line].get('item_image')">
+                   <img t-if="aggregated_lines[line].get('item_image')" class="h-25 w-50 mw-50"
+                     t-attf-src="{{'data:image/png;base64,%s' % aggregated_lines[line]['item_image'].decode('utf-8')}}"
+                     t-att-title="Product Image"/>
+                </t>
+
             </td>
             <td>
                 <p t-if="aggregated_lines[line].get('order_ref')">
@@ -196,5 +208,51 @@
                 </p>
             </td>
         </xpath>
+        <xpath expr="//td[@name='move_line_aggregated_qty_ordered']" position="replace">
+            <td class="text-center" name="move_line_ordered_quantity">
+                <t t-if="aggregated_lines[line]['qty_ordered']">
+
+                    <span t-esc="int(aggregated_lines[line]['qty_ordered'])"/>
+
+                    <span t-if="aggregated_lines[line]['packaging'].name">
+                        (
+                        <span t-out="aggregated_lines[line]['packaging_quantity']"
+                              t-options='{"widget": "integer"}'/>
+                        <span t-out="aggregated_lines[line]['packaging'].name"/>
+                        )
+                    </span>
+                </t>
+            </td>
+        </xpath>
+
+        <xpath expr="//td[@name='move_line_aggregated_quantity']" position="replace">
+            <td class="text-center" name="move_line_aggregated_quantity">
+                <t t-if="aggregated_lines[line]['quantity']">
+
+                    <span t-esc="int(aggregated_lines[line]['quantity'])"/>
+
+
+                    <span t-if="aggregated_lines[line]['packaging'].name">
+                        (
+                        <span t-out="aggregated_lines[line]['packaging_quantity']"
+                              t-options='{"widget": "integer"}'/>
+                        <span t-out="aggregated_lines[line]['packaging'].name"/>
+                        )
+                    </span>
+                </t>
+            </td>
+
+        </xpath>
     </template>
+
+    <template id="stock_report_delivery_package_section_line_inherit_delivery_custom_tracking"
+              inherit_id="stock.stock_report_delivery_package_section_line">
+        <xpath expr="//td[@name='package_info']" position="inside">
+            <t t-if="o.carrier_tracking_ref">
+                <span>- Tracking:</span>
+                <span t-esc="o.carrier_tracking_ref"/>
+            </t>
+        </xpath>
+    </template>
+
 </odoo>

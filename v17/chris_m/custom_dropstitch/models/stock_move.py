@@ -116,5 +116,7 @@ class StockMoveLine(models.Model):
                     str(prod) for prod in self.move_id.sale_line_id.mapped('custom_customer_product') if prod
                 ]
                 aggregated_move_lines[aggregated_move_line]['customer_sku'] = ', '.join(customer_products)
-
+            move = aggregated_move_lines[aggregated_move_line]['move']
+            if move and move.custom_item_image:
+                aggregated_move_lines[aggregated_move_line]['item_image'] = move.custom_item_image
         return aggregated_move_lines
