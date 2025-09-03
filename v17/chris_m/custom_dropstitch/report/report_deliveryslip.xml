@@ -189,12 +189,14 @@
                     <span t-esc="aggregated_lines[line]['name']"/>
                 </p>
             </td>
-            <td>
-              <t t-if="aggregated_lines[line].get('item_image')">
-                <img t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image']"
-                     class="h-25 w-50 mw-50"
-                     t-att-title="'Product Image'"/>
-              </t>
+             <td >
+                 <t t-if="aggregated_lines[line].get('item_image')">
+                     <img t-if="aggregated_lines[line].get('item_image')"
+                          width="100"
+                          t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image'].decode('utf-8')"
+                          alt="Product Image"/>
+                 </t>
+
             </td>
             <td>
                 <p t-if="aggregated_lines[line].get('order_ref')">
