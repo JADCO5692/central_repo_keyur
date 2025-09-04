@@ -82,6 +82,15 @@ class StockMove(models.Model):
             return self.env['account.move']
         return super()._account_entry_move(qty, description, svl_id, cost)
 
+    @api.model_create_multi
+    def create(self, vals):
+        result = super().create(vals)
+        for rec in result:
+            if rec.sale_line_id and rec.sale_line_id.name:
+                rec.description_picking = rec.sale_line_id.name
+
+        return result
+
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
     
