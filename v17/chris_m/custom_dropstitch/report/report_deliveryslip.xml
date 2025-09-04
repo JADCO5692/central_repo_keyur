@@ -25,8 +25,8 @@
                 <t t-if="custom_dropship_order and o.sale_id.custom_from">
                     <div class="col-4">
                         <strong>From Address:</strong>
-                        <div t-field="o.sale_id.custom_from"
-                             t-options='{"widget": "contact", "fields": ["name"], "no_marker": True}'/>
+                        <div t-esc="o.sale_id.custom_from"/>
+<!--                             t-options='{"widget": "contact", "fields": ["name"], "no_marker": True}'/>-->
                     </div>
                 </t>
                 <t t-elif="custom_dropship_order and not o.sale_id.custom_from">
@@ -114,6 +114,93 @@
                 }
             </style>
         </xpath>
+
+        <xpath expr="//table[@name='stock_move_table']/thead" position="replace">
+            <thead>
+
+                <tr>
+                    <th name="th_sm_product" class="text-left">
+                        <strong>Product</strong>
+                    </th>
+                    <th name="th_sm_description" class="text-left">
+                        <strong>Description</strong>
+                    </th>
+                    <th name="th_sm_product_image" class="text-left">
+                        <strong>Product Image</strong>
+                    </th>
+                    <th name="th_sm_customer_order_ref" class="text-left">
+                        <strong>Order Ref</strong>
+                    </th>
+                    <th name="th_sm_customer_sku" class="text-left">
+                        <strong>Customer SKU</strong>
+                    </th>
+                    <th name="th_sm_ordered">
+                        <strong>Ordered</strong>
+                    </th>
+                    <th name="th_sm_quantity">
+                        <strong>Delivered</strong>
+                    </th>
+                </tr>
+            </thead>
+
+
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody" position="replace">
+            <tbody>
+                <tr t-att-class="'bg-200 fw-bold o_line_section'">
+                    <td colspan="99" name="no_package_info">
+                        <t t-if="o.weight_bulk">
+                            <span>- Weight:</span>
+                            <span t-field="o.weight_bulk"/>
+                            <span t-field="o.weight_uom_name"/>
+                        </t>
+                        <t t-if="o.carrier_tracking_ref">
+                            <span>- Tracking:</span>
+                            <span t-esc="o.carrier_tracking_ref"/>
+                        </t>
+                    </td>
+                </tr>
+                <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
+                <tr t-foreach="lines" t-as="move">
+                                 <td>
+                                    <span t-field="move.product_id.name">Customizable Desk</span>
+                                </td>
+                                <td>
+                                    <span t-field="move.product_id">Customizable Desk</span>
+                                    <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                        <span t-field="move.description_picking">Description on transfer</span>
+                                    </p>
+                                </td>
+                                <td>
+                                    <img t-if="move.custom_item_image"
+                                      width="100"
+                                      t-att-src="'data:image/png;base64,%s' % move.custom_item_image.decode('utf-8')"
+                                      alt="Product Image"/>
+                                </td>
+                                <td>
+                                    <t t-if="move.picking_id.custom_client_order_ref">
+                                        <span t-esc="move.picking_id.custom_client_order_ref"/>
+                                    </t>
+                                    <t t-elif="move.picking_id.origin">
+                                        <span t-esc="move.picking_id.origin"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="move.sale_line_id">
+                                        <span t-esc="move.sale_line_id.custom_customer_product"/>
+                                    </t>
+                                </td>
+
+                                <td>
+                                    <span t-field="move.product_uom_qty" t-options='{"widget": "integer"}'>0.0</span>
+
+                                </td>
+                                <td>
+                                    <span t-field="move.quantity" t-options='{"widget": "integer"}'>0.00</span>
+                                </td>
+                            </tr>
+            </tbody>
+        </xpath>
         <xpath expr="//table[@name='stock_move_line_table']/thead" position="replace">
             <thead>
                 <tr>
@@ -190,11 +277,11 @@
                 </p>
             </td>
              <td >
-                 <t t-if="aggregated_lines[line].get('item_image')">
-                     <img t-if="aggregated_lines[line].get('item_image')"
-                          width="100"
-                          t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image'].decode('utf-8')"
-                          alt="Product Image"/>
+                 <t t-if="aggregated_lines[line].get('item_image') and isinstance(aggregated_lines[line].get('item_image'),str)">
+                      <img t-if="aggregated_lines[line].get('item_image')"
+                         width="100"
+                         t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image'].decode('utf-8')"
+                         alt="Product Image"/>
                  </t>
 
             </td>

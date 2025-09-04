@@ -119,5 +119,5 @@ class StockMoveLine(models.Model):
                 aggregated_move_lines[aggregated_move_line]['customer_sku'] = ', '.join(customer_products)
             move = aggregated_move_lines[aggregated_move_line]['move']
             if move and move.custom_item_image:
-                aggregated_move_lines[aggregated_move_line]['item_image'] = base64.b64encode(move.custom_item_image).decode('utf-8')
+                aggregated_move_lines[aggregated_move_line]['item_image'] = base64.b64encode(move.custom_item_image)
         return aggregated_move_lines
