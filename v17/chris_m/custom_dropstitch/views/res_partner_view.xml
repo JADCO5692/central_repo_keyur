@@ -43,6 +43,9 @@
 						</group>
 					</page>
 				</xpath>
+				<field name="vat" position="after">
+				    <field name="custom_so_special_inst" invisible="parent_id"/>
+				</field>
 				<group name="sale" position="inside">
 					<field name="custom_allowed_shipping_ids" invisible="customer_rank &lt; 1 or parent_id" widget="many2many_tags"/>
 					<field name="custom_allowed_customer_ids" invisible="customer_rank &lt; 1" widget="many2many_tags"/>

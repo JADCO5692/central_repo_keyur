@@ -26,7 +26,6 @@
                     <div class="col-4">
                         <strong>From Address:</strong>
                         <div t-esc="o.sale_id.custom_from"/>
-<!--                             t-options='{"widget": "contact", "fields": ["name"], "no_marker": True}'/>-->
                     </div>
                 </t>
                 <t t-elif="custom_dropship_order and not o.sale_id.custom_from">

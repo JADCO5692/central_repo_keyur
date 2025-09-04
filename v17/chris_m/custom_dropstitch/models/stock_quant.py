@@ -21,8 +21,21 @@ class StockQuant(models.Model):
     def _compute_quantities(self):
         """Compute the incoming quantity."""
         for record in self:
-            vals = record.product_id.with_context(location=record.location_id.id)._compute_quantities_dict(lot_id=record.lot_id.id, package_id=record.package_id.id, owner_id=record.owner_id.id)
-            vals = vals.get(record.product_id.id)
+            if not record.product_id or not record.location_id:
+                record.incoming_qty = 0.0
+                record.outgoing_qty = 0.0
+                record.virtual_available = 0.0
+                continue
+    
+            vals_dict = record.product_id.with_context(
+                location=record.location_id.id
+            )._compute_quantities_dict(
+                lot_id=record.lot_id.id,
+                package_id=record.package_id.id,
+                owner_id=record.owner_id.id
+            )
+    
+            vals = vals_dict.get(record.product_id.id, {})
             record.incoming_qty = vals.get('incoming_qty', 0.0)
             record.outgoing_qty = vals.get('outgoing_qty', 0.0)
             record.virtual_available = vals.get('virtual_available', 0.0)

@@ -194,6 +194,7 @@ class CustomSaleOrder(models.Model):
             order.custom_policy = order.partner_id.custom_policy
             order.custom_shipping_fees = order.partner_id.custom_shipping_fees
             order.custom_dropship_order = order.partner_id.custom_dropship_order
+            order.custom_so_special_inst = order.partner_id.custom_so_special_inst
 
     def _prepare_order_line_values(
         self,
