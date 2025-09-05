@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_stock_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="po_origin"/>
+            </xpath>
+            <xpath expr="//div[contains(@class,'o_td_label')]" position="replace"/>
+            <xpath expr="//field[@name='partner_id']" position="replace">  
+                <field name="partner_id" context="{'show_address': 1}" placeholder="Type to find a customer..." invisible="picking_type_code != 'outgoing'" string="Delivery Address"/>
+                <field name="partner_id" context="{'show_address': 1}" placeholder="Type to find a customer..." invisible="picking_type_code != 'incoming'" string="Receive From"/>
+                <field name="partner_id" context="{'show_address': 1}" placeholder="Type to find a customer..." invisible="picking_type_code in ['incoming', 'outgoing']" string="Contact"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_picking_tree" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='origin']" position="after">
+                <field name="po_origin"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_picking_search" model="ir.ui.view">
+        <field name="name">stock.picking.search.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="po_origin" string="PO Origin"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

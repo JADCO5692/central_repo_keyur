@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="my_pricelist_link" name="Link to my pricelist" inherit_id="portal.user_dropdown">
+        <xpath expr="//*[@id='o_logout_divider']" position="before">
+            <a href="/my/pricelist" role="menuitem" class="dropdown-item ps-3">
+                <i class="fa fa-fw fa-id-card-o me-1 small text-primary text-primary-emphasis"/> My Pricelists
+            </a>
+        </xpath>
+    </template>
+    <template id="custom_pricelist_list" name="Pricelist List">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <section id="custom_list" class="pt32 pb32">
+                    <div class="container">
+                        <owl-component name="custom_pricelist" />
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>

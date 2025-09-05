@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sale_order_portal_content_inherit" inherit_id="sale.sale_order_portal_content" name="Sale Portal">
+        <xpath expr="//table[@id='sales_order_table']//thead/tr/th[3]" position="replace">
+            <th t-attf-class="text-end">
+                Unit Price
+            </th>
+        </xpath>
+        <xpath expr="//table[@id='sales_order_table']//thead/tr/th[@id='subtotal_header']" position="attributes">
+            <attribute name="t-attf-class">text-end {{ 'd-none d-sm-table-cell' if report_type == 'html' else '' }}</attribute>
+        </xpath>
+        <xpath expr="//table[@id='sales_order_table']//t[@name='product_line_row']/td[3]" position="attributes">
+            <attribute name="t-attf-class">text-end</attribute>
+            <attribute name="class">d-block</attribute>  
+        </xpath>  
+        <xpath expr="//table[@id='sales_order_table']//t[@name='product_line_row']/td[@id='subtotal']" position="attributes">
+            <attribute name="t-attf-class">text-end {{ 'd-none d-sm-table-cell' if report_type == 'html' else '' }}</attribute>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+    <t t-name="PaymentScreenButtonsExt" t-inherit="point_of_sale.PaymentScreenButtons" t-inherit-mode="extension">
+        <xpath expr="//div[contains(@class,'payment-buttons')]" position="inside"> 
+            <div calss="d-flex flex-column flex-sm-row gap-2 w-100" t-if="this.currentOrder.shipping_date">
+                <button class="button btn btn-light btn-lg d-flex justify-content-center align-items-baseline w-100 lh-lg  text-action" 
+                    t-on-click="()=>this.select_route()">
+                    <i class="fa fa-truck me-2" />Shipping Route 
+                </button> 
+            </div>
+        </xpath>
+    </t>
+
+</templates>

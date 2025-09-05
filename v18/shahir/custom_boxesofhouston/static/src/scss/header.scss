@@ -1,0 +1,76 @@
+.s_mega_menu_boh_menu{
+    background-color: #F9F9F9;
+    #exTab1-desktop{
+        .s_tabs_nav{
+            background-color: #F9F9F9;
+            ul.nav{
+                a.nav-link{
+                    background-color: #F9F9F9;
+                    color: #1b1b1b !important;
+                    border: none !important; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    .arrow-toggle{ 
+                        margin: 0px;
+                        display: inline-block;
+                        height: 25px;
+                        position: relative;
+                        width: 20px; 
+                        &:after {
+                            border-bottom-style: solid;
+                            border-bottom-width: 2px;
+                            border-right-style: solid;
+                            border-right-width: 2px;
+                            content: '';
+                            display: inline-block;
+                            height: 8px; 
+                            width: 8px;
+                            -moz-transform: rotate(225deg);
+                            -ms-transform: rotate(225deg);
+                            -webkit-transform: rotate(225deg);
+                            transform: rotate(225deg);
+                        }
+                    }
+                    &.active{
+                        background-color: #fff !important;
+                        border-radius: 5px 5px 0 0;
+                        .arrow-toggle::after{
+                            -moz-transform: rotate(45deg);
+                            -ms-transform: rotate(45deg);
+                            -webkit-transform: rotate(45deg);
+                            transform: rotate(45deg);
+                        }
+                    } 
+                }
+                
+            } 
+        }
+        .tab-pane{
+            .nav-item{
+                color: #1b1b1b !important;
+                .nav-hierarchy{
+                    margin-left: 12px;
+                }
+                &.oe_main_categ{
+                    color: o-color('primary') !important; 
+                }
+            }
+        }
+        @media (max-width:991px) {
+            display: none !important;
+        }
+    }
+    #exTab1-mobile{
+        display: none;
+        @media (max-width:991px) {
+            display: block !important;
+        }
+        li.nav-item{
+            padding-left: 10px !important;
+            ul{
+                padding-left: 8px !important;
+            }
+        }
+    } 
+}

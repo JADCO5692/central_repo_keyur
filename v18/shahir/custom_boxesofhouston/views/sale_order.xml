@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sale_order_form_view_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='margin']" position="after">
+                <field name="custom_margin_percentage"
+                    invisible="price_subtotal == 0"
+                    widget="percentage"
+                    optional="hide"/>  
+            </xpath>
+            <xpath expr="//field[@name='margin_percent']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']//list/field[@name='product_template_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_create_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="stock_route_id" 
+                    readonly="state not in ['draft','sent']"
+                    domain="[('sale_order_line_selectable','=',True)]" string="Route"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button type="object" name="action_update_pricelist" string="Update Pricelist"/>
+            </xpath>
+            <xpath expr="//field[@name='stock_route_id']" position="after">
+                <field name="margine_percentage" widget="percentage" readonly="state in ['sale','cancel']"/>
+                <field name="customer_statement" />
+                <field name="custom_quote" invisible="1" /> 
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="view_order_form_custom" model="ir.ui.view">
+        <field name="name">sale.order.form.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/header[1]/button[@name='action_confirm'][2]" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//form[1]/header[1]/button[@name='action_confirm']" position="replace">
+                <button name="custom_action_send_email" string="Send Payable Quote" class="btn-primary" type="object" invisible="require_payment or state in ['sale','cancel']"/>
+                <button class="btn btn-primary" name="custom_register_payment" type="object"
+                    string="Register Payment" invisible="custom_hide_register_button"
+                />
+                <button name="custom_action_confirm" string="Confirm" class="btn-primary" type="object" invisible="state in ['sale','cancel']"/>
+            </xpath>
+            <xpath expr="//form[1]/header[1]/button[@name='action_quotation_send']" position="attributes">
+                <attribute name="string">Send UnPayable Quote</attribute>
+            </xpath>
+            <xpath expr="//form[1]/header[1]/button[@name='action_quotation_send'][4]" position="attributes">
+                <attribute name="string">Send UnPayable Quote</attribute>
+                <attribute name="invisible">state not in ['sent']</attribute>
+            </xpath>
+            <xpath expr="//form[1]/header[1]/button[@name='action_quotation_send'][4]" position="after">
+                <button name="custom_action_send_email" string="Send Payable Quote" type="object" invisible="not require_payment or state in['sale','cancel']"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('parent_id', '=', False)]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_sales_order_filter_inherit" model="ir.ui.view">
+        <field name="name">model_name.view.search</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="partner_email"/>
+                <field name="partner_phone"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

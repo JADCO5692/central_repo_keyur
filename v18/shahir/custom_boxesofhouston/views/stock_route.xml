@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_location_route_form_view_ext" model="ir.ui.view">
+        <field name="name">stock.location.route.form.view.ext</field>
+        <field name="model">stock.route</field>
+        <field name="inherit_id" ref="stock.stock_location_route_form_view"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='packaging_selectable']" position="after">
+                <field name="sale_order_line_selectable" />
+                <field name="available_for_pos_order" />
+                <field name="is_address_mandatory" />
+                <field name="is_auto_complete"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

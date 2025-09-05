@@ -1,0 +1,25 @@
+@mixin o_overflow{
+    .o_list_renderer{
+        max-height: 500px;
+        overflow: auto;
+    }
+    .o_section_and_note_list_view{
+        thead{
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 5;
+
+        }
+    }
+}
+.o_action_manager{
+    .o_content{
+        .o_field_widget.o_field_sol_o2m{
+            @include o_overflow;
+        }
+        .o_field_widget.o_field_one2many.o_custome_list{
+            @include o_overflow;
+        }
+    }
+}

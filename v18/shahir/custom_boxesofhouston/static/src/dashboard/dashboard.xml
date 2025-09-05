@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="SalesDashboard" owl="1">
+        <div class="o_action" t-ref="el">
+            <div class="o_content"> 
+                <div class="header_container container-fluid">
+                    <div class="row py-3 align-items-center">
+                        <div class="col-12 col-sm-12 col-md-9 col-lg-6 col-xl-6 d-flex cnt-left align-items-center">
+                            <div class="">
+                                <h2 class="ms-2 mb-0">
+                                    Sales Dashboard
+                                </h2>
+                            </div>
+                        </div> 
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-6 col-xl-6 d-flex justify-content-end">
+                            <select class="form-control w-50" t-on-change="(ev)=>this.onSelectTimeframe(ev)">
+                                <option t-att-selected="state.time_frame == 'this_month'" t-att-value="this_month">This Month</option>
+                                <option t-att-selected="state.time_frame == 'last_month'" t-att-value="last_month">Last Month</option> 
+                                <option t-att-selected="state.time_frame == 'this_week'" t-att-value="this_week">This Week</option>  
+                                <option t-att-selected="state.time_frame == 'last_week'" t-att-value="last_week">Last Week</option>
+                            </select> 
+                        </div> 
+                    </div>
+                </div>
+                <div id="body_container" class="body_container container-fluid">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>New Leads</h3>
+                                    <div class="value" id="newLeadsCount"><t t-esc="SmrySum.new_leads"/></div>
+                                    <div class="trend"> 
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-blue"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Total Sales</h3>
+                                    <div class="value" id="totalSales">$ <t t-esc="SmrySum.sales_amount.toFixed(2)"/></div>
+                                    <div class="trend">  
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-green"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card" t-on-click="()=>this.onclickCustomers()">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>New Customers</h3>
+                                    <div class="value" id="newCustomers"><t t-esc="getNewCustomers()"/></div>
+                                    <div class="trend"> 
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-purple"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Quotations Sent</h3>
+                                    <div class="value" id="quotationsSent"><t t-esc="SmrySum.quotations_sent"/></div>
+                                    <div class="trend">
+                                         
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-orange"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Total sales for new leads</h3>
+                                    <div class="value" id="newLeadsSales">$ <t t-esc="SmrySum.new_lead_sales.toFixed(2)"/></div>
+                                    <div class="trend">
+                                         
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-indigo"> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-grid m-auto"> 
+                        <div class="bg-white item-container">
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h2>Sales Leaderborad</h2> 
+                                </div>
+                                
+                                <div class="table-wrapper">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Salesperson</th> 
+                                                <th>New Leads</th>
+                                                <th>New Leads Sales</th>
+                                                <th>New Quotations Sent</th>
+                                                <th>Sales Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            <tr t-foreach="state.salesperson_summary" t-as="smry" t-key="smry_index">
+                                                <td><t t-esc="smry.salesperson"/></td> 
+                                                <td><t t-esc="smry.new_leads"/></td> 
+                                                <td>$ <t t-esc="smry.new_leads_sales_amount"/></td>
+                                                <td><t t-esc="smry.quotations_sent"/></td> 
+                                                <td>$ <t t-esc="smry.sales_amount.toFixed(2)"/></td>
+                                            </tr>
+                                            <tr class="bg-100">
+                                                <td> 
+                                                    <b>Totals</b>
+                                                </td>
+                                                <td>
+                                                    <b><t t-esc="SmrySum.new_leads"/></b>
+                                                </td>
+                                                <td>
+                                                    <b><t t-esc="SmrySum.new_lead_sales.toFixed(2)"/></b>
+                                                </td>
+                                                <td>
+                                                    <b><t t-esc="SmrySum.quotations_sent"/></b>
+                                                </td>
+                                                <td>
+                                                    <b><t t-esc="SmrySum.sales_amount.toFixed(2)"/></b>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="bg-white item-container">
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h2>New Customers Onboarded</h2> 
+                                </div>
+                                
+                                <div class="table-wrapper">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Salesperson</th>
+                                                <th>New Customers</th>
+                                                <th>Sales Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            <tr t-foreach="state.new_onboard_customers" t-as="noc" t-key="noc_index">
+                                                <td><t t-esc="noc.salesperson"/></td> 
+                                                <td><t t-esc="noc.new_customers"/></td>
+                                                <td>$ <t t-esc="noc.new_customer_sales_amount.toFixed(2)"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

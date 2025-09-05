@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="website_sale_product_ext" inherit_id="website_sale.product" name="Product">
+        <xpath expr="//form" position="before">
+            <t t-set="pricelist_product" t-value="product._is_pricelist_item()"/>
+            <t t-set="curr_quote" t-value="request.env['sale.order'].sudo().search([('state','=','draft'),('partner_id','=',request.env.user.partner_id.id),('custom_quote','=',True)],limit=1)"/>
+            <t t-set="curr_quote_ids" t-value="curr_quote and curr_quote.order_line and curr_quote.order_line.mapped('product_id.id')"/>
+        </xpath>
+        <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="attributes">
+            <attribute name="t-if">pricelist_product</attribute>
+        </xpath>
+        <xpath expr="//t[@t-call='website_sale.product_price']" position="attributes">
+            <attribute name="t-if">pricelist_product</attribute>
+        </xpath>
+        <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
+            <div id="o_wsale_cta_wrapper" class="d-flex flex-wrap align-items-center">
+                <t t-if="not pricelist_product"> 
+                    <t t-if="curr_quote_ids and product_variant.id in curr_quote_ids">
+                        <a href="javascript:;" role="button" class="btn btn-primary a-quote" aria-label="Request A Quote" title="Added to Quote" >
+                            Added to Quote
+                        </a>
+                    </t>
+                    <t t-else="">
+                        <a href="#" role="button" class="btn btn-light o_quote_product_btn a-quote" aria-label="Request A Quote" title="Request A Quote" >
+                            Add To Quote
+                        </a>
+                    </t>
+                </t>
+            </div>
+        </xpath> 
+    </template>
+
+</odoo>

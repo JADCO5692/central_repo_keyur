@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_reorder_report_search_ext" model="ir.ui.view">
+            <field name="name">stock.reorder.report.search.ext</field>
+            <field name="model">stock.warehouse.orderpoint</field>
+            <field name="inherit_id" ref="stock.stock_reorder_report_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="product_tag_ids" string="Tags"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
