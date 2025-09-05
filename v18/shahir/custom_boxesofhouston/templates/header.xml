@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="categories_recursive_bh" name="Category list">
+        <li class="nav-item mb-1">
+            <t t-set="c_url" t-value="'/shop/category/%s' % request.env['ir.http']._slug(c)"/>
+            <a t-att-href="c_url" t-attf-class="nav-item #{'oe_main_categ' if c.child_id else ''} p-0" t-field="c.name" >
+                <t t-esc="c.name"/>
+            </a>
+            <ul t-if="c.child_id" class="nav flex-column nav-hierarchy mt-2">
+                <t t-foreach="c.child_id" t-as="c"> 
+                    <t t-call="custom_boxesofhouston.categories_recursive_bh" />
+                </t>
+            </ul>
+        </li>
+    </template>
+    <template id="s_megamenu_custom_boh" name="Boxes Of Houston Megamenu" groups="base.group_user">
+        <section class="s_mega_menu_boh_menu s_mega_menu_odoo_menu o_colored_level">
+            <t t-set="categories" t-value="request.env['product.public.category'].sudo().search([])" />
+            <div id="exTab1-mobile" class="px-0"> 
+                <ul class="nav nav-underline d-block" >
+                    <t t-foreach="categories" t-as="c" t-if="c.is_main_parent">
+                        <section class="s_text_block py-2">
+                            <div class="s_allow_columns pt-3">
+                                <a class="nav-link bg-200 w-100 border-bottom"><t t-esc="c.name"/></a>
+                                <t t-if="c.child_id">
+                                    <t t-foreach="c.child_id" t-as="c">
+                                        <t t-call="custom_boxesofhouston.categories_recursive_bh"/>  
+                                    </t>
+                                </t> 
+                            </div>
+                        </section>
+                    </t>
+                    <section class="s_text_block py-2">
+                        <t t-set="categories_more" t-value="categories.check_more_categories()"/>
+                        <div class="s_allow_columns pt-3">
+                            <a class="nav-link bg-200 w-100 border-bottom">More</a>
+                        </div>
+                        <ul t-if="categories_more" class="nav flex-column nav-hierarchy mt-2">
+                            <li t-foreach="categories_more" t-as="c" class="nav-item mb-1">
+                                <t t-set="c_url" t-value="'/shop/category/%s' % request.env['ir.http']._slug(c)"/>
+                                <a t-att-href="c_url" t-attf-class="nav-item oe_main_categ p-0">
+                                    <t t-esc="c.name"/>
+                                </a>
+                                <t t-if="c.child_id">
+                                    <ul class="nav flex-column nav-hierarchy mt-2">
+                                        <t t-foreach="c.child_id" t-as="c">
+                                            <t t-call="custom_boxesofhouston.categories_recursive_bh"/>  
+                                        </t>
+                                    </ul>
+                                </t>
+                            </li>
+                        </ul>
+                    </section>
+                </ul>
+            </div>
+            <div id="exTab1-desktop" class="">
+                <div class="s_tabs_nav container px-0" data-name="Tab Header">
+                    <ul class="nav nav-underline nav-justified flex-nowrap overflow-y-hidden overflow-x-auto" role="tablist">
+                        <t t-foreach="categories" t-as="category" t-if="category.is_main_parent">
+                            <t t-set="c_url" t-value="'/shop/category/%s' % request.env['ir.http']._slug(category)"/>
+                            <li t-attf-class="nav-item" role="presentation">
+                                <!-- <a t-attf-class="nav-link {{'active' if category_first else ''}}" t-attf-id="nav_tabs_link_#{category.id}" data-bs-toggle="tab" t-attf-data-toggleId="#nav_tabs_content_#{category.id}" t-att-href="c_url" role="tab" t-attf-aria-controls="nav_tabs_content_#{category.id}" aria-selected="true"> -->
+                                <t t-if="category.child_id">
+                                    <a t-attf-class="nav-link {{'active' if category_first else ''}}" t-attf-id="nav_tabs_link_#{category.id}" t-attf-data-toggleId="#nav_tabs_content_#{category.id}" t-att-href="c_url" role="tab" t-attf-aria-controls="nav_tabs_content_#{category.id}" aria-selected="true">
+                                        <t t-esc="category.name"/>
+                                        <span class="arrow-toggle" />
+                                    </a>  
+                                </t>
+                                <t t-else="">
+                                    <a t-attf-class="nav-link" t-att-href="c_url" role="tab">
+                                        <t t-esc="category.name"/> 
+                                    </a>
+                                </t>
+                            </li>    
+                        </t>
+                        <li t-attf-class="nav-item" role="presentation">
+                            <a t-attf-class="nav-link" t-attf-id="nav_tabs_link_more" t-attf-data-toggleId="#nav_tabs_content_more" role="tab" t-attf-aria-controls="nav_tabs_content_more" aria-selected="true">
+                                More
+                                <span class="arrow-toggle" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="s_tabs_content tab-content bg-white">
+                    <t t-foreach="categories" t-as="c" t-if="c.is_main_parent">
+                        <div t-attf-class="tab-pane fade {{'active show' if c_first else ''}}" t-attf-id="nav_tabs_content_#{c.id}" role="tabpanel" t-attf-aria-labelledby="nav_tabs_link_#{c.id}">
+                            <div class="oe_structure oe_empty">
+                                <section class="s_text_block pb-4" data-snippet="s_text_block">
+                                    <div class="container s_allow_columns pt-3">
+                                        <t t-if="c.child_id">
+                                            <t t-foreach="c.child_id" t-as="c">
+                                                <t t-call="custom_boxesofhouston.categories_recursive_bh"/>  
+                                            </t>
+                                        </t> 
+                                    </div>
+                                </section>
+                            </div>
+                        </div> 
+                    </t>
+                    <div t-attf-class="tab-pane fade" t-attf-id="nav_tabs_content_more" role="tabpanel" t-attf-aria-labelledby="nav_tabs_link_more">
+                        <div class="oe_structure oe_empty">
+                            <section class="s_text_block pb-4" data-snippet="s_text_block">
+                                <div class="container s_allow_columns pt-3">
+                                    <ul t-if="categories" class="nav flex-column nav-hierarchy mt-2">
+                                        <t t-set="categories" t-value="categories.check_more_categories()"/>
+                                        <li t-foreach="categories" t-as="c" class="nav-item mb-1">
+                                            <t t-set="c_url" t-value="'/shop/category/%s' % request.env['ir.http']._slug(c)"/>
+                                            <a t-att-href="c_url" t-attf-class="nav-item oe_main_categ p-0">
+                                                <t t-esc="c.name"/>
+                                            </a>
+                                            <t t-if="c.child_id">
+                                                <ul class="nav flex-column nav-hierarchy mt-2">
+                                                    <t t-foreach="c.child_id" t-as="c">
+                                                        <t t-call="custom_boxesofhouston.categories_recursive_bh"/>  
+                                                    </t>
+                                                </ul>
+                                            </t>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            
+        </section>
+    </template> 
+    <template id="mega_menu_snippet_options_bits" inherit_id="website.snippet_options">
+        <xpath expr="//div[@data-js='MegaMenuLayout']/we-select/we-button[last()]" position="after">
+            <t t-set="_label">Menu Boxes Of Houston</t>
+            <we-button t-att-data-select-label="_label"
+                data-select-template="custom_boxesofhouston.s_megamenu_custom_boh"
+                data-img="/website/static/src/img/snippets_thumbs/s_mega_menu_odoo_menu.svg"
+                t-out="_label" />
+        </xpath>
+    </template>
+
+</odoo>

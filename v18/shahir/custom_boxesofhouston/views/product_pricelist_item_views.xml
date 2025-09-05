@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_product_pricelist_item_form_inherit" model="ir.ui.view">
+        <field name="name">product.pricelist.item.form.inherit</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='pricelist_rule_base']" position="replace">
+                <group name="pricelist_rule_base" invisible="compute_price != 'formula'">
+                    <group>
+                        <field name="base" string="Based price"/>
+                        <field name="base_pricelist_id" invisible="base != 'pricelist'" readonly="base != 'pricelist'" required="compute_price == 'formula' and base == 'pricelist'" string="Other Pricelist"/>
+                        <label for="price_discount" string="Discount" invisible="base == 'standard_price' or base =='cost_margin'"/>
+                        <div class="o_row" invisible="base == 'standard_price' or base =='cost_margin'" style="width: 40% !important;">
+                            <field name="price_discount"/>
+                            <span>%</span>
+                        </div>
+                        <label for="price_markup" string="Markup" invisible="base != 'standard_price'"/>
+                        <div class="o_row" invisible="base != 'standard_price'" style="width: 40% !important;">
+                            <field name="price_markup"/>
+                            <span>%</span>
+                        </div>
+                        <label for="price_margin" string="Margin" invisible="base != 'cost_margin'"/>
+                        <div class="o_row" invisible="base != 'cost_margin'" style="width: 40% !important;">
+                            <field name="price_margin"/>
+                            <span>%</span>
+                        </div>
+                        <field name="price_round" string="Round off to" invisible="base == 'cost_margin'"/>
+                        <field name="price_surcharge" widget="monetary" invisible="base == 'cost_margin'" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                        <label string="Margins" for="price_min_margin" invisible="base == 'cost_margin'" groups="base.group_no_one"/>
+                        <div class="d-flex align-items-baseline" groups="base.group_no_one" invisible="base == 'cost_margin'">
+                            <field name="price_min_margin" string="Min. Margin" class="oe_inline" widget="monetary" options="{'field_digits': True}"/>
+                            <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow"/>
+                            <field name="price_max_margin" string="Max. Margin" class="oe_inline" widget="monetary" nolabel="1" options="{'field_digits': True}"/>
+                        </div>
+                    </group>
+                    <div invisible="base == 'cost_margin'">
+                        <div class="alert alert-info" role="alert" style="white-space: pre;">
+                            <field name="rule_tip"/>
+                        </div>
+                        <div class="alert alert-info" role="alert" style="white-space: pre;">
+                            <b>Tip: want to round at 9.99?</b>
+                            <div>round off to 10.00 and set an extra at -0.01</div>
+                        </div>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+        </record>
+    </odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_crm_case_kanban_view_leads_inherit_creation_date" model="ir.ui.view">
+            <field name="name">crm.case.kanban.view.leads.inherit.creation.date</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//footer" position="before">
+                    <div class="o_kanban_creation_date">
+                        <field name="create_date" widget="datetime" options="{'format': 'short'}"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_crm_lead_form_inherit_custom_contact_email" model="ir.ui.view">
+            <field name="name">crm.lead.form.inherit.custom.contact.email</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='lead']//field[@name='function']" position="before">
+                    <field name="custom_contact_email" string="Contact Email" placeholder="Enter custom contact email"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

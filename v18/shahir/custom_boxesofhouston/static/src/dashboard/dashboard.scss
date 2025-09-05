@@ -1,0 +1,56 @@
+#body_container{
+    .table-grid{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        .item-container{
+            border: 1px solid #eee;
+            box-shadow: 0px 0px 5px #efefef;
+            border-radius: 10px;
+            padding: 10px 10px;
+        }
+    }
+}
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    .metric-card {
+        cursor: pointer;
+        background: white;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid #f3f4f6;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+        &:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        .metric-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .metric-info {
+            h3 {
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #6b7280;
+                margin-bottom: 0.5rem;
+            }
+            .value {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #111827;
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+}
+
+    

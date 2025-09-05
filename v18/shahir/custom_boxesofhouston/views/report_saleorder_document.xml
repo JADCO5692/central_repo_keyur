@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document" name="report saleorder document">
+        <th name="th_taxes" position="attributes">
+            <attribute name="t-if">doc.state not in ['draft', 'sent', 'cancel'] or doc.require_payment</attribute>
+        </th> 
+        <th name="th_subtotal" position="attributes">
+            <attribute name="t-if">doc.state not in ['draft', 'sent', 'cancel'] or doc.require_payment</attribute>
+        </th>
+        <td name="td_taxes" position="attributes">
+            <attribute name="t-if">doc.state not in ['draft', 'sent', 'cancel'] or doc.require_payment</attribute>
+        </td>
+        <td name="td_subtotal" position="attributes">
+            <attribute name="t-if">doc.state not in ['draft', 'sent', 'cancel'] or doc.require_payment</attribute>
+        </td>
+        <div name="so_total_summary" position="attributes">
+            <attribute name="t-if">doc.state not in ['draft', 'sent', 'cancel'] or doc.require_payment</attribute>
+        </div>
+        <xpath expr="//div[@t-field='doc.partner_id']" position="before">
+            <t t-if="doc.partner_id.id == doc.partner_shipping_id.id">
+                <strong>Ship to:</strong>
+            </t> 
+            <t t-else="">
+                <strong>Customer:</strong>
+            </t>
+        </xpath>
+        <xpath expr="//div[@t-if='doc.user_id.name']" position="before">
+            <div t-if="doc.stock_route_id" class="col">
+                <strong>Route</strong>
+                <div t-field="doc.stock_route_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

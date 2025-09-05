@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="custom_res_partner_form" model="ir.ui.view">
+		<field name="name">custom.res.partner.form.inherit</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_partner_form"/>
+		<field name="arch" type="xml">
+			<notebook position="inside">
+				<page string="Documents">
+					<group>
+						<group>
+							<field filename="custom_resale_permit_f" name="custom_resale_permit" widget="binary" options="{'accepted_file_extensions': '.pdf,.docx,.doc'}"/>
+							<field name="custom_resale_permit_f" invisible="1"/>
+							<field filename="custom_resale_permit_f" name="custom_tax_exem_cert" widget="binary" options="{'accepted_file_extensions': '.pdf,.docx,.doc'}"/>
+							<field name="custom_resale_permit_f" invisible="1"/>
+						</group>
+						<group>
+							<field filename="custom_resale_certificate_f" name="custom_resale_certificate" widget="binary" options="{'accepted_file_extensions': '.pdf,.docx,.doc'}"/>
+							<field name="custom_resale_certificate_f" invisible="1"/>
+							<field filename="custom_customer_profile_f" name="custom_customer_profile" widget="binary" options="{'accepted_file_extensions': '.pdf,.docx,.doc'}"/>
+							<field name="custom_customer_profile_f" invisible="1"/>
+						</group>
+					</group>
+				</page>
+			</notebook>
+			<xpath expr="//field[@name='vat']" position="after">
+				<field name="custom_tax_exemption" invisible="parent_id"/>
+			</xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="attributes">
+                <attribute name="invisible">parent_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_payment_term_id']" position="attributes">
+                <attribute name="invisible">parent_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
+                <attribute name="invisible">parent_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_delivery_carrier_id']" position="attributes">
+                <attribute name="invisible">parent_id</attribute>
+            </xpath> 
+		</field>
+	</record>
+</odoo>

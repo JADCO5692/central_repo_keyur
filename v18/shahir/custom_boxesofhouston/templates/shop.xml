@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="products_boxes" inherit_id="website_sale.products" name="template_name">
+        <xpath expr="//div[contains(@class,'o_wsale_products_main_row')]" position="replace">
+            <t t-if="category" >
+                <t t-call="website_sale.products_breadcrumb">
+                    <t t-set="_classes" t-valuef="d-none d-lg-flex w-100 p-0 small px-3 mt-3"/>
+                </t>
+                <div class="row m-auto py-4 w-100 align-items-center">
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <div class="categ-img-container">
+                            <img class="img img-fluid" t-attf-src="/web/image/product.public.category/#{category.id}/image_1920" t-att-alt="category.name" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-8">
+                        <h2 class="categ-title"><t t-esc="category.name"/></h2>
+                        <span class="categ-desc-title" >PRODUCT DESCRIPTION</span>
+                        <div class="category_description" t-field="category.website_description"/>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product-stock">
+                            <a class="active" t-if="stock_only" t-att-href="keep('/shop/category/' + slug(category), stock='inactive')"><span>In Stock</span></a>
+                            <a class="inactive" t-else="" t-att-href="keep('/shop/category/' + slug(category), stock='active')"><span>In Stock</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row o_wsale_products_main_row align-items-start flex-nowrap"> 
+                    <div id="products_grid" t-attf-class="o_wsale_layout_list col-lg-12">
+                        <!-- <div class="products_header btn-toolbar flex-nowrap align-items-center justify-content-between gap-3 mb-3">
+                            <t t-if="is_view_active('website_sale.add_grid_or_list_option')" t-call="website_sale.add_grid_or_list_option">
+                                <t t-set="_classes" t-valuef="d-flex"/>
+                            </t> 
+                        </div> -->
+
+                        <div t-if="original_search and products" class="alert alert-warning mt8">
+                            No results found for '<span t-esc="original_search"/>'. Showing results for '<span t-esc="search"/>'.
+                        </div>
+
+                        <div t-if="products" class="o_wsale_products_grid_table_wrapper pt-3 pt-lg-0">
+                            <t t-set="grid_md_allow_custom_cols" t-value="hasLeftColumn"/>
+                            <t t-set="grid_md_use_3col"
+                                t-value="not hasLeftColumn and ppr == 4"/>
+
+                            <section id="o_wsale_products_grid" t-attf-class="d-block"
+                                t-attf-style="--o-wsale-products-grid-gap: {{gap}}; --o-wsale-ppr: {{ppr}}; --o-wsale-ppg: {{ppg}}"
+                                t-att-data-ppg="ppg" t-att-data-ppr="ppr" t-att-data-default-sort="website.shop_default_sort"
+                                t-att-data-name="grid_block_name" >
+                                <div class="row m-auto prod-h-row w-100 align-items-center"> 
+                                    <div class="prod-h-col col-4 col-md-4 col-lg-4">Name</div>
+                                    <div class="prod-h-col col-4 col-md-4 col-lg-4">Price(per Unit)</div> 
+                                    <div class="prod-h-col col-4 col-md-4 col-lg-4">Add to cart</div>
+                                </div>
+                                
+                                <t t-foreach="bins" t-as="tr_product">
+                                    <t t-foreach="tr_product" t-as="td_product">
+                                        <t t-if="td_product">  
+                                            <div class="oe_product p-0 m-0" t-att-data-ribbon-id="td_product['ribbon'].id" t-att-data-name="product_block_name" >
+                                                <div t-attf-class="p-0 m-0 o_wsale_product_grid_wrapper position-relative h-100 o_wsale_product_grid_wrapper_#{td_product['x']}_#{td_product['y']}">
+                                                    <t t-call="custom_boxesofhouston.boxesofhouston_products_item">
+                                                        <t t-set="product" t-value="td_product['product']"/>
+                                                    </t>
+                                                </div>
+                                            </div> 
+                                        </t>
+                                    </t>
+                                </t>
+                            </section>
+                        </div>
+                        <div t-else="" class="text-center text-muted mt128 mb256">
+                            <t t-if="not search">
+                                <h3 class="mt8">No product defined</h3>
+                                <p t-if="category">No product defined in this category.</p>
+                            </t>
+                            <t t-else="">
+                                <h3 class="mt8">No results</h3>
+                                <p>No results for "<strong t-esc='search'/>"<t t-if="category"> in category "<strong t-esc="category.display_name"/>"</t>.</p>
+                            </t>
+                            <p t-ignore="true" groups="sales_team.group_sale_manager">Click <i>'New'</i> in the top-right corner to create your first product.</p>
+                        </div>
+                        <div class="products_pager d-flex justify-content-center pt-5 pb-3">
+                            <t t-call="website.pager"/>
+                        </div>
+                        <t t-if="category">
+                            <t t-set='footer_editor_message'>
+                                Drag building blocks here to customize the footer for
+                                "<t t-esc='category.name'/>" category.
+                            </t>
+                            <div
+                                class="mb16"
+                                id="category_footer"
+                                t-att-data-editor-message="footer_editor_message"
+                                t-field="category.website_footer"
+                            />
+                        </t>
+                    </div>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="row o_wsale_products_main_row align-items-start flex-nowrap">
+                    <aside t-if="hasLeftColumn" id="products_grid_before" class="d-none d-lg-block position-sticky col-3 px-3 clearfix">
+                        <div class="o_wsale_products_grid_before_rail vh-100 ms-n2 mt-n2 pt-2 p-lg-2 pb-lg-5 ps-2 overflow-y-scroll">
+                            <t
+                                t-set="is_sidebar_collapsible"
+                                t-value="is_view_active('website_sale.products_categories_list_collapsible')"
+                            />
+                            <div t-if="opt_wsale_categories"
+                                t-att-class="'products_categories'
+                                            + (' accordion accordion-flush' if is_sidebar_collapsible else ' mb-3')"
+                            >
+                                <t t-call="website_sale.products_categories_list"/>
+                            </div>
+                            <div
+                                t-attf-class="products_attributes_filters d-empty-none {{opt_wsale_categories and 'border-top'}}"
+                            />
+                            <t
+                                t-if="opt_wsale_filter_price and opt_wsale_attributes"
+                                t-call="website_sale.filter_products_price"
+                            >
+                                <t
+                                    t-set="_classes"
+                                    t-valuef="{{is_sidebar_collapsible and 'accordion accordion-flush'}} {{is_sidebar_collapsible and (opt_wsale_categories or len(attributes) > 0) and 'border-top'}}"
+                                />
+                            </t>
+                        </div>
+                    </aside>
+                    <div id="products_grid"
+                         t-attf-class="#{'o_wsale_layout_list' if layout_mode == 'list' else ''} {{'col-lg-9' if hasLeftColumn else 'col-12'}}">
+                        <t t-call="website_sale.products_breadcrumb">
+                            <t t-set="_classes" t-valuef="d-none d-lg-flex w-100 p-0 small"/>
+                        </t>
+
+                        <h1 t-if="category">
+                            <t t-esc="category.name"/>
+                        </h1>
+
+                        <t t-if="category">
+                            <t t-set='editor_msg'>
+                                Drag building blocks here to customize the header for
+                                "<t t-esc='category.name'/>" category.
+                            </t>
+                            <div class="mb16"
+                                id="category_header"
+                                t-att-data-editor-message="editor_msg"
+                                t-field="category.website_description"/>
+                        </t>
+
+                        <t t-if="opt_wsale_categories_top"
+                           t-call="website_sale.filmstrip_categories"/>
+
+                        <div class="products_header btn-toolbar flex-nowrap align-items-center justify-content-between gap-3 mb-3">
+                            <t t-if="is_view_active('website_sale.search')" t-call="website_sale.search">
+                                <t t-set="search" t-value="original_search or search"/>
+                                <t t-set="_form_classes" t-valuef="d-lg-inline {{'d-inline' if not category else 'd-none'}}"/>
+                            </t>
+
+                            <t t-call="website_sale.pricelist_list">
+                                <t t-set="_classes" t-valuef="d-none d-lg-inline"/>
+                            </t>
+
+                            <t t-if="is_view_active('website_sale.sort')" t-call="website_sale.sort">
+                                <t t-set="_classes" t-valuef="d-none me-auto d-lg-inline-block"/>
+                            </t>
+
+                            <div t-if="category" class="d-flex align-items-center d-lg-none me-auto">
+                                <t t-if="not category.parent_id" t-set="backUrl" t-valuef="/shop"/>
+                                <t t-else="" t-set="backUrl" t-value="keep('/shop/category/' + slug(category.parent_id), category=0)"/>
+
+                                <a t-attf-class="btn btn-{{navClass}} me-2" t-att-href="category.parent_id and keep('/shop/category/' + slug(category.parent_id), category=0) or '/shop'">
+                                    <i class="fa fa-angle-left"/>
+                                </a>
+                                <h4 t-out="category.name" class="mb-0 me-auto"/>
+                            </div>
+
+                            <t t-if="is_view_active('website_sale.add_grid_or_list_option')" t-call="website_sale.add_grid_or_list_option">
+                                <t t-set="_classes" t-valuef="d-flex"/>
+                            </t>
+
+                            <button t-if="is_view_active('website_sale.sort') or opt_wsale_categories or opt_wsale_attributes or opt_wsale_attributes_top"
+                                    t-attf-class="btn btn-{{navClass}} position-relative {{not opt_wsale_attributes_top and 'd-lg-none'}}"
+                                    data-bs-toggle="offcanvas"
+                                    data-bs-target="#o_wsale_offcanvas">
+                                <i class="fa fa-sliders"/>
+                                <span t-if="isFilteringByPrice or attrib_set or tags" t-attf-class="position-absolute top-0 start-100 translate-middle border border-{{navClass}} rounded-circle bg-danger p-1"><span class="visually-hidden">filters active</span></span>
+                            </button>
+                        </div>
+
+                        <div t-if="original_search and products" class="alert alert-warning mt8">
+                            No results found for '<span t-esc="original_search"/>'. Showing results for '<span t-esc="search"/>'.
+                        </div>
+
+                        <div t-if="products" class="o_wsale_products_grid_table_wrapper pt-3 pt-lg-0">
+                            <t t-set="grid_md_allow_custom_cols" t-value="hasLeftColumn"/>
+                            <t t-set="grid_md_use_3col"
+                               t-value="not hasLeftColumn and ppr == 4"/>
+
+                            <section
+                                id="o_wsale_products_grid"
+                                t-attf-class="o_wsale_products_grid_table grid {{grid_md_allow_custom_cols and 'o_wsale_products_grid_table_md'}}"
+                                t-attf-style="--o-wsale-products-grid-gap: {{gap}}; --o-wsale-ppr: {{ppr}}; --o-wsale-ppg: {{ppg}}"
+                                t-att-data-ppg="ppg"
+                                t-att-data-ppr="ppr"
+                                t-att-data-default-sort="website.shop_default_sort"
+                                t-att-data-name="grid_block_name"
+                            >
+                                <t t-foreach="bins" t-as="tr_product">
+                                    <t t-foreach="tr_product" t-as="td_product">
+                                        <t t-if="td_product">
+                                            <t t-set="col_height" t-value="td_product['y']"/>
+                                            <t t-set="col_width"
+                                               t-value="12 // ppr * td_product['x']"/>
+                                            <t t-set="col_class_lg"
+                                               t-value="'g-col-lg-' + str(col_width)"/>
+                                            <t t-set="col_class_md"
+                                               t-value="grid_md_allow_custom_cols and ('g-col-md-' + str(col_width)) or grid_md_use_3col and 'g-col-md-4' or 'g-col-md-6'"/>
+                                            <t t-set="col_is_stretched"
+                                               t-value="(td_product['x'] &gt;= td_product['y'] * 2)"/>
+                                            <t t-set="col_is_custom_portrait"
+                                               t-value="not col_is_stretched and (col_height &gt; td_product['x'])"/>
+                                            <div
+                                                t-attf-class="oe_product {{col_is_custom_portrait and 'oe_product_custom_portrait'}} g-col-6 {{col_class_md}} {{col_class_lg}} {{col_is_stretched and 'oe_product_size_stretch'}}"
+                                                t-attf-style="--o-wsale-products-grid-product-col-height: {{col_height}};"
+                                                t-att-data-ribbon-id="td_product['ribbon'].id"
+                                                t-att-data-colspan="td_product['x'] != 1 and td_product['x']"
+                                                t-att-data-rowspan="td_product['y'] != 1 and td_product['y']"
+                                                t-att-data-name="product_block_name"
+                                            >
+                                                <div t-attf-class="o_wsale_product_grid_wrapper position-relative h-100 o_wsale_product_grid_wrapper_#{td_product['x']}_#{td_product['y']}">
+                                                    <t t-call="website_sale.products_item">
+                                                        <t t-set="product"
+                                                           t-value="td_product['product']"/>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </t>
+                            </section>
+                        </div>
+                        <div t-else="" class="text-center text-muted mt128 mb256">
+                            <t t-if="not search">
+                                <h3 class="mt8">No product defined</h3>
+                                <p t-if="category">No product defined in this category.</p>
+                            </t>
+                            <t t-else="">
+                                <h3 class="mt8">No results</h3>
+                                <p>No results for "<strong t-esc='search'/>"<t t-if="category"> in category "<strong t-esc="category.display_name"/>"</t>.</p>
+                            </t>
+                            <p t-ignore="true" groups="sales_team.group_sale_manager">Click <i>'New'</i> in the top-right corner to create your first product.</p>
+                        </div>
+                        <div class="products_pager d-flex justify-content-center pt-5 pb-3">
+                            <t t-call="website.pager"/>
+                        </div>
+                        <t t-if="category">
+                            <t t-set='footer_editor_message'>
+                                Drag building blocks here to customize the footer for
+                                "<t t-esc='category.name'/>" category.
+                            </t>
+                            <div
+                                class="mb16"
+                                id="category_footer"
+                                t-att-data-editor-message="footer_editor_message"
+                                t-field="category.website_footer"
+                            />
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+custom_boxesofhouston.access_custom_order_payment,access_custom_order_payment,custom_boxesofhouston.model_custom_order_payment,base.group_user,1,1,1,1

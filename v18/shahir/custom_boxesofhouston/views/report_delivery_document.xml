@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_delivery_document_ext" inherit_id="stock.report_delivery_document" name="Report delivery slip">
+        <xpath expr="//div[@class='page']/h2" position="before">
+           <div class="mb-3">
+                <t t-set="phone_partner" t-value="partner.parent_id or partner"/>
+                <div t-if="phone_partner">
+                    <label><b>Company</b></label>
+                    <div class="d-flex" t-if="phone_partner and phone_partner.phone">
+                        <b>Phone :</b> <t t-esc="phone_partner.phone"/>
+                    </div>
+                    <div class="d-flex" t-if="phone_partner and phone_partner.mobile">
+                        <b>Mobile :</b> <t t-esc="phone_partner.phone"/>
+                    </div>
+                </div> 
+           </div>  
+        </xpath>
+    </template>
+
+</odoo>

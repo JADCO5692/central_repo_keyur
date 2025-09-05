@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_public_category_form_view_inherit" model="ir.ui.view">
+        <field name="name">product.public.category.form.view.inherit</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_form_view"></field>
+        <field name="arch" type="xml">
+            <field name="website_id" position="after">
+                <field name="is_main_parent" />
+            </field>
+        </field>
+    </record> 
+    
+</odoo>

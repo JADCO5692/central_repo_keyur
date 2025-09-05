@@ -1,0 +1,76 @@
+# -*- coding: utf-8 -*-
+{
+    "name": "Custom - Boxes of Houston",
+    "summary": ("Custom - Boxes of Houston"),
+    "author": "https://www.theerpbot.com",
+    "website": "https://www.theerpbot.com",
+    "version": "18.0.0.0.87",
+    "development_status": "Production/Stable",
+    "license": "LGPL-3",
+    "installable": True,
+    "data": [
+        "security/ir.model.access.csv",
+        "security/custom_security.xml",
+        "views/res_partner_view.xml",
+        "views/report_purchase_order_template.xml",
+        "views/purchase_order_view.xml",
+        "views/report_saleorder_document.xml",
+        "views/product_public_category.xml",
+        "templates/header.xml",
+        "templates/product_card.xml", 
+        "templates/shop.xml",
+        "views/sale_order.xml",
+        "views/product_pricelist_item_views.xml",
+        "views/product_pricelist.xml", 
+        "views/product_category.xml", 
+        "views/account_fiscal_position.xml",
+        "views/stock_route.xml",        
+        "views/stock_picking_view.xml",
+        "data/sale_approval_rule.xml",
+        "wizard/message_wizard_view.xml",
+        "views/sale_portal_templates.xml",
+        "views/crm_view.xml",
+        "views/res_config_settings.xml",
+        "views/stock_reorder_report.xml",
+        "views/report_delivery_document.xml",
+        "templates/product.xml",
+        "templates/custom_pricelist_list.xml",
+        "views/dashboard_menu.xml"
+    ],
+    "images": [],
+    "depends": [
+        "base",
+        "sale",
+        "stock",
+        "product",
+        "purchase_stock",
+        "purchase",
+        "website_sale",
+        "sale_margin",
+        "web_studio",
+        "account",
+        "point_of_sale",
+        "website_hide_button",
+        "web", "bus"
+    ],
+    'assets': {
+        'web.assets_frontend': [
+            '/custom_boxesofhouston/static/src/scss/shop.scss',
+            '/custom_boxesofhouston/static/src/scss/header.scss', 
+            '/custom_boxesofhouston/static/src/js/menu_widget.js',
+            '/custom_boxesofhouston/static/src/js/website_sale.js',
+            '/custom_boxesofhouston/static/src/components/pricelist_list/*'
+        ],
+        'web.assets_backend': [
+            '/custom_boxesofhouston/static/src/scss/backend.scss',
+            '/custom_boxesofhouston/static/src/dashboard/*'
+        ],
+        "point_of_sale._assets_pos": [  
+            '/custom_boxesofhouston/static/src/js/pos/route_picker_popup/*',
+            '/custom_boxesofhouston/static/src/js/pos/posOrder.js',
+            '/custom_boxesofhouston/static/src/js/pos/payment_screen.xml', 
+            '/custom_boxesofhouston/static/src/js/pos/payment_screen.js',
+            '/custom_boxesofhouston/static/src/js/pos/partner_list.js',
+        ]
+    }
+}

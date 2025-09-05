@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_pricelist_view_inherit" model="ir.ui.view">
+        <field name="name">product.pricelist.view.inherit</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <field name="country_group_ids" position="after">
+                <field name="customer_id"/>
+                <field name="cust_company_id"/>
+                <field name="phone"/>
+                <field name="email"/>
+            </field>
+        </field>
+    </record>
+    <record id="product_pricelist_view_tree_inherit" model="ir.ui.view">
+        <field name="name">product.pricelist.view.tree.inherit</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view_tree"/>
+        <field name="arch" type="xml"> 
+            <field name="company_id" position="after">
+                <field name="customer_id"/>
+                <field name="cust_company_id"/>
+                <field name="phone"/>
+                <field name="email"/>
+            </field>
+        </field>
+    </record>
+    <record id="product_pricelist_view_search_inherit_view" model="ir.ui.view">
+        <field name="name">Product Pricelist Search</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view_search"/>
+        <field name="arch" type="xml">
+            <filter name="inactive" position="after"> 
+                <field name="customer_id" string="Customer"/>
+                <field name="cust_company_id" string="Parent Company"/>
+                <field name="email" string="Email"/>
+                <field name="phone" string="Phone"/>
+                <!-- Filters -->
+                <filter name="customer_id" string="Customer"/>
+                <filter name="cust_company_id" string="Parent Company"/> 
+                <filter name="phone" string="Phone"/> 
+                <filter name="email" string="Email"/> 
+            </filter>
+        </field>
+    </record>
+ 
+</odoo>
