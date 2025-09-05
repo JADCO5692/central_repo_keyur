@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-
     <template id="stock_report_delivery_document_inherit_customer_sku" inherit_id="stock.report_delivery_document">
         <xpath expr="//div[@name='partner_header']" position="replace">
             <t t-if="o.sale_id.custom_dropship_order">
@@ -113,10 +112,8 @@
                 }
             </style>
         </xpath>
-
         <xpath expr="//table[@name='stock_move_table']/thead" position="replace">
             <thead>
-
                 <tr>
                     <th name="th_sm_product" class="text-left">
                         <strong>Product</strong>
@@ -141,8 +138,6 @@
                     </th>
                 </tr>
             </thead>
-
-
         </xpath>
         <xpath expr="//table[@name='stock_move_table']/tbody" position="replace">
             <tbody>
@@ -233,15 +228,10 @@
             </thead>
         </xpath>
     </template>
+
     <template id="external_layout_striped_inherit" inherit_id="web.external_layout_striped">
-<!--        <t t-if="custom_dropship_order">-->
-<!--            <xpath expr="//img" position="replace">-->
-                <!-- Empty to hide -->
-<!--            </xpath>-->
-<!--        </t>-->
-           <xpath expr="//img[contains(@t-att-src, 'company.logo')]" position="replace">
-<!--         Empty -->
-    </xpath>
+        <xpath expr="//img[contains(@t-att-src, 'company.logo')]" position="replace">
+        </xpath>
 
         <xpath expr="//span[@t-field='company.company_details']" position="replace">
             <t t-if="custom_dropship_order">
@@ -300,10 +290,10 @@
                         </li>
                     </ul>
                 </div>
-
             </t>
         </xpath>
     </template>
+
     <template id="stock_report_delivery_has_serial_move_line"
               inherit_id="stock.stock_report_delivery_aggregated_move_lines">
         <xpath expr="//td[1]" position="replace">
@@ -353,7 +343,6 @@
                 </t>
             </td>
         </xpath>
-
         <xpath expr="//td[@name='move_line_aggregated_quantity']" position="replace">
             <td class="text-center" name="move_line_aggregated_quantity">
                 <t t-if="aggregated_lines[line]['quantity']">
@@ -370,7 +359,6 @@
                     </span>
                 </t>
             </td>
-
         </xpath>
     </template>
 
@@ -383,5 +371,4 @@
             </t>
         </xpath>
     </template>
-
 </odoo>
