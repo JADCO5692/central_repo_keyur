@@ -21,13 +21,13 @@
         </xpath>
         <xpath expr="//t[@t-set='address']" position="replace">
             <div class="row">
-                <t t-if="custom_dropship_order and o.sale_id.custom_from">
+                <t t-if="(custom_dropship_order or shopify_instance) and o.sale_id.custom_from">
                     <div class="col-4">
                         <strong>From Address:</strong>
                         <div t-esc="o.sale_id.custom_from"/>
                     </div>
                 </t>
-                <t t-elif="custom_dropship_order and not o.sale_id.custom_from">
+                <t t-elif="(custom_dropship_order or shopify_instance) and not o.sale_id.custom_from">
                     <div class="col-4">
                         <strong>From Address:</strong>
                         <div t-field="o.sale_id.partner_id"
@@ -247,7 +247,8 @@
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
                 </t>
-                <t t-elif="shopify_instance">
+            </t>
+            <t t-elif="shopify_instance">
                     <img t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
@@ -257,7 +258,6 @@
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
                 </t>
-            </t>
             <t t-else="">
                 <xpath expr="//div[hasclass('company_address')]" position="replace">
                 </xpath>
