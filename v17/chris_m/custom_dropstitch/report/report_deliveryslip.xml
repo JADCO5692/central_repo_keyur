@@ -319,12 +319,11 @@
                 </p>
             </td>
              <td >
-                 <t t-if="aggregated_lines[line].get('item_image') and isinstance(aggregated_lines[line].get('item_image'),str)">
-                      <img t-if="aggregated_lines[line].get('item_image')"
-                         width="100"
-                         t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image'].decode('utf-8')"
+                 <t t-if="aggregated_lines[line].get('item_image')">
+                    <img width="100"
+                         t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image']"
                          alt="Product Image"/>
-                 </t>
+                </t>
 
             </td>
             <td>
