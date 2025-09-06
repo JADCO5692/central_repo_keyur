@@ -8,7 +8,7 @@
     ),
     "author": "theERPbot",
     "website": "https://www.theerpbot.com",
-    "version": "17.0.1.6.85",
+    "version": "17.0.1.6.90",
     "development_status": "Production/Stable",
     "license": "LGPL-3",
     "installable": True,
@@ -110,5 +110,6 @@
         "delivery_fedex",
         "aspl_website_partial_payment_ee",
         "stock_picking_batch",
+        "sale_margin",
     ],
 }
