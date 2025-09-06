@@ -132,6 +132,22 @@
 			</field>
 		</record>
 
+        <record id="custom_sale_margin_sale_order_line_form" model="ir.ui.view">
+            <field name="name">sale.order.margin.custom.view.view_type.view.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line_form"/>
+            <field name="arch" type="xml">
+                <!-- Add fields to an existing group -->
+                <xpath expr="//field[@name = 'margin']" position="attributes">
+                    <attribute name="groups">custom_dropstitch.group_show_margin_custom</attribute>
+                </xpath>
+                <xpath expr="//field[@name = 'margin_percent']" position="attributes">
+                    <attribute name="groups">custom_dropstitch.group_show_margin_custom</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
 		<record id="view_quotation_tree_inherit" model="ir.ui.view">
 			<field name="name">mrp.production.tree.custom</field>
 			<field name="model">sale.order</field>

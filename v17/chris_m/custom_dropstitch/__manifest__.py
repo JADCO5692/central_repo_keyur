@@ -15,6 +15,7 @@
     "application": True,
     "data": [
         "security/ir.model.access.csv",
+        "security/security.xml",
         "data/data.xml",
         "data/ir_cron_view.xml",
         "data/email_template.xml",

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="group_show_margin_custom" model="res.groups">
+            <field name="name">Show Margin</field>
+        </record>
+
+    </data>
+</odoo>
