@@ -648,8 +648,8 @@ class Picking(models.Model):
         """
         pickings = super(Picking, self).create(vals_list)
         for picking in pickings:
-            subscribe_partners = picking.partner_id._get_notify_partner_ids('custom_shipping_confirmation_ids')
-            if subscribe_partners:
+            subscribe_partners = picking.partner_id._get_notify_partner_ids('custom_shipping_confirmation_ids', picking)
+            if subscribe_partners and (picking.partner_id.custom_shipping_confirmation_ids.ids or picking.shopify_instance_id.id):
                 picking.message_subscribe(partner_ids=subscribe_partners)
         return pickings
     
@@ -657,3 +657,8 @@ class Picking(models.Model):
         return self.carrier_id.convert_weight_for_shipstation(self.company_id.get_weight_uom_id(),
                                                               self.shipstation_instance_id.weight_uom_id,
                                                               weight or self.shipping_weight)
+
+    def _send_confirmation_email(self):
+        if not self.shopify_instance_id and not self.partner_id.custom_shipping_confirmation_ids:
+            return False
+        return super()._send_confirmation_email()

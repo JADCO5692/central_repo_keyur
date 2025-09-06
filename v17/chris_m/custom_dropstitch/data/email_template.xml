@@ -10,7 +10,7 @@
 
         <!-- Modify partner_to field to use custom recipients for order confirmations -->
         <record id="sale.mail_template_sale_confirmation" model="mail.template">
-            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_order_confirmation_ids') }}</field>
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_order_confirmation_ids',object) }}</field>
         </record>
 
         <!-- Reset noupdate to True to prevent future automatic updates -->
@@ -28,7 +28,7 @@
 
         <!-- Modify partner_to field to use custom recipients for shipping confirmations -->
         <record id="stock.mail_template_data_delivery_confirmation" model="mail.template">
-            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_shipping_confirmation_ids') }}</field>
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_shipping_confirmation_ids',object) }}</field>
         </record>
 
         <!-- Reset noupdate to True to prevent future automatic updates -->
@@ -46,7 +46,7 @@
 
         <!-- Modify partner_to field to use custom recipients for invoice notifications -->
         <record id="account.email_template_edi_invoice" model="mail.template">
-            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_invoice_generated_ids') }}</field>
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_invoice_generated_ids',object) }}</field>
         </record>
 
         <!-- Reset noupdate to True to prevent future automatic updates -->
@@ -64,7 +64,7 @@
 
         <!-- Modify partner_to field to use custom recipients for payment confirmations -->
         <record id="account.mail_template_data_payment_receipt" model="mail.template">
-            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_payment_completed_ids') }}</field>
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_payment_completed_ids', object,object) }}</field>
         </record>
 
         <!-- Reset noupdate to True to prevent future automatic updates -->
