@@ -3,6 +3,7 @@ from odoo import models, fields, api
 
 class ProductPricelistItem(models.Model):
     _inherit = "product.pricelist.item"
+    _order = "product_tmpl_id, min_quantity"
 
     base = fields.Selection(
         selection_add=[("cost_margin", "Cost Margin")],
