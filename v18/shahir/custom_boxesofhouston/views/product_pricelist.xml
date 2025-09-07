@@ -12,6 +12,11 @@
                 <field name="phone"/>
                 <field name="email"/>
             </field>
+
+            <xpath expr="//field[@name='item_ids']/list/field[@name='applied_on']" position="after">
+                <field name="price_margin"/>
+                <field name="margin_percent"  widget="percentage"/>
+            </xpath>
         </field>
     </record>
     <record id="product_pricelist_view_tree_inherit" model="ir.ui.view">

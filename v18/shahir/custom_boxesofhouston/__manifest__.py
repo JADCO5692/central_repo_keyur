@@ -20,6 +20,7 @@
         "templates/product_card.xml", 
         "templates/shop.xml",
         "views/sale_order.xml",
+        "views/product.xml",
         "views/product_pricelist_item_views.xml",
         "views/product_pricelist.xml", 
         "views/product_category.xml", 

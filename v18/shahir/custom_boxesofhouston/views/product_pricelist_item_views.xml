@@ -45,6 +45,9 @@
                     </div>
                 </group>
             </xpath>
+               <xpath expr="//field[@name='product_tmpl_id']" position="after">
+                        <field name="product_cost"/>
+                    </xpath>
         </field>
         </record>
     </odoo>
