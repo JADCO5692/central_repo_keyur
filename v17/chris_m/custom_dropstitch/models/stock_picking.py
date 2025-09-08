@@ -58,6 +58,18 @@ class Picking(models.Model):
     custom_customer_name = fields.Char("Customer Name", related="sale_id.partner_id.name")
     custom_customer_id = fields.Many2one('res.partner', "Customer", related="sale_id.partner_id")
     amount_residual = fields.Float(string="Balance Due", compute="_compute_amount_residual")
+    order_line_ref = fields.Char(string="Order Lines", compute="_compute_order_line_ref")
+
+    def _compute_order_line_ref(self):
+        for picking in self:
+            picking.order_line_ref = False
+            order_lines = picking.sale_id.order_line
+            line_refs = []
+            for line in order_lines:
+                if line.custom_order_no:
+                    line_refs.append(line.custom_order_no)
+            if line_refs:
+                picking.order_line_ref = ', '.join(line_refs)
 
     def _compute_amount_residual(self):
         for picking in self:

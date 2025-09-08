@@ -23,6 +23,7 @@
 					<field name="custom_shipping_label_name" invisible="1" />
 					<field filename="custom_packing_list_name" name="custom_packing_list" options="{'accepted_file_extensions': '.pdf'}" invisible="picking_type_code != 'outgoing'" widget="file" />
                     <field name="custom_packing_list_name" invisible="1" />
+					<field name="order_line_ref" string="Order Line Ref" readonly="1"/>
 					<field name="custom_client_order_ref" string="Customer Order Ref" readonly="1"/>
 					<label for="custom_gift_mess" decoration-danger="state not in ('draft')" invisible="custom_gift_mess == False"/>
 					<div class="o_row" invisible="custom_gift_mess == False">
