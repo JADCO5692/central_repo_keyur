@@ -19,8 +19,8 @@
 								<field name="custom_brand_label" readonly="1"/>
 								<field name="custom_care_label" readonly="1"/>
 								<field name="custom_label_placement" readonly="1"/>
-								<field name="custom_instruction" readonly="1"/>
-								<field name="custom_pack_instr" readonly="1"/>
+								<field name="custom_instruction" style="font-size:25px;" decoration-danger="1" readonly="1"/>
+								<field name="custom_pack_instr" style="font-size:25px;" decoration-danger="1" readonly="1"/>
 							</group>
 							<group>
 								<field name="custom_bag_info" readonly="1"/>

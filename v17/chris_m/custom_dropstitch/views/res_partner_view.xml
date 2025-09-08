@@ -19,8 +19,8 @@
 								<field name="custom_brand_label" required="customer_rank > 0"/>
 								<field name="custom_care_label" required="customer_rank > 0"/>
 								<field name="custom_label_placement" required="customer_rank > 0"/>
-								<field name="custom_instruction" required="customer_rank > 0"/>
-								<field name="custom_pack_instr" required="customer_rank > 0"/>
+								<field name="custom_instruction" style="font-size:25px;" decoration-danger="1" required="customer_rank > 0"/>
+								<field name="custom_pack_instr" style="font-size:25px;" decoration-danger="1" required="customer_rank > 0"/>
 							</group>
 							<group>
 								<field name="custom_bag_info" required="customer_rank > 0"/>

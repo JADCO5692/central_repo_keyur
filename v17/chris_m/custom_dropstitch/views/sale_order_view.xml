@@ -14,8 +14,8 @@
 								<field name="custom_brand_label"/>
 								<field name="custom_care_label"/>
 								<field name="custom_label_placement"/>
-								<field name="custom_instruction"/>
-								<field name="custom_pack_instr"/>
+								<field name="custom_instruction" style="font-size:25px;" decoration-danger="1"/>
+								<field name="custom_pack_instr" style="font-size:25px;" decoration-danger="1"/>
 								<field name="custom_allowed_customer_ids" invisible="1"/>
 							</group>
 							<group>
