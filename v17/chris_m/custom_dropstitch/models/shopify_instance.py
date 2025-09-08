@@ -27,6 +27,11 @@ class ShopifyInstanceEpt(models.Model):
         string="Payment Terms",
         tracking=True,
     )
+    custom_emails = fields.Char(string="Notification Emails", help="Enter email addresses separated by commas to receive notifications.")
+    mail_server_id = fields.Many2one(
+        comodel_name="ir.mail_server",
+        string="Shopify Mail Server",
+        help="Select the mail server to be used for sending emails.",)
 
 class ShopifyInstanceEptTags(models.Model):
     _name = "custom.shopify.instance.ept.tags"

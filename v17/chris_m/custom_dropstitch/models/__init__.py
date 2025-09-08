@@ -35,3 +35,4 @@ from . import account_bank_statement_line
 from . import stock_location
 from . import stock_quant
 from . import payment_gateway
+from . import mail_server

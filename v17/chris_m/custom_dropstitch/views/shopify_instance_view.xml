@@ -14,6 +14,8 @@
 								<field name="custom_policy"/>
 								<field name="custom_from_address_id"/>
 								<field name="custom_sale_payment_term_id"/>
+								<field name="custom_emails"/>
+								<field name="mail_server_id"/>
 							</group>
 							<group></group>
 						</group>
