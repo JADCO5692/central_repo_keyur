@@ -63,7 +63,7 @@ class CRMLead(models.Model):
             lead.custom_invoice_sent_date = False
             lead.custom_contract_sent_date = False
             # Find mail.message entries where stage_id changed to this stage
-            messages = self.env['mail.message'].search([
+            messages = self.env['mail.message'].sudo().search([
                 ('model', '=', 'crm.lead'),
                 ('res_id', '=', lead.id),
                 ('tracking_value_ids.field_id.name', '=', 'stage_id')
@@ -133,7 +133,7 @@ class CRMLead(models.Model):
     @api.depends('message_ids')
     def _compute_custom_last_stage_changed_date(self):
         for lead in self:
-            last_msg = self.env['mail.message'].search([
+            last_msg = self.env['mail.message'].sudo().search([
                 ('model', '=', 'crm.lead'),
                 ('res_id', '=', lead.id),
                 ('tracking_value_ids.field_id.name', '=', 'stage_id')
