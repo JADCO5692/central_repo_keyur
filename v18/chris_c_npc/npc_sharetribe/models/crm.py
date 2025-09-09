@@ -114,9 +114,10 @@ class CRMLead(models.Model):
             # Option A: If at least one sign request exists and all are signed
             if sign_requests and len(signed_requests) == len(sign_requests):
                 lead.custom_all_contracts_signed2 = signed_requests[-1].last_action_date
-                stage = self.env['crm.stage'].search([('name', '=', 'All Contracts signed')], limit=1)
-                if stage and lead.stage_id != stage:
-                    lead.stage_id = stage
+                all_signed_stage = self.env['crm.stage'].search([('name', '=', 'All Contracts signed')], limit=1)
+                contract_sent = self.env['crm.stage'].search([('name', '=', 'Contracts sent')], limit=1)
+                if all_signed_stage and contract_sent and lead.stage_id == contract_sent and lead.stage_id != all_signed_stage:
+                    lead.stage_id = all_signed_stage
             else:
                 lead.custom_all_contracts_signed2 = False
 
