@@ -25,6 +25,9 @@ class MailMail(models.Model):
                     if instance and instance.custom_emails:
                         vals['email_from'] = instance.custom_emails
 
+                    if instance and instance.custom_reply_to:
+                        vals['reply_to'] = instance.custom_reply_to
+
             elif getattr(record, 'shopify_instance_id', False) and record.shopify_instance_id:
                 instance = record.shopify_instance_id
 
@@ -35,5 +38,8 @@ class MailMail(models.Model):
                 # Force "From" address
                 if instance.custom_emails:
                     vals['email_from'] = instance.custom_emails
+
+                if instance and instance.custom_reply_to:
+                    vals['reply_to'] = instance.custom_reply_to
 
         return super(MailMail, self).create(vals)

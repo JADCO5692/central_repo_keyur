@@ -32,6 +32,7 @@ class ShopifyInstanceEpt(models.Model):
         comodel_name="ir.mail_server",
         string="Shopify Mail Server",
         help="Select the mail server to be used for sending emails.",)
+    custom_reply_to = fields.Char(string="Reply-To Email", help="Specify the Reply-To email address for outgoing emails.")
 
 class ShopifyInstanceEptTags(models.Model):
     _name = "custom.shopify.instance.ept.tags"

@@ -15,6 +15,7 @@
 								<field name="custom_from_address_id"/>
 								<field name="custom_sale_payment_term_id"/>
 								<field name="custom_emails"/>
+								<field name="custom_reply_to"/>
 								<field name="mail_server_id"/>
 							</group>
 							<group></group>
