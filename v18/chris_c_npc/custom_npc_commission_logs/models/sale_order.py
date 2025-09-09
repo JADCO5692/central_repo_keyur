@@ -15,7 +15,7 @@ class SaleOrder(models.Model):
             order.subscription_pause_date = False
 
             # Search for field tracking messages related to 'subscription_state'
-            messages = self.env['mail.message'].search([
+            messages = self.env['mail.message'].sudo().search([
                 ('model', '=', 'sale.order'),
                 ('res_id', '=', order.id),
                 ('tracking_value_ids.field_id.name', '=', 'subscription_state')

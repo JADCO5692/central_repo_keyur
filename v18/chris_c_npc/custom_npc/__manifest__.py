@@ -1,13 +1,20 @@
 
 {
     'name': "Custom NPC",
-    'version': '18.0.0.48',
+    'version': '18.0.0.54',
     'category': 'CRM',
     'summary': "Custom NPC",
     'description': """
         Custom NPC
     """, 
-    'depends': ['mail','account','npc_crm','sale','sale_subscription'],
+    'depends': [
+        'mail',
+        'account',
+        'npc_crm',
+        'sale',
+        'sale_subscription',
+        'payment_fees_base',
+    ],
     'data': [
         "security/ir.model.access.csv",
         "views/account_move.xml",
@@ -18,8 +25,11 @@
         "views/project_task_type.xml",
 		'wizard/vendor_selection_view.xml',
         'views/payment_form.xml',
-        'views/dashboard.xml'
-    ], 
+        'views/dashboard.xml',
+        'views/payment_method_view.xml',
+        'views/payment_form_template.xml',
+		'views/portal_invoice.xml',
+    ],
     'installable': True,
     'application': False,
     'assets': {

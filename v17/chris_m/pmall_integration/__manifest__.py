@@ -6,7 +6,7 @@
         Pmall Integration
         """
     ), 
-    "version": "17.0.0.0.5",
+    "version": "17.0.0.0.6",
     "license": "LGPL-3",
     "installable": True,
     "application": True,
