@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC",
-    'version': '18.0.0.54',
+    'version': '18.0.0.55',
     'category': 'CRM',
     'summary': "Custom NPC",
     'description': """

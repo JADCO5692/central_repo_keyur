@@ -11,7 +11,7 @@ class AccountMove(models.Model):
     custom_lead_id = fields.Many2one('crm.lead', string="Opportunity", compute="_compute_custom_lead_id")
     custom_lead_id2 = fields.Many2one('crm.lead', string="Alternate Opportunity")
     np_partner_id = fields.Many2one('res.partner','NP Partner')
-    custom_contract_end_date = fields.Date('Contract End Date')
+    custom_contract_end_date = fields.Date('MD Stop Date')
 
     # Track related vendor bills
     vendor_bill_ids = fields.One2many('account.move', 'source_invoice_id',
