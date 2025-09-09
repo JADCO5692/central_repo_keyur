@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="shopify_action_account_report_pl" model="ir.actions.client">
+        <field name="name">Profit and Loss</field>
+        <field name="tag">account_report</field>
+        <field name="context"
+               eval="{'report_id': ref('shopify_net_profit_report_ept.shopify_profit_and_loss'),'shopify_report':1}"/>
+    </record>
+
+    <menuitem id="menu_action_shopify_report_profit_and_loss" name="Net Profit"
+              action="shopify_action_account_report_pl"
+              parent="shopify_ept.menu_item_parent_shopify_reporting_ept" groups="analytic.group_analytic_accounting"/>
+</odoo>

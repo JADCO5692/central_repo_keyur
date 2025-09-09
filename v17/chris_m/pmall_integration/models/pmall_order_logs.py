@@ -117,6 +117,11 @@ class PmallOrderLogs(models.Model):
                         (i for i in item.get('personalization', []) if i.get('fieldName') == "Choose Color"),
                         None
                     )
+                    if not field_value:
+                        field_value = next(
+                            (i for i in item.get('personalization', []) if i.get('fieldName') == "Select Color"),
+                            None
+                        )
                     field_value = (field_value.get('fieldValue') if field_value else '').strip()
                 
                     # Only join if field_value exists
