@@ -262,13 +262,13 @@ class AccountMove(models.Model):
     def _adjust_npc_fee_on_invoice(self, subscription):
         for inv in self:
             for line in inv.invoice_line_ids:
+                fee = line.price_unit
+                inv_count = subscription.invoice_count
+                months = subscription.npc_fees_waiver_months
+                start = subscription.start_date
+                end = subscription.end_date
+                nxt = subscription.next_invoice_date
                 if line.product_id.is_np_fees_product and subscription.npc_fees_waiver_months:
-                    fee = line.price_unit
-                    inv_count = subscription.invoice_count
-                    months = subscription.npc_fees_waiver_months
-                    start = subscription.start_date
-                    end = subscription.end_date
-                    nxt = subscription.next_invoice_date
 
                     # Zero fee during waiver period
                     if inv_count <= months:
@@ -294,6 +294,15 @@ class AccountMove(models.Model):
                         continue
 
                     line.price_unit = fee
+
+                if line.product_id.is_np_fees_product:
+                    if end and nxt and (end.year == nxt.year and end.month == nxt.month):
+                        days_in_month = calendar.monthrange(end.year, end.month)[1]
+                        used_days = end.day
+                        prorated = round(fee * used_days / days_in_month, 2)
+                        line.price_unit = prorated
+                        line.name = f"{line.name} (Prorated for {used_days} days)"
+                        continue
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
