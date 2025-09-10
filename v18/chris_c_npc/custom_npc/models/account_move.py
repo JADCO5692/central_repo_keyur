@@ -265,19 +265,35 @@ class AccountMove(models.Model):
                 if line.product_id.is_np_fees_product and subscription.npc_fees_waiver_months:
                     fee = line.price_unit
                     inv_count = subscription.invoice_count
+                    months = subscription.npc_fees_waiver_months
+                    start = subscription.start_date
+                    end = subscription.end_date
+                    nxt = subscription.next_invoice_date
 
-                    if inv_count <= subscription.npc_fees_waiver_months:
+                    # Zero fee during waiver period
+                    if inv_count <= months:
                         line.price_unit = 0.0
-                    elif inv_count == subscription.npc_fees_waiver_months + 1:
-                        dt =  subscription.start_date
-                        days_in_month = calendar.monthrange(dt.year, dt.month)[1]
-                        used_days = days_in_month - dt.day + 1
+                        continue
+
+                    # Prorate in first invoice after waiver months
+                    if inv_count == months + 1 and start:
+                        days_in_month = calendar.monthrange(start.year, start.month)[1]
+                        used_days = days_in_month - start.day + 1
                         prorated = round(fee * used_days / days_in_month, 2)
                         line.price_unit = prorated
-                        line.name = line.name + f" (Prorated for {used_days} days)"
-                    else:
-                        line.price_unit = fee
+                        line.name = f"{line.name} (Prorated for {used_days} days)"
+                        continue
 
+                    # If final invoice is in the same month as end_date, prorate up to end_date
+                    if end and nxt and (end.year == nxt.year and end.month == nxt.month):
+                        days_in_month = calendar.monthrange(end.year, end.month)[1]
+                        used_days = end.day
+                        prorated = round(fee * used_days / days_in_month, 2)
+                        line.price_unit = prorated
+                        line.name = f"{line.name} (Prorated for {used_days} days)"
+                        continue
+
+                    line.price_unit = fee
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
