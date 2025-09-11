@@ -292,10 +292,11 @@ class AccountMove(models.Model):
 
                         else:
                             days_in_start_month = calendar.monthrange(start.year, start.month)[1]
-                            used_days = days_in_start_month - start.day + 1
+                            used_days = days_in_start_month - subscription.npc_fees_waiver_days
+                            expire_date = date(nxt.year, nxt.month, subscription.npc_fees_waiver_days)
                             prorated_amount = round(fee * used_days / days_in_start_month, 2)
                             line.price_unit = prorated_amount
-                            line.name = f"{line.name} (Prorated: {used_days}/{days_in_start_month} from {start})"
+                            line.name = f"{used_days} from {expire_date.strftime('%m/%d/%Y')}"
                             continue
 
                     # If final invoice is in the same month as end_date, prorate up to end_date
