@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Inherit the sale order report template -->
+        <template id="sale_order_report_inherit" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//t[@t-set='address']" position="replace">
+                <t t-set="address">
+
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-set='information_block']" position="replace">
+                <t t-set="information_block">
+                    <!-- Show customer address on the right side -->
+                    <strong>Customer:</strong>
+                    <div t-field="doc.partner_id" t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+
+                    <!-- Show shipping address only if it's different from customer address -->
+                    <t t-if="doc.partner_shipping_id != doc.partner_id">
+                        <strong>Shipping Address:</strong>
+                        <div t-field="doc.partner_shipping_id" t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+    </data>
+
+</odoo>
