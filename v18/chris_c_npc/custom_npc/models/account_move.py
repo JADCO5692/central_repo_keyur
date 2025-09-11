@@ -277,12 +277,26 @@ class AccountMove(models.Model):
 
                     # Prorate in first invoice after waiver months
                     if inv_count == months + 1 and start:
-                        days_in_month = calendar.monthrange(start.year, start.month)[1]
-                        used_days = days_in_month - start.day + 1
-                        prorated = round(fee * used_days / days_in_month, 2)
-                        line.price_unit = prorated
-                        line.name = f"{line.name} (Prorated for {used_days} days)"
-                        continue
+                        if end and (nxt.year == end.year and nxt.month == end.month) and subscription.npc_fees_waiver_days and subscription.npc_fees_waiver_days < end.day:
+                            days_in_end_month = calendar.monthrange(end.year, end.month)[1]
+                            used_days = end.day - subscription.npc_fees_waiver_days
+                            prorated_amount = round(fee * used_days / days_in_end_month, 2)
+                            expire_date = date(end.year, end.month, subscription.npc_fees_waiver_days)
+                            line.price_unit = prorated_amount
+                            line.name = f"{used_days} days {expire_date.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
+                            continue
+                        elif  end and (nxt.year == end.year and nxt.month == end.month) and subscription.npc_fees_waiver_days and subscription.npc_fees_waiver_days > end.day:
+                            line.price_unit = 0.0
+                            line.name = f"Waiver until {end.strftime('%m/%d/%Y')}"
+                            continue
+
+                        else:
+                            days_in_start_month = calendar.monthrange(start.year, start.month)[1]
+                            used_days = days_in_start_month - start.day + 1
+                            prorated_amount = round(fee * used_days / days_in_start_month, 2)
+                            line.price_unit = prorated_amount
+                            line.name = f"{line.name} (Prorated: {used_days}/{days_in_start_month} from {start})"
+                            continue
 
                     # If final invoice is in the same month as end_date, prorate up to end_date
                     if end and nxt and (end.year == nxt.year and end.month == nxt.month):
