@@ -6,11 +6,12 @@
             <field name="name">npc.favorites.view.form</field>
             <field name="model">npc.favorites</field>
             <field name="arch" type="xml">
-                <form string="Npc Favorites">
+                <form string="NPC Favorites">
                     <sheet>
                         <group>
                             <field name="name"/>
                             <field name="partner_id" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="custom_physician_product"/>
                         </group>
                     </sheet>
                 </form>
@@ -22,9 +23,10 @@
             <field name="name">npc.favorites.view.list</field>
             <field name="model">npc.favorites</field>
             <field name="arch" type="xml">
-                <list string="Npc Favorites" editable="top">
+                <list string="NPC Favorites" editable="top">
                     <field name="name"/>
                     <field name="partner_id"/>
+                    <field name="custom_physician_product"/>
                 </list>
             </field>
         </record>
@@ -53,19 +55,19 @@
         
         <!-- Menu -->
         <menuitem id="menu_npc_favorites_view_crm"
-                  name="Favorites Physicians"
+                  name="Favorite Physicians"
                   action="action_npc_favorites_view"
                   parent="crm.crm_menu_sales"
                   sequence="10"/>
         
         <menuitem id="menu_npc_favorites_view_contacts"
-                  name="Favorites Physicians"
+                  name="Favorite Physicians"
                   action="action_npc_favorites_view"
                   parent="contacts.menu_contacts"
                   sequence="10"/>
 
         <menuitem id="menu_npc_favorites_view_subscription"
-                  name="Favorites Physicians"
+                  name="Favorite Physicians"
                   action="action_npc_favorites_view"
                   parent="sale_subscription.menu_sale_subscription"
                   sequence="10"/>
