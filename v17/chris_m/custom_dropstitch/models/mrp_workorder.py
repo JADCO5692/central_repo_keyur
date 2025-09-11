@@ -54,7 +54,7 @@ class CustomMrpWorkOrder(models.Model):
 
     def button_start(self):
         for wo in self:
-            if wo.state != "ready":
+            if wo.state not in ["ready", "progress"]:
                 raise UserError(
                     _(
                         "Cannot Start. All raw materials/components for this operation are not available"

@@ -342,8 +342,8 @@ class Picking(models.Model):
             )
             ._create_invoices(sale_order_obj)
         )
-        invoice.with_context(order=self.move_ids.created_production_id).action_post()
-        invoice._generate_pdf_and_send_invoice(template=template)
+        invoice.with_context(order=self.move_ids.created_production_id, custom_notify=True).action_post()
+        invoice.with_context(custom_notify=True)._generate_pdf_and_send_invoice(template=template)
 
         if (
             saved_payment_token
