@@ -70,8 +70,8 @@ class AccountMove(models.Model):
             if order and order.next_invoice_date:
                 rec.invoice_date = order.next_invoice_date
                 rec.invoice_date_due = order.next_invoice_date
-                rec._adjust_npc_fee_on_invoice(order)
-
+                if order:
+                    rec._adjust_npc_fee_on_invoice(order)
         return invoices
         
     @api.onchange("custom_contract_end_date")
@@ -290,18 +290,18 @@ class AccountMove(models.Model):
                         used_days = end.day
                         prorated = round(fee * used_days / days_in_month, 2)
                         line.price_unit = prorated
-                        line.name = f"{line.name} (Prorated for {used_days} days)"
+                        line.name = f"{used_days} days {nxt.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
                         continue
 
                     line.price_unit = fee
 
-                if line.product_id.is_np_fees_product:
+                if line.product_id.is_np_fees_product or line.product_id.is_physician_fees_product:
                     if end and nxt and (end.year == nxt.year and end.month == nxt.month):
                         days_in_month = calendar.monthrange(end.year, end.month)[1]
                         used_days = end.day
                         prorated = round(fee * used_days / days_in_month, 2)
                         line.price_unit = prorated
-                        line.name = f"{line.name} (Prorated for {used_days} days)"
+                        line.name = f"{used_days} days {nxt.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
                         continue
 
 class AccountMoveLine(models.Model):
