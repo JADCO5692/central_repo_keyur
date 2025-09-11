@@ -64,7 +64,7 @@
 
         <!-- Modify partner_to field to use custom recipients for payment confirmations -->
         <record id="account.mail_template_data_payment_receipt" model="mail.template">
-            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_payment_completed_ids', object,object) }}</field>
+            <field name="partner_to">{{ object.partner_id._get_notify_partner_ids('custom_payment_completed_ids', object) }}</field>
         </record>
 
         <!-- Reset noupdate to True to prevent future automatic updates -->

@@ -721,3 +721,17 @@ class CustomSaleOrder(models.Model):
             return
         if work_flow_process_record.validate_order:
             self.validate_order_ept()
+
+    def action_confirm(self):
+        res = super().action_confirm()
+        template_id = self.env.ref('sale.mail_template_sale_confirmation')
+        notify_partner = self.partner_id._get_notify_partner_ids('custom_order_confirmation_ids', self)
+        if template_id and notify_partner:
+            self.with_context(custom_notify=True).message_post_with_source(
+                template_id,
+                subtype_xmlid='mail.mt_comment',
+                message_type='comment',
+            )
+        return  res
+
+

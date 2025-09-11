@@ -234,21 +234,9 @@ class CustomOrderProcessingImport(models.Model):
                             "font": (
                                 row_dict.get("Font") if row_dict.get("Font") else ""
                             ),
-                            "personalize_line_1": (
-                                str((row_dict.get("Line1")))
-                                if row_dict.get("Line1")
-                                else ""
-                            ),
-                            "personalize_line_2": (
-                                str((row_dict.get("Line2")))
-                                if row_dict.get("Line2")
-                                else ""
-                            ),
-                            "personalize_line_3": (
-                                str((row_dict.get("Line3")))
-                                if row_dict.get("Line3")
-                                else ""
-                            ),
+                            "personalize_line_1": self.return_correct_excel_value(row_dict.get("Line1")),
+                            "personalize_line_2": self.return_correct_excel_value(row_dict.get("Line2")),
+                            "personalize_line_3": self.return_correct_excel_value(row_dict.get("Line3")),
                             "quantity": row_dict.get("Quantity"),
                             "open_text": (
                                 str((row_dict.get("Open Text")))
