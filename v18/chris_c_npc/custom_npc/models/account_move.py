@@ -11,7 +11,7 @@ class AccountMove(models.Model):
     custom_lead_id = fields.Many2one('crm.lead', string="Opportunity", compute="_compute_custom_lead_id")
     custom_lead_id2 = fields.Many2one('crm.lead', string="Alternate Opportunity")
     np_partner_id = fields.Many2one('res.partner','NP Partner')
-    custom_contract_end_date = fields.Date('Contract End Date')
+    custom_contract_end_date = fields.Date('MD Stop Date')
 
     # Track related vendor bills
     vendor_bill_ids = fields.One2many('account.move', 'source_invoice_id',
@@ -70,8 +70,8 @@ class AccountMove(models.Model):
             if order and order.next_invoice_date:
                 rec.invoice_date = order.next_invoice_date
                 rec.invoice_date_due = order.next_invoice_date
-                rec._adjust_npc_fee_on_invoice(order)
-
+                if order:
+                    rec._adjust_npc_fee_on_invoice(order)
         return invoices
         
     @api.onchange("custom_contract_end_date")
@@ -262,22 +262,62 @@ class AccountMove(models.Model):
     def _adjust_npc_fee_on_invoice(self, subscription):
         for inv in self:
             for line in inv.invoice_line_ids:
+                fee = line.price_unit
+                inv_count = subscription.invoice_count
+                months = subscription.npc_fees_waiver_months
+                start = subscription.start_date
+                end = subscription.end_date
+                nxt = subscription.next_invoice_date
                 if line.product_id.is_np_fees_product and subscription.npc_fees_waiver_months:
-                    fee = line.price_unit
-                    inv_count = subscription.invoice_count
 
-                    if inv_count <= subscription.npc_fees_waiver_months:
+                    # Zero fee during waiver period
+                    if inv_count <= months:
                         line.price_unit = 0.0
-                    elif inv_count == subscription.npc_fees_waiver_months + 1:
-                        dt =  subscription.start_date
-                        days_in_month = calendar.monthrange(dt.year, dt.month)[1]
-                        used_days = days_in_month - dt.day + 1
+                        continue
+
+                    # Prorate in first invoice after waiver months
+                    if inv_count == months + 1 and start:
+                        if end and (nxt.year == end.year and nxt.month == end.month) and subscription.npc_fees_waiver_days and subscription.npc_fees_waiver_days < end.day:
+                            days_in_end_month = calendar.monthrange(end.year, end.month)[1]
+                            used_days = end.day - subscription.npc_fees_waiver_days
+                            prorated_amount = round(fee * used_days / days_in_end_month, 2)
+                            expire_date = date(end.year, end.month, subscription.npc_fees_waiver_days)
+                            line.price_unit = prorated_amount
+                            line.name = f"{used_days} days {expire_date.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
+                            continue
+                        elif  end and (nxt.year == end.year and nxt.month == end.month) and subscription.npc_fees_waiver_days and subscription.npc_fees_waiver_days > end.day:
+                            line.price_unit = 0.0
+                            line.name = f"Waiver until {end.strftime('%m/%d/%Y')}"
+                            continue
+
+                        else:
+                            days_in_start_month = calendar.monthrange(start.year, start.month)[1]
+                            used_days = days_in_start_month - subscription.npc_fees_waiver_days
+                            expire_date = date(nxt.year, nxt.month, subscription.npc_fees_waiver_days)
+                            prorated_amount = round(fee * used_days / days_in_start_month, 2)
+                            line.price_unit = prorated_amount
+                            line.name = f"{used_days} from {expire_date.strftime('%m/%d/%Y')}"
+                            continue
+
+                    # If final invoice is in the same month as end_date, prorate up to end_date
+                    if end and nxt and (end.year == nxt.year and end.month == nxt.month):
+                        days_in_month = calendar.monthrange(end.year, end.month)[1]
+                        used_days = end.day
                         prorated = round(fee * used_days / days_in_month, 2)
                         line.price_unit = prorated
-                        line.name = line.name + f" (Prorated for {used_days} days)"
-                    else:
-                        line.price_unit = fee
+                        line.name = f"{used_days} days {nxt.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
+                        continue
 
+                    line.price_unit = fee
+
+                if line.product_id.is_np_fees_product or line.product_id.is_physician_fees_product:
+                    if end and nxt and (end.year == nxt.year and end.month == nxt.month):
+                        days_in_month = calendar.monthrange(end.year, end.month)[1]
+                        used_days = end.day
+                        prorated = round(fee * used_days / days_in_month, 2)
+                        line.price_unit = prorated
+                        line.name = f"{used_days} days {nxt.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
+                        continue
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"

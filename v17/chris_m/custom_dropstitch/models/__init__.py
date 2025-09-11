@@ -36,3 +36,5 @@ from . import stock_location
 from . import stock_quant
 from . import payment_gateway
 from . import mail_server
+from . import account_payment
+from . import mail_thread

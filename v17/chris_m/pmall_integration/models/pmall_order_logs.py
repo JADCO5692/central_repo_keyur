@@ -150,17 +150,32 @@ class PmallOrderLogs(models.Model):
                     qty = item.get('quantity', 1)
                     price = item.get('price', product.lst_price)
                     pls = item.get('personalization')
+                    # Filter out unwanted personalization fields
+                    filtered_pls = [
+                        p for p in pls
+                        if p.get("fieldName") and not any(
+                            kw in p["fieldName"] for kw in ["Select Color", "Choose Color"]
+                        )
+                    ]
+
                     custom_tiff_file_url = item.get('productionFile')
                     name_part = item.get('itemName') or product.display_name or ''
                     order_number_str = str(order_number) if order_number is not None else ''
                     
-                    route_id = False
-                    if len(pls):
-                        route_id = route_obj.id if len(route_obj) else False
+                    route_id = route_obj.id if filtered_pls and route_obj else False
                         
-                    custom_line1 = ("\nLine 1 :" + pls[0].get('fieldValue')) if len(pls) else ''
-                    custom_line2 = ("\nLine 2 :" + pls[1].get('fieldValue')) if len(pls) > 1 else ''
-                    custom_line3 = ("\nLine 3 :" + pls[2].get('fieldValue')) if len(pls) >= 3 else ''
+                    # Build custom lines (max 3)
+                    custom_lines = []
+                    for idx, p in enumerate(filtered_pls[:3], start=1):
+                        val = p.get("fieldValue", "")
+                        if val:
+                            custom_lines.append(f"\nLine {idx} :{val}")
+                        else:
+                            custom_lines.append("")
+                    
+                    custom_line1 = custom_lines[0] if len(custom_lines) > 0 else ""
+                    custom_line2 = custom_lines[1] if len(custom_lines) > 1 else ""
+                    custom_line3 = custom_lines[2] if len(custom_lines) > 2 else ""
                     
                     order_lines.append((0, 0, {
                         'product_id': product.id,
@@ -168,9 +183,9 @@ class PmallOrderLogs(models.Model):
                         'price_unit': price,
                         'name': (item.get('itemName') or product.display_name) + custom_line1 + custom_line2 + custom_line3,
                         'product_uom': product.uom_id.id,
-                        'custom_line1': pls[0].get('fieldValue') if len(pls) else '',
-                        'custom_line2': pls[1].get('fieldValue') if len(pls) > 1 else '',
-                        'custom_line3': pls[2].get('fieldValue') if len(pls) >= 3 else '',
+                        "custom_line1": filtered_pls[0].get("fieldValue") if len(filtered_pls) > 0 else "",
+                        "custom_line2": filtered_pls[1].get("fieldValue") if len(filtered_pls) > 1 else "",
+                        "custom_line3": filtered_pls[2].get("fieldValue") if len(filtered_pls) > 2 else "",
                         "route_id": route_id,
                         'custom_tiff_file_url': custom_tiff_file_url,
                     }))
