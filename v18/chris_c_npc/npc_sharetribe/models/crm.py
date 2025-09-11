@@ -33,7 +33,7 @@ class CRMLead(models.Model):
     )
     first_payment_date = fields.Date("First Payment Date", compute="_compute_invoice_payment_dates", store=True)
     second_payment_date = fields.Date("Second Payment Date", compute="_compute_invoice_payment_dates", store=True)
-    favorites_ids = fields.Many2many(string="Favorites", comodel_name='npc.favorites', relation='crm_lead_npc_favorite_rel', tracking=True)
+    favorites_ids = fields.Many2many(string="Favorites", comodel_name='npc.favorites', relation='crm_lead_npc_favorite_rel')
     calendlyintialisation = fields.Text("Calendly Initialisation", readonly=True)
     calendlyintialisation_url = fields.Char("Calendly Initialisation URL", readonly=True)
     calendlyintialisation_date = fields.Datetime("Calendly Initialisation Date", readonly=True)

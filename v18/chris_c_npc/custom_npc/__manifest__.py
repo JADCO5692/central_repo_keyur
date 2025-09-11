@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC",
-    'version': '18.0.0.55',
+    'version': '18.0.0.56',
     'category': 'CRM',
     'summary': "Custom NPC",
     'description': """
@@ -10,10 +10,10 @@
     'depends': [
         'mail',
         'account',
-        'npc_crm',
         'sale',
         'sale_subscription',
         'payment_fees_base',
+        'npc_crm',
     ],
     'data': [
         "security/ir.model.access.csv",
