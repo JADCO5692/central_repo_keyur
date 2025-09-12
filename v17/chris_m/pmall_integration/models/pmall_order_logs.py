@@ -188,6 +188,7 @@ class PmallOrderLogs(models.Model):
                         "custom_line3": filtered_pls[2].get("fieldValue") if len(filtered_pls) > 2 else "",
                         "route_id": route_id,
                         'custom_tiff_file_url': custom_tiff_file_url,
+                        'custom_customer_product': product.custom_customer_sku,
                     }))
                 if len(order_items_len) == len(order_lines): 
                     address_ids = self.create_addresses(order_context,rec.pmall_config_id.for_partner_id)

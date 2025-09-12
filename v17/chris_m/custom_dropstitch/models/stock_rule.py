@@ -135,7 +135,7 @@ class StockRule(models.Model):
                         res["custom_released"] = False
                     if sale_order_line_id.custom_tiff_file_url:
                         res["custom_tiff_file_url"] = sale_order_line_id.custom_tiff_file_url
-                        res["custom_released"] = False
+                        res["custom_released"] = True
 
                     if (
                         res["custom_released"] == False
