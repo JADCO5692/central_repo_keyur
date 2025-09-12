@@ -243,7 +243,7 @@
                     <t t-if="not partner.custom_customer_logo and company.logo">
                         <img t-att-src="image_data_uri(company.logo)" class="float-start" alt="Logo"/>
                     </t>
-                    <div class="float-start company_address" style="font-size: smaller;">
+                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle; text-align: center;">
                         <div t-field="partner.commercial_partner_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
@@ -253,7 +253,7 @@
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: smaller;">
+                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle; text-align: center;">
                         <div t-esc="shopify_instance.custom_from_address_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
@@ -265,7 +265,7 @@
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: smaller;">
+                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle; text-align: center;">
                         <div t-esc="shopify_instance.custom_from_address_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
@@ -306,13 +306,37 @@
         </xpath>
         <xpath expr="//div[@class='text-center']/ul" position="replace">
             <ul class="list-inline">
-                <li t-if="company.email">
+                <li t-if="custom_dropship_order and not shopify_instance and partner.email">
                     <span>
-                      For Customer Service, please send your request via email to <a t-att-href="'mailto:%s' % company.email"><t t-esc="company.email"/></a>
+                        For Customer Service, please send your request via email to
+                        <a t-att-href="'mailto:%s' % partner.commercial_partner_id.email">
+                            <t t-esc="partner.email"/>
+                        </a>
+                    </span>
+                </li>
+
+                <!-- Case 2: Shopify instance -->
+                <li t-elif="shopify_instance and shopify_instance.custom_from_address_id.email">
+                    <span>
+                        For Customer Service, please send your request via email to
+                        <a t-att-href="'mailto:%s' % shopify_instance.custom_from_address_id.email">
+                            <t t-esc="shopify_instance.custom_from_address_id.email"/>
+                        </a>
+                    </span>
+                </li>
+
+                <!-- Case 3: Default company -->
+                <li t-elif="company.partner_id.email">
+                    <span>
+                        For Customer Service, please send your request via email to
+                        <a t-att-href="'mailto:%s' % company.partner_id.email">
+                            <t t-esc="company.partner_id.email"/>
+                        </a>
                     </span>
                 </li>
             </ul>
         </xpath>
+
     </template>
 
     <template id="stock_report_delivery_has_serial_move_line"
