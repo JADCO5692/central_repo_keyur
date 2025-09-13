@@ -242,7 +242,7 @@
         <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
      class="mt16"
      style="margin-top: 10px;">
-  <div style="margin-top:5px;margin-left:400px;text-align:left;">
+  <div style="margin-top:5px;margin-left:300px;text-align:left;">
     <strong style="font-size:13px !important;">Gift Message:</strong>
     <div class="gift-message">
         <t t-raw="o.custom_gift_mess"/>
