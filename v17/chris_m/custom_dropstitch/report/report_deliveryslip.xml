@@ -117,6 +117,14 @@
                 }
             </style>
         </xpath>
+        <xpath expr="//table[@name='stock_move_table']" position="attributes">
+            <attribute name="class">table table-sm mt24</attribute>
+        </xpath>
+
+        <!-- Update stock_move_line_table -->
+        <xpath expr="//table[@name='stock_move_line_table']" position="attributes">
+            <attribute name="class">table table-sm mt24</attribute>
+        </xpath>
         <xpath expr="//table[@name='stock_move_table']/thead" position="replace">
             <thead>
                 <tr>
@@ -239,16 +247,16 @@
             </thead>
         </xpath>
         <xpath expr="//div[@class='page']" position="after">
-        <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
-     class="mt16"
-     style="margin-top: 10px;">
-  <div style="margin-top:5px;margin-left:300px;text-align:left;">
-    <strong style="font-size:13px !important;">Gift Message:</strong>
-    <div class="gift-message">
-        <t t-raw="o.custom_gift_mess"/>
-    </div>
-</div>
-</div>
+            <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
+                 class="mt16"
+                 style="margin-top: 10px;">
+                <div style="margin-top:5px;margin-left:300px;text-align:left;">
+                    <strong style="font-size:13px !important;">Gift Message:</strong>
+                    <div class="gift-message">
+                        <t t-raw="o.custom_gift_mess"/>
+                    </div>
+                </div>
+            </div>
         </xpath>
 
     </template>
