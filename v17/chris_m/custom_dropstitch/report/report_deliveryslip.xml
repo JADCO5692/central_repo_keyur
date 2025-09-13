@@ -111,6 +111,10 @@
                 * {
                 font-size: 10px !important;
                 }
+                .gift-message * {
+                    font-size: 13px !important;
+                    line-height: 16px !important;
+                }
             </style>
         </xpath>
         <xpath expr="//table[@name='stock_move_table']/thead" position="replace">
@@ -235,15 +239,16 @@
             </thead>
         </xpath>
         <xpath expr="//div[@class='page']" position="after">
-            <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
-                 class="mt16"
-                 style="margin-top: 10px;">
-                <div style="margin-top:5px;margin-left:400px;text-align: left;">
-                    <strong style="font-size:12px !important;">Gift Message:</strong>
-                    <span t-esc="o.custom_gift_mess"  style="font-size:12px !important;" />
-                </div>
-
-            </div>
+        <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
+     class="mt16"
+     style="margin-top: 10px;">
+  <div style="margin-top:5px;margin-left:400px;text-align:left;">
+    <strong style="font-size:13px !important;">Gift Message:</strong>
+    <div class="gift-message">
+        <t t-raw="o.custom_gift_mess"/>
+    </div>
+</div>
+</div>
         </xpath>
 
     </template>
