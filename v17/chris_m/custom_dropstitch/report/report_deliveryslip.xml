@@ -238,11 +238,9 @@
             <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
                  class="mt16"
                  style="margin-top: 10px;">
-                <div style="margin-top:5px;margin-left:400px; font-size:10px; white-space: pre-line; text-align: left;">
-                    <strong>Gift Message:</strong>
-                    <span>
-                        <t t-esc="o.custom_gift_mess"/>
-                    </span>
+                <div style="margin-top:5px;margin-left:400px;text-align: left;">
+                    <strong style="font-size:12px !important;">Gift Message:</strong>
+                    <span t-esc="o.custom_gift_mess"  style="font-size:12px !important;" />
                 </div>
 
             </div>
