@@ -232,7 +232,7 @@
         <xpath expr="//t[@t-set='o']" position="after">
             <style>
                 * {
-                font-size: 14px !important;
+                font-size: 10px !important;
                 }
             </style>
         </xpath>

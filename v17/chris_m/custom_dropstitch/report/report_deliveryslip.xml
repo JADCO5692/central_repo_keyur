@@ -54,7 +54,7 @@
 
                            <span>
                         <strong>
-                                    <span t-field="o.name" style="font-size:18px !important"/>
+                                    <span t-field="o.name" style="font-size:10px !important"/>
                                 </strong>
                     </span>
 
@@ -108,12 +108,12 @@
         <xpath expr="//t[@t-set='o']" position="after">
             <style>
                 * {
-                font-size: 14px !important;
+                font-size: 10px !important;
                 }
             </style>
         </xpath>
         <xpath expr="//table[@name='stock_move_table']/thead" position="replace">
-            <thead >
+            <thead>
                 <tr>
                     <th name="th_sm_product" class="text-left" style="width : 17%;vertical-align: middle; text-align: center;">
                         <strong>Product</strong>
@@ -144,31 +144,31 @@
                 <tr t-att-class="'bg-200 fw-bold o_line_section'">
                     <td colspan="99" name="no_package_info">
                         <t t-if="o.weight_bulk">
-                            <span>- Weight:</span>
-                            <span t-field="o.weight_bulk"/>
-                            <span t-field="o.weight_uom_name"/>
+                            <span >- Weight:</span>
+                            <span  t-field="o.weight_bulk"/>
+                            <span  t-field="o.weight_uom_name"/>
                       "  </t>
                         <t t-elif="o.weight">
-                            <span>- Weight:</span>
-                            <span t-field="o.weight"/>
-                            <span t-field="o.weight_uom_name"/>
+                            <span >- Weight:</span>
+                            <span  t-field="o.weight"/>
+                            <span  t-field="o.weight_uom_name"/>
                         </t>
                         <t t-if="o.carrier_tracking_ref">
-                            <span>- Tracking:</span>
-                            <span t-esc="o.carrier_tracking_ref"/>
+                            <span >- Tracking:</span>
+                            <span  t-esc="o.carrier_tracking_ref"/>
                         </t>
                     </td>
                 </tr>
                 <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
                 <tr t-foreach="lines" t-as="move">
                                  <td>
-                                    <span t-field="move.product_id.name">Customizable Desk</span>
+                                    <span t-field="move.product_id.name" >Customizable Desk</span>
                                 </td>
                                 <td>
-                                    <span t-field="move.product_id">Customizable Desk</span>
+                                    <span t-field="move.product_id" >Customizable Desk</span>
                                     <br/>
                                     <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
-                                        <span t-field="move.description_picking">Description on transfer</span>
+                                        <span t-field="move.description_picking" >Description on transfer</span>
                                     </p>
                                 </td>
                                 <td>
@@ -179,51 +179,51 @@
                                 </td>
                                 <td>
                                     <t t-if="move.picking_id.custom_client_order_ref">
-                                        <span t-esc="move.picking_id.custom_client_order_ref"/>
+                                        <span t-esc="move.picking_id.custom_client_order_ref" />
                                     </t>
                                     <t t-elif="move.picking_id.origin">
-                                        <span t-esc="move.picking_id.origin"/>
+                                        <span t-esc="move.picking_id.origin" />
                                     </t>
                                 </td>
                                 <td>
                                     <t t-if="move.sale_line_id">
-                                        <span t-esc="move.sale_line_id.custom_customer_product"/>
+                                        <span t-esc="move.sale_line_id.custom_customer_product" />
                                     </t>
                                 </td>
 
                                 <td>
-                                    <span t-field="move.product_uom_qty" t-options='{"widget": "integer"}'>0.0</span>
+                                    <span t-field="move.product_uom_qty" t-options='{"widget": "integer"}' >0.0</span>
 
                                 </td>
                                 <td>
-                                    <span t-field="move.quantity" t-options='{"widget": "integer"}'>0.00</span>
+                                    <span t-field="move.quantity" t-options='{"widget": "integer"}' >0.00</span>
                                 </td>
                             </tr>
             </tbody>
         </xpath>
         <xpath expr="//table[@name='stock_move_line_table']/thead" position="replace">
-            <thead>
-                <tr>
+            <thead >
+                <tr >
                     <th name="th_sm_product" class="text-left" style="width : 17%;vertical-align: middle; text-align: center;">
-                        <strong>Product</strong>
+                        <strong >Product</strong>
                     </th>
                     <th name="th_sm_description" class="text-left" style ="vertical-align: middle; text-align: center;">
-                        <strong>Description</strong>
+                        <strong >Description</strong>
                     </th>
                     <th name="th_sm_product_image" class="text-left" style ="vertical-align: middle; text-align: center;">
-                        <strong>Product Image</strong>
+                        <strong >Product Image</strong>
                     </th>
                     <th name="th_sm_customer_order_ref" class="text-left" style ="vertical-align: middle; text-align: center;">
-                        <strong>Order Ref</strong>
+                        <strong >Order Ref</strong>
                     </th>
                     <th name="th_sm_customer_sku" class="text-left" style ="vertical-align: middle; text-align: center;">
-                        <strong>Customer SKU</strong>
+                        <strong >Customer SKU</strong>
                     </th>
                     <th name="th_sm_ordered" style ="vertical-align: middle; text-align: center;">
-                        <strong>Ordered</strong>
+                        <strong >Ordered</strong>
                     </th>
                     <th name="th_sm_quantity" style ="vertical-align: middle; text-align: center;">
-                        <strong>Delivered</strong>
+                        <strong >Delivered</strong>
                     </th>
                 </tr>
             </thead>
@@ -237,38 +237,44 @@
         <xpath expr="//span[@t-field='company.company_details']" position="replace">
             <t t-if="custom_dropship_order">
                 <t t-if="not shopify_instance">
+                     <div style="display: flex; align-items: center; gap: 20px;">
                     <img t-if="partner.custom_customer_logo"
                          t-att-src="image_data_uri(partner.custom_customer_logo)" class="float-start"
                          alt="Logo"/>
                     <t t-if="not partner.custom_customer_logo and company.logo">
                         <img t-att-src="image_data_uri(company.logo)" class="float-start" alt="Logo"/>
                     </t>
-                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle; text-align: center;">
+                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
                         <div t-field="partner.commercial_partner_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
+                     </div>
                 </t>
                 <t t-elif="shopify_instance">
+                     <div style="display: flex; align-items: center; gap: 20px;">
                     <img t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle; text-align: center;">
+                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
                         <div t-esc="shopify_instance.custom_from_address_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
+                     </div>
                 </t>
 
             </t>
             <t t-elif="shopify_instance">
+                 <div style="display: flex; align-items: center; gap: 20px;">
                     <img t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle; text-align: center;">
+                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
                         <div t-esc="shopify_instance.custom_from_address_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
+                 </div>
                 </t>
             <t t-else="">
                 <xpath expr="//div[hasclass('company_address')]" position="replace">
@@ -276,38 +282,43 @@
                 <img t-if="company.logo"
                      t-att-src="image_data_uri(company.logo)"
                      class="float-start" alt="Logo"/>
-                <div class="float-start company_address" style="font-size: 15px;">
-                    <ul class="list-unstyled" name='company_address_list'>
-                        <li t-if="company.is_company_details_empty">
-                            <span t-field="company.partner_id"
-                                  t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'>
-                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
-                                    <strong>Company address block</strong>
-                                    <div>Contains the company address.</div>
-                                </div>
-                            </span>
-                        </li>
-                        <li t-else="">
-                            <span t-field="company.company_details">
-                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
-                                    <strong>Company details block</strong>
-                                    <div>Contains the company details.</div>
-                                </div>
-                            </span>
-                        </li>
-                        <li t-if="not forced_vat"/>
-                        <li t-else="">
-                            <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
-                            <span t-esc="forced_vat">US12345671</span>
-                        </li>
-                    </ul>
-                </div>
+                  <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
+                        <div t-esc="company.partner_id"
+                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                    </div>
+<!--                <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">-->
+<!--                    <ul class="list-unstyled" name='company_address_list'>-->
+<!--                        <li t-if="company.is_company_details_empty">-->
+<!--                            <span t-field="company.partner_id"-->
+<!--                                  t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'>-->
+<!--                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">-->
+<!--                                    <strong>Company address block</strong>-->
+<!--                                    <div>Contains the company address.</div>-->
+<!--                                </div>-->
+<!--                            </span>-->
+<!--                        </li>-->
+<!--                        <li t-else="">-->
+<!--                            <span t-field="company.company_details">-->
+<!--                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">-->
+<!--                                    <strong>Company details block</strong>-->
+<!--                                    <div>Contains the company details.</div>-->
+<!--                                </div>-->
+<!--                            </span>-->
+<!--                        </li>-->
+<!--                        <li t-if="not forced_vat"/>-->
+<!--                        <li t-else="">-->
+<!--                            <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:-->
+<!--                            <span t-esc="forced_vat">US12345671</span>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+
             </t>
         </xpath>
-        <xpath expr="//div[@class='text-center']/ul" position="replace">
-            <ul class="list-inline">
+        <xpath expr="//div[@class='text-center']" position="replace">
+            <ul class="list-inline" style="padding-left: 0; list-style: none; text-align: center; margin-bottom: 0;">
                 <li t-if="custom_dropship_order and not shopify_instance and partner.email">
-                    <span>
+                    <span style="font-size: 10px !important;">
                         For Customer Service, please send your request via email to
                         <a t-att-href="'mailto:%s' % partner.commercial_partner_id.email">
                             <t t-esc="partner.email"/>
@@ -317,7 +328,7 @@
 
                 <!-- Case 2: Shopify instance -->
                 <li t-elif="shopify_instance and shopify_instance.custom_from_address_id.email">
-                    <span>
+                    <span style="font-size: 10px !important;">
                         For Customer Service, please send your request via email to
                         <a t-att-href="'mailto:%s' % shopify_instance.custom_from_address_id.email">
                             <t t-esc="shopify_instance.custom_from_address_id.email"/>
@@ -327,7 +338,7 @@
 
                 <!-- Case 3: Default company -->
                 <li t-elif="company.partner_id.email">
-                    <span>
+                    <span style="font-size: 10px !important;">
                         For Customer Service, please send your request via email to
                         <a t-att-href="'mailto:%s' % company.partner_id.email">
                             <t t-esc="company.partner_id.email"/>
@@ -335,6 +346,17 @@
                     </span>
                 </li>
             </ul>
+             <div t-if="report_type == 'pdf'" class="text-muted" style="padding-left: 0; list-style: none; text-align: center; margin-bottom: 0;">
+                  <strong style="font-size: 10px !important;">  Page:
+                    <span class="page"/>
+                    of
+                    <span class="topage"/>
+                 </strong>
+                </div>
+
+                <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">
+                    <span t-out="o.name">(document name)</span>
+                </div>
         </xpath>
 
     </template>
@@ -343,14 +365,14 @@
               inherit_id="stock.stock_report_delivery_aggregated_move_lines">
         <xpath expr="//td[1]" position="replace">
             <td>
-                <span t-esc="aggregated_lines[line]['product'].name"/>
+                <span t-esc="aggregated_lines[line]['product'].name" />
             </td>
             <td>
                 <p t-if="aggregated_lines[line]['description']">
-                    <span t-esc="aggregated_lines[line]['description']" t-options="{'widget': 'text'}"/>
+                    <span t-esc="aggregated_lines[line]['description']" t-options="{'widget': 'text'}" />
                 </p>
                 <p t-else="">
-                    <span t-esc="aggregated_lines[line]['name']"/>
+                    <span t-esc="aggregated_lines[line]['name']" />
                 </p>
             </td>
              <td >
@@ -363,12 +385,12 @@
             </td>
             <td>
                 <p t-if="aggregated_lines[line].get('order_ref')">
-                    <span t-esc="aggregated_lines[line]['order_ref']" t-options="{'widget': 'text'}"/>
+                    <span t-esc="aggregated_lines[line]['order_ref']" t-options="{'widget': 'text'}" />
                 </p>
             </td>
             <td>
                 <p t-if="aggregated_lines[line].get('customer_sku')">
-                    <span t-esc="aggregated_lines[line]['customer_sku']" t-options="{'widget': 'text'}"/>
+                    <span t-esc="aggregated_lines[line]['customer_sku']" t-options="{'widget': 'text'}" />
                 </p>
             </td>
         </xpath>
@@ -376,13 +398,13 @@
             <td class="text-center" name="move_line_ordered_quantity">
                 <t t-if="aggregated_lines[line]['qty_ordered']">
 
-                    <span t-esc="int(aggregated_lines[line]['qty_ordered'])"/>
+                    <span t-esc="int(aggregated_lines[line]['qty_ordered'])" />
 
                     <span t-if="aggregated_lines[line]['packaging'].name">
                         (
                         <span t-out="aggregated_lines[line]['packaging_quantity']"
-                              t-options='{"widget": "integer"}'/>
-                        <span t-out="aggregated_lines[line]['packaging'].name"/>
+                              t-options='{"widget": "integer"}' />
+                        <span t-out="aggregated_lines[line]['packaging'].name" />
                         )
                     </span>
                 </t>
@@ -392,14 +414,14 @@
             <td class="text-center" name="move_line_aggregated_quantity">
                 <t t-if="aggregated_lines[line]['quantity']">
 
-                    <span t-esc="int(aggregated_lines[line]['quantity'])"/>
+                    <span t-esc="int(aggregated_lines[line]['quantity'])" />
 
 
-                    <span t-if="aggregated_lines[line]['packaging'].name">
+                    <span t-if="aggregated_lines[line]['packaging'].name" >
                         (
                         <span t-out="aggregated_lines[line]['packaging_quantity']"
-                              t-options='{"widget": "integer"}'/>
-                        <span t-out="aggregated_lines[line]['packaging'].name"/>
+                              t-options='{"widget": "integer"}' />
+                        <span t-out="aggregated_lines[line]['packaging'].name" />
                         )
                     </span>
                 </t>
