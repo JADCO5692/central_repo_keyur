@@ -58,6 +58,7 @@
 					<field name="custom_shipping_fees" required="customer_rank > 0 and not parent_id" invisible="parent_id"/>
 					<field name="custom_generate_type"/>
 					<field name="shipstation_store_id"/>
+                    <field name="is_show_gift_msg"/>
 					<field name="custom_customer_logo" widget="image" invisible="parent_id"/>
 					<label for="custom_require_payment" invisible="parent_id"/>
 					<div id="custom_require_payment" class="o_row" invisible="parent_id">

@@ -232,6 +232,7 @@ class CustomResPartner(models.Model):
         default=False,
     )
     custom_so_special_inst = fields.Html("Customer Special Instruction", copy=False)
+    is_show_gift_msg = fields.Boolean("Show Gift Message in Delivery")
 
     @api.onchange("custom_label_template_id")
     def _onchange_custom_label_template(self):

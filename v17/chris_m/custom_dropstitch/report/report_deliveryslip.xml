@@ -59,43 +59,44 @@
                     </span>
 
                         <tr t-if="o.scheduled_date">
-                            <td style="white-space: nowrap; width: 140px;">Ship Date:&#160;</td>
-                            <td style="white-space: nowrap;">
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">Ship Date:&#160;</td>
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span t-esc="o.scheduled_date.strftime('%d-%m-%Y')"/>
                             </td>
                         </tr>
                         <tr t-if="o.origin">
-                            <td style="white-space: nowrap; width: 140px;">Sales Order:&#160;</td>
-                            <td style="white-space: nowrap;">
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">Sales Order:&#160;</td>
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span t-field="o.origin"/>
                             </td>
                         </tr>
                         <tr t-if="o.custom_client_order_ref">
-                            <td style="white-space: nowrap; width: 140px;">Customer Order Ref:&#160;</td>
-                            <td style="white-space: nowrap;">
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">Customer Order Ref:&#160;</td>
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span t-field="o.custom_client_order_ref"/>
                             </td>
                         </tr>
                         <tr t-if="o.weight">
-                            <td style="white-space: nowrap; width: 140px;">Shipment Weight (lbs):&#160;</td>
-                            <td style="white-space: nowrap;">
+                            <td style="white-space: nowrap; width: 140px;padding:0 !important; margin:0 !important; line-height:1.2 !important;">Shipment Weight (lbs):&#160;</td>
+                            <td style="white-space: nowrap; width: 140px;padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span t-field="o.weight"/> &#160; <span>lbs</span>
                             </td>
                         </tr>
                         <tr>
-                            <td style="white-space: nowrap; width: 140px; border: none !important;">Box Count:&#160;
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">Box Count:&#160;
                             </td>
-                            <td style="border: none !important; white-space: nowrap;">
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span>1</span>
                             </td>
                         </tr>
                         <tr t-if="o.carrier_id">
-                            <td style="white-space: nowrap; width: 140px; vertical-align: top;">Carrier:&#160;</td>
-                            <td style="white-space: normal; word-break: break-word; max-width: 300px;">
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">Carrier:&#160;</td>
+                            <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span t-field="o.carrier_id.name"/>
                             </td>
-                        </tr>
-                    </table>
+    </tr>
+</table>
+
                 </div>
             </div>
         </xpath>
@@ -121,9 +122,9 @@
                     <th name="th_sm_description" class="text-left" style ="vertical-align: middle; text-align: center;">
                         <strong>Description</strong>
                     </th>
-                    <th name="th_sm_product_image" class="text-left" style ="vertical-align: middle; text-align: center;">
-                        <strong>Product Image</strong>
-                    </th>
+<!--                    <th name="th_sm_product_image" class="text-left" style ="vertical-align: middle; text-align: center;">-->
+<!--                        <strong>Product Image</strong>-->
+<!--                    </th>-->
                     <th name="th_sm_customer_order_ref" class="text-left" style ="vertical-align: middle; text-align: center;">
                         <strong>Order Ref</strong>
                     </th>
@@ -163,6 +164,11 @@
                 <tr t-foreach="lines" t-as="move">
                                  <td>
                                     <span t-field="move.product_id.name" >Customizable Desk</span>
+                                     <br/>
+                                       <img t-if="move.custom_item_image"
+                                      width="100"
+                                      t-att-src="'data:image/png;base64,%s' % move.custom_item_image.decode('utf-8')"
+                                      alt="Product Image"/>
                                 </td>
                                 <td>
                                     <span t-field="move.product_id" >Customizable Desk</span>
@@ -171,12 +177,12 @@
                                         <span t-field="move.description_picking" >Description on transfer</span>
                                     </p>
                                 </td>
-                                <td>
-                                    <img t-if="move.custom_item_image"
-                                      width="100"
-                                      t-att-src="'data:image/png;base64,%s' % move.custom_item_image.decode('utf-8')"
-                                      alt="Product Image"/>
-                                </td>
+<!--                                <td>-->
+<!--                                    <img t-if="move.custom_item_image"-->
+<!--                                      width="100"-->
+<!--                                      t-att-src="'data:image/png;base64,%s' % move.custom_item_image.decode('utf-8')"-->
+<!--                                      alt="Product Image"/>-->
+<!--                                </td>-->
                                 <td>
                                     <t t-if="move.picking_id.custom_client_order_ref">
                                         <span t-esc="move.picking_id.custom_client_order_ref" />
@@ -210,9 +216,9 @@
                     <th name="th_sm_description" class="text-left" style ="vertical-align: middle; text-align: center;">
                         <strong >Description</strong>
                     </th>
-                    <th name="th_sm_product_image" class="text-left" style ="vertical-align: middle; text-align: center;">
-                        <strong >Product Image</strong>
-                    </th>
+<!--                    <th name="th_sm_product_image" class="text-left" style ="vertical-align: middle; text-align: center;">-->
+<!--                        <strong >Product Image</strong>-->
+<!--                    </th>-->
                     <th name="th_sm_customer_order_ref" class="text-left" style ="vertical-align: middle; text-align: center;">
                         <strong >Order Ref</strong>
                     </th>
@@ -228,6 +234,20 @@
                 </tr>
             </thead>
         </xpath>
+        <xpath expr="//div[@class='page']" position="after">
+            <div t-if="partner.is_show_gift_msg and o.custom_gift_mess"
+                 class="mt16"
+                 style="margin-top: 10px;">
+                <div style="margin-top:5px;margin-left:400px; font-size:10px; white-space: pre-line; text-align: left;">
+                    <strong>Gift Message:</strong>
+                    <span>
+                        <t t-esc="o.custom_gift_mess"/>
+                    </span>
+                </div>
+
+            </div>
+        </xpath>
+
     </template>
 
     <template id="external_layout_striped_inherit" inherit_id="web.external_layout_striped">
@@ -366,6 +386,12 @@
         <xpath expr="//td[1]" position="replace">
             <td>
                 <span t-esc="aggregated_lines[line]['product'].name" />
+                <br/>
+                  <t t-if="aggregated_lines[line].get('item_image')">
+                    <img width="100"
+                         t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image']"
+                         alt="Product Image"/>
+                </t>
             </td>
             <td>
                 <p t-if="aggregated_lines[line]['description']">
@@ -375,14 +401,14 @@
                     <span t-esc="aggregated_lines[line]['name']" />
                 </p>
             </td>
-             <td >
-                 <t t-if="aggregated_lines[line].get('item_image')">
-                    <img width="100"
-                         t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image']"
-                         alt="Product Image"/>
-                </t>
+<!--             <td >-->
+<!--                 <t t-if="aggregated_lines[line].get('item_image')">-->
+<!--                    <img width="100"-->
+<!--                         t-att-src="'data:image/png;base64,%s' % aggregated_lines[line]['item_image']"-->
+<!--                         alt="Product Image"/>-->
+<!--                </t>-->
 
-            </td>
+<!--            </td>-->
             <td>
                 <p t-if="aggregated_lines[line].get('order_ref')">
                     <span t-esc="aggregated_lines[line]['order_ref']" t-options="{'widget': 'text'}" />
