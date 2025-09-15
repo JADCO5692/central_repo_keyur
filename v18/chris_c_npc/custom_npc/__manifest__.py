@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC",
-    'version': '18.0.0.56',
+    'version': '18.0.0.59',
     'category': 'CRM',
     'summary': "Custom NPC",
     'description': """
@@ -37,7 +37,8 @@
             'custom_npc/static/plugins/*',
             'custom_npc/static/src/js/ChatterExt.js',
             'custom_npc/static/src/xml/ChatterExt.xml',
-            'custom_npc/static/src/dashboard/*'
+            'custom_npc/static/src/dashboard/*',
+            'custom_npc/static/src/dashboard_sales/*',
         ],
     },
     'license': 'LGPL-3',

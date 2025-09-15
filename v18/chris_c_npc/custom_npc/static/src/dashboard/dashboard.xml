@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
-    <t t-name="SalesDashboard" owl="1">
+    <t t-name="SalesRevenueDashboard" owl="1">
         <div class="o_action" t-ref="el">
             <div class="o_content"> 
                 <div class="header_container container-fluid">
