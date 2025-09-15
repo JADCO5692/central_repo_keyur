@@ -71,3 +71,5 @@ class SaleOrder(models.Model):
 
             if rec.opportunity_id:
                 rec.np_partner_id = rec.opportunity_id.np_partner_id.id
+
+    

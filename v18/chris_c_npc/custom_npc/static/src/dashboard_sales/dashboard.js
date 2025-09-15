@@ -24,17 +24,24 @@ function get_time_frames() {
         next_month: "Next Month",
         this_month: "This Month",
         last_month: "Last Month",
+        custom: "Custom",
     };
 }
 
-class SalesRevenueDashboard extends Component {
+class SalesDashboard extends Component {
     setup() {
         super.setup();
         this.orm = useService("orm");
-        this.state = useState({
-            npc_data: [], 
+        this.state = useState({ 
             all_time_frames: {},
-            time_frame: 'this_month'
+            time_frame: 'this_month',
+            new_leads_assigned: {},
+            signed_contract:{},
+            stage_durations:{},
+            activity_complete_avg:0,
+            sales_persons:[],
+            start_date:'',
+            end_date:'',
         });
         this.action = useService("action");
         this.notification = useService("notification");
@@ -44,11 +51,7 @@ class SalesRevenueDashboard extends Component {
         this.dialogService = this.env.services.dialog;
 
         onWillStart(async () => { 
-            this.state.all_time_frames = get_time_frames(); 
-            // this.busService.subscribe("dashboard_notify", (params) => {
-            //     this._onNotification(params)
-            // }); 
-
+            this.state.all_time_frames = get_time_frames();
         });
         onMounted(async () => { 
             let defs = [];
@@ -72,19 +75,62 @@ class SalesRevenueDashboard extends Component {
     loadDashboardData() { 
         try {
             var self = this;
-            return rpc("/sales/data", { params: self.prepareContex() })
-                .then(function (result) { 
-                    self.state.npc_data = result.npc_data?result.npc_data:[];  
-                    self.render_chart()
+            return rpc("/np/sales/data", { params: self.prepareContex() })
+                .then(function (result) {  
+                    self.state.new_leads_assigned = result.new_leads_assigned?result.new_leads_assigned:[]; 
+                    self.state.signed_contract = result.signed_contract?result.signed_contract?.total_per_rep:[];  
+                    self.state.stage_durations = result.stage_durations?result.stage_durations:[];
+                    self.state.activity_complete_avg = result.activity_complete_avg?result.activity_complete_avg:0; 
+                    self.state.sales_persons = result.salespersons?result.salespersons:[];  
+                    console.log(self.state)
                 });
         } catch (e) {
             return e;
         }
+    } 
+    getStageTime(avg_for){
+        let avg_key = ''
+        if(avg_for === "meet"){
+            avg_key = 'avg_meet_days'
+        }
+        if(avg_for === "zoom"){
+            avg_key = 'avg_zoom_days'
+        }  
+        let total = 0;
+        let count = 0; 
+        let data = this.state.stage_durations;
+        for (const rep in data) {
+            if (data[rep][avg_key] !== undefined) {
+            total += data[rep][avg_key];
+            count++;
+            }
+        } 
+        return count > 0 ? (total / count).toFixed(1) : 0;
     }
+    getNew_leads(){
+        const values = Object.values(this.state.new_leads_assigned);
+        if (values.length === 0) {
+            return 0;
+        }
+        return values.reduce((sum, val) => sum + val, 0)
+        // const total = values.reduce((sum, val) => sum + val, 0);
+        // return Math.round(total / values.length); 
+    }
+    getsignedContracts(){
+        const values = Object.values(this.state.signed_contract);
+        if (values.length === 0) {
+            return 0;
+        }
+        return values.reduce((sum, val) => sum + val, 0)
+    } 
+    // utils methods
     prepareContex() {
         var context = {
             time_frame: this.state.time_frame,
+            start_date: this.state.start_date,
+            end_date: this.state.end_date,
         };
+        console.log(context)
         return Object.assign(context, {});
     }
     toggleDropdownClass(ev) {
@@ -96,8 +142,10 @@ class SalesRevenueDashboard extends Component {
         var $target = ev.currentTarget;
         var Tframe = $target.value || "default";
         let tframe = this.timefrrame(Tframe);
-        this.state.time_frame = tframe; 
-        this.loadDashboardData()
+        this.state.time_frame = tframe;
+        if(tframe != 'custom'){ 
+            this.loadDashboardData()
+        }
     } 
     timefrrame(tframe){  
         if (tframe == 'This Week'){
@@ -112,75 +160,30 @@ class SalesRevenueDashboard extends Component {
         else if (tframe == 'Last Month'){
             return 'last_month';
         }
+        else if (tframe == 'Custom'){
+            return 'custom';
+        }
         else{
             return 'this_month';
         }
-    }  
-    render_chart(){ 
-        var ctx = document.getElementById("chart-sales-revenue").getContext("2d"); 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: this.state.npc_data.labels,   
-                datasets: [{
-                    label: 'Revenue Amount ($)',
-                    data: this.state.npc_data.values, 
-                    borderColor: 'blue',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderWidth: 2,
-                    tension: 0.3, 
-                    fill: true,  
-                    pointRadius: 5,
-                    pointBackgroundColor: 'red'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return '$' + context.raw.toFixed(2);
-                            }
-                        }
-                    },
-                    datalabels: {
-                        display: true,
-                        align: 'top',
-                        color: 'black',
-                        font: {
-                            weight: 'bold'
-                        },
-                        formatter: function(value) {
-                            return "$" + value.toLocaleString();
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value;
-                            }
-                        }
-                    }  
-                }  
-            },
-            plugins: [ChartDataLabels]  
-        });
+    } 
+    OnchangeDate(ev,input){
+        if(input == 'start'){
+            this.state.start_date = ev.currentTarget.value
+        }
+        if(input == 'end'){
+            this.state.end_date = ev.currentTarget.value
+        }
+    }
+    OnApplyDates(){
+        this.loadDashboardData()
     }
 }
 
-SalesRevenueDashboard.template = "SalesRevenueDashboard";
-SalesRevenueDashboard.components = {
+SalesDashboard.template = "SalesDashboard";
+SalesDashboard.components = {
     Dropdown,
     DropdownItem,
     DateTimeInput,
 };
-registry.category("actions").add("sales_revenue_action", SalesRevenueDashboard);
+registry.category("actions").add("sales_dashboard_action", SalesDashboard);

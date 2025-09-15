@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="SalesDashboard" owl="1">
+        <div class="o_action" t-ref="el">
+            <div class="o_content"> 
+                <div class="header_container container-fluid">
+                    <div class="row py-3 align-items-center">
+                        <div class="col-12 col-sm-12 col-md-9 col-lg-6 col-xl-6 d-flex cnt-left align-items-center">
+                            <div class="">
+                                <h2 class="ms-2 mb-0">
+                                    Sales Dashboard
+                                </h2>
+                            </div>
+                        </div> 
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-6 col-xl-6 d-flex justify-content-end">
+                            <div class="d-flex px-2" t-if="state.time_frame == 'custom'"  >
+                                <lable class="form-control bg-200" for="start_date">From</lable>
+                                <input type="date" name="start_date" class="form-control bg-white" id="start_date" t-on-change="(ev)=>this.OnchangeDate(ev,'start')" t-att-value="state.start_date"/>
+                                <lable class="form-control bg-200" for="start_date">To</lable>
+                                <input type="date" name="end_date" class="form-control bg-white" id="end_date" t-on-change="(ev)=>this.OnchangeDate(ev,'end')" t-att-value="state.end_date"/>
+                                <button t-if="state.start_date &amp;&amp; state.end_date"
+                                class="btn btn-sm btn-secondary" t-on-click="(ev)=>this.OnApplyDates()">Apply</button>
+                            </div>
+                            <select class="form-control w-50" t-on-change="(ev)=>this.onSelectTimeframe(ev)">
+                                <option t-att-selected="state.time_frame == 'this_month'" t-att-value="this_month">This Month</option>
+                                <option t-att-selected="state.time_frame == 'last_month'" t-att-value="last_month">Last Month</option> 
+                                <option t-att-selected="state.time_frame == 'this_week'" t-att-value="this_week">This Week</option>  
+                                <option t-att-selected="state.time_frame == 'last_week'" t-att-value="last_week">Last Week</option>
+                                <option t-att-selected="state.time_frame == 'custom'" t-att-value="custom">Custom</option>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div id="body_container" class="body_container container-fluid"> 
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>New Leads Assigned</h3>
+                                    <div class="value" id="newLeadsCount"><t t-esc="getNew_leads()"/></div>
+                                    <div class="trend"> 
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-blue"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Total Signed Contracts</h3>
+                                    <div class="value" id="totalSales"><t t-esc="getsignedContracts()"/></div>
+                                    <div class="trend">  
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-green"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card" t-on-click="()=>this.onclickCustomers()">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Avg Days from NP signup to Scheduled Zoom Call</h3>
+                                    <div class="value" id="newCustomers"><t t-esc="getStageTime('zoom')"/> Days</div>
+                                    <div class="trend"> 
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-purple"> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Avg Days from NP signup to Scheduled to Meet Physician.</h3>
+                                    <div class="value" id="quotationsSent"><t t-esc="getStageTime('meet')" /> Days</div>
+                                    <div class="trend">
+                                         
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-orange"> 
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info">
+                                    <h3>Activity completed after NP signup.</h3>
+                                    <div class="value" id="quotationsSent"><t t-esc="state.activity_complete_avg" /></div>
+                                    <div class="trend">
+                                         
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-orange"> 
+                                </div>
+                            </div>
+                        </div> 
+                    </div> 
+                    <div class="table-grid m-auto"> 
+                        <div class="bg-white item-container">
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h2>Salesperson Wise Numbers</h2> 
+                                </div>
+                                
+                                <div class="table-wrapper">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Salesperson</th> 
+                                                <th>New Leads Assigned</th>
+                                                <th>Total Signed Contracts</th>
+                                                <th>Avg. Signup to Zoom Call</th> 
+                                                <th>Avg. Zoom Call to Meet</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            <tr t-foreach="state.sales_persons" t-as="sp" t-key="sp_index">
+                                                <td><t t-esc="sp"/></td> 
+                                                <td><t t-esc="state.new_leads_assigned[sp]"/></td> 
+                                                <td><t t-esc="state.signed_contract[sp]"/></td>
+                                                <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_zoom_days"/></td>
+                                                <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_meet_days"/></td>
+                                            </tr> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
