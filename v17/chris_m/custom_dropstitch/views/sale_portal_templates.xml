@@ -63,42 +63,10 @@
                 </t> 
             </td>
         </xpath>
+        <xpath expr="//div[@name="
     </template>
     
-   <template id="report_saleorder_document_Custom" inherit_id="sale.report_saleorder_document">
-        <xpath expr="//div[hasclass('page')]/table/thead/tr/th[@name='th_description']" position="after">
-            <th class="text-center" id="cust_product_image_header">Product Image</th>
-        </xpath>
-        
-        <xpath expr="//div[hasclass('page')]/table/tbody[hasclass('sale_tbody')]/t/tr/t/td[@name='td_name']" position="after">
-            <td> 
-                <div style="width:50px;" t-field="line.sudo().custom_item_image" class="d-flex align-items-start justify-content-center"
-	                 t-options='{"widget": "image", "class": "product_detail_img h-25 w-100 mw-100", "alt-field": "name"}'/>
-            </td>
-        </xpath>
-        <xpath expr="//div[hasclass('page')]/div[@id='informations']/div[@name='informations_reference']" position="replace">
-        	<div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2" name="informations_reference">
-                <strong>Customer Order Ref:</strong><br/>
-                <span class="m-0" t-field="doc.client_order_ref">SO0000</span>
-            </div>
-        </xpath>
-        <xpath expr="//td[@name='td_name']" position="replace">
-            <td name="td_name">
-                <span t-field="line.name"/>
-                <t t-if="line.custom_color_2"><t t-esc="line.custom_color_2.display_name"/><br/></t>
-                <t t-if="line.custom_color_3"><t t-esc="line.custom_color_3.display_name"/><br/></t>
-                <t t-if="line.custom_color_4" ><t t-esc="line.custom_color_4.display_name"/><br/></t>
-                <t t-if="line.custom_color_5"><t t-esc="line.custom_color_5.display_name"/><br/></t>
-                <t t-if="line.custom_color_6" ><t t-esc="line.custom_color_6.display_name"/></t>
-                <br/>
-                <t t-if="line.custom_attribute_1" t-esc="line.custom_attribute_1.display_name"></t>
-                <br/>
-                <t t-if="line.custom_tiff_file_name">
-                    Tiff file: <t t-esc="line.custom_tiff_file_name"></t>
-                </t>
-            </td>
-        </xpath>
-   </template>
+
 
     <template id="report_delivery_document_inherit_sale_stock_custom" inherit_id="sale_stock.report_delivery_document_inherit_sale_stock">
         <xpath expr="//div[@t-if='o.sudo().sale_id.client_order_ref']" position="replace">

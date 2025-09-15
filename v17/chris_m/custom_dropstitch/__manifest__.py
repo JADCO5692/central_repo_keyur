@@ -24,7 +24,7 @@
         "report/product_label_templates.xml",
         "report/report_deliveryslip.xml",
         "report/report_invoice.xml",
-        "report/report_saleorder.xml",
+        # "report/report_saleorder.xml",
         "report/gift_message_label_template.xml",
         "report/report_wave_delivery_slip.xml",
         "views/custom_security.xml",
