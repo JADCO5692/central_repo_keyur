@@ -19,7 +19,9 @@ Stripe Payment Acquirer Fees Extension: Collect Stripe processing fees from cust
     "license": "OPL-1",
     "support": "info@craftsync.com",
     "depends": ["payment_stripe", "payment_fees_base"],
-    "data": [],
+    "data": [
+        'views/payment_form_template.xml',
+    ],
     "demo": [],
     "application": True,
     "auto_install": False,
