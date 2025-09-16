@@ -150,6 +150,10 @@ class CustomMrpProduction(models.Model):
     custom_sale_order_date = fields.Datetime(
         string="Order Date", related="custom_sale_order_line.order_id.date_order", store=True
     )
+    
+    custom_can_be_sold = fields.Binary(
+        string="Can be Sold", Boolean="product_id.sale_ok"
+    )
 
     @api.model
     def read_group(
@@ -204,70 +208,72 @@ class CustomMrpProduction(models.Model):
                     production.custom_tiff_file_url = production.product_id.custom_tiff_file_url
 
     def custom_action_confirm(self):
-        if ( not self.custom_tiff_file ) and ( not self.custom_tiff_file_url ):
-            raise UserError(_("Cannot Proceed. Add TIFF File URL"))
-        if not self.bom_id:
-            raise UserError(_("Cannot Proceed. BoM missing"))
-        if not self.move_raw_ids:
-            raise UserError(_("Cannot Proceed. BoM components missing"))
+        if self.custom_can_be_sold:
+            if ( not self.custom_tiff_file ) and ( not self.custom_tiff_file_url ):
+                raise UserError(_("Cannot Proceed. Add TIFF File URL"))
+            if not self.bom_id:
+                raise UserError(_("Cannot Proceed. BoM missing"))
+            if not self.move_raw_ids:
+                raise UserError(_("Cannot Proceed. BoM components missing"))
         
         self.custom_released = True
         self.action_confirm()
 
     def action_confirm(self):
         for production in self:
-            if (not production.bom_id) or (not production.move_raw_ids):
-                production.custom_released = False
-            if production.custom_released:
-                super(CustomMrpProduction, production).action_confirm()
-                proc_grp_id = self.env["procurement.group"].search(
-                    [("name", "=", production.name)], limit=1
-                )
-                if production.state == "confirmed":
-                    seq = 1
-                    for component in production.move_raw_ids:
-                        if production.product_id.custom_color_count == "1":
-                            if seq == 1:
-                                seq = 3
-                        elif production.product_id.custom_color_count == "2":
-                            if seq == 1:
-                                seq = 3
-                            elif seq == 3:
-                                seq = 6
-                        elif production.product_id.custom_color_count == "3":
-                            if seq == 1:
-                                seq = 3
-                            elif seq == 3:
-                                seq = 6
-                            elif seq == 6:
-                                seq = 7
-                        elif production.product_id.custom_color_count == "4":
-                            if seq == 1:
-                                seq = 3
-                            elif seq == 3:
-                                seq = 4
-                            elif seq == 4:
-                                seq = 5
-                            elif seq == 5:
-                                seq = 6
-                        elif production.product_id.custom_color_count == "6":
-                            if seq == 1:
-                                seq = 2
-                            elif seq == 2:
-                                seq = 3
-                            elif seq == 3:
-                                seq = 4
-                            elif seq == 4:
-                                seq = 5
-                            elif seq == 5:
-                                seq = 6
-                            elif seq == 6:
-                                seq = 7
-                        component.custom_color_no = str(seq)
-                        field_name = "custom_color_" + str(seq)
-                        production.update({field_name: component.product_id.id})
-                        if proc_grp_id:
-                            component.group_id = proc_grp_id.id
+            if production.custom_can_be_sold:
+                if (not production.bom_id) or (not production.move_raw_ids):
+                    production.custom_released = False
+                if production.custom_released:
+                    super(CustomMrpProduction, production).action_confirm()
+                    proc_grp_id = self.env["procurement.group"].search(
+                        [("name", "=", production.name)], limit=1
+                    )
+                    if production.state == "confirmed":
+                        seq = 1
+                        for component in production.move_raw_ids:
+                            if production.product_id.custom_color_count == "1":
+                                if seq == 1:
+                                    seq = 3
+                            elif production.product_id.custom_color_count == "2":
+                                if seq == 1:
+                                    seq = 3
+                                elif seq == 3:
+                                    seq = 6
+                            elif production.product_id.custom_color_count == "3":
+                                if seq == 1:
+                                    seq = 3
+                                elif seq == 3:
+                                    seq = 6
+                                elif seq == 6:
+                                    seq = 7
+                            elif production.product_id.custom_color_count == "4":
+                                if seq == 1:
+                                    seq = 3
+                                elif seq == 3:
+                                    seq = 4
+                                elif seq == 4:
+                                    seq = 5
+                                elif seq == 5:
+                                    seq = 6
+                            elif production.product_id.custom_color_count == "6":
+                                if seq == 1:
+                                    seq = 2
+                                elif seq == 2:
+                                    seq = 3
+                                elif seq == 3:
+                                    seq = 4
+                                elif seq == 4:
+                                    seq = 5
+                                elif seq == 5:
+                                    seq = 6
+                                elif seq == 6:
+                                    seq = 7
+                            component.custom_color_no = str(seq)
+                            field_name = "custom_color_" + str(seq)
+                            production.update({field_name: component.product_id.id})
+                            if proc_grp_id:
+                                component.group_id = proc_grp_id.id
         return True
 
     def button_mark_done(self):
