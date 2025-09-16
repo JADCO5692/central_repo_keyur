@@ -5,6 +5,7 @@
         <xpath expr="//th[@name='th_description']" position="before">
             <th name="th_sm_customer_product" class="text-left">Product</th>
         </xpath>
+
         <xpath expr="//td[@name='td_name']" position="before">
             <td>
                 <t t-if="line.product_id">
@@ -17,6 +18,9 @@
                 </t>
             </td>
         </xpath>
+       <xpath expr="//t[contains(@t-if, 'doc.partner_shipping_id') and contains(@t-if, 'doc.partner_invoice_id')]" position="attributes">
+  <attribute name="t-if">True</attribute>
+</xpath>
         <xpath expr="//t[@t-set='address']" position="replace">
             <t t-set="address">
             </t>
@@ -30,18 +34,17 @@
             <t t-set="information_block">
                 <div class="row">
                     <div class="col-4">
-                        <!-- Show customer address on the right side -->
                         <strong>Customer:</strong>
                         <div t-field="doc.partner_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
 
                     </div>
                     <div name="shipping_delivery_address" class="col-4">
-                        <t t-if="doc.partner_shipping_id != doc.partner_id">
+<!--                        <t t-if="doc.partner_shipping_id != doc.partner_id">-->
                             <strong>Shipping Address:</strong>
                             <div t-field="doc.partner_shipping_id"
                                  t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
-                        </t>
+<!--                        </t>-->
                     </div>
                     <div class="col-4">
                         <table style="padding: 0 10px; width: 100%; border-collapse: collapse;"
