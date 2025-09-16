@@ -1,6 +1,8 @@
 from odoo import models, fields,_
 from odoo.exceptions import ValidationError
 import json 
+import requests
+import base64
 from datetime import datetime
 from dateutil import parser 
 import pytz
@@ -159,6 +161,7 @@ class PmallOrderLogs(models.Model):
                     ]
 
                     custom_tiff_file_url = item.get('productionFile')
+                    preview_url = item.get("previewUrl")
                     name_part = item.get('itemName') or product.display_name or ''
                     order_number_str = str(order_number) if order_number is not None else ''
                     
@@ -177,7 +180,7 @@ class PmallOrderLogs(models.Model):
                     custom_line2 = custom_lines[1] if len(custom_lines) > 1 else ""
                     custom_line3 = custom_lines[2] if len(custom_lines) > 2 else ""
                     
-                    order_lines.append((0, 0, {
+                    vals = {
                         'product_id': product.id,
                         'product_uom_qty': qty,
                         'price_unit': price,
@@ -189,7 +192,10 @@ class PmallOrderLogs(models.Model):
                         "route_id": route_id,
                         'custom_tiff_file_url': custom_tiff_file_url,
                         'custom_customer_product': product.custom_customer_sku,
-                    }))
+                        'custom_image_file_url_preview': preview_url, 
+                    }                    
+                    order_lines.append((0, 0, vals))
+
                 if len(order_items_len) == len(order_lines): 
                     address_ids = self.create_addresses(order_context,rec.pmall_config_id.for_partner_id)
                     order_vals.update({
@@ -209,6 +215,19 @@ class PmallOrderLogs(models.Model):
                         for line in SaleOrder.order_line:
                             line._onchange_custom_product_no_variant_attribute_value_ids()
                             line._get_sale_order_line_multiline_description_variants()
+                            
+                            preview_image = False  # Initialize early                    
+                            preview_url = line.custom_image_file_url_preview
+                            if preview_url:
+                                try:
+                                    resp = requests.get(preview_url, timeout=10)
+                                    if resp.status_code == 200 and resp.headers.get("Content-Type", "").startswith("image"):
+                                        preview_image = base64.b64encode(resp.content)
+                                except Exception as e:
+                                    _logger.warning("Failed to download preview image: %s", e)                                    
+                            if preview_image:
+                                line.custom_item_image = preview_image
+
                         SaleOrder.process_order(date_order)
                     rec.order_id = SaleOrder.id or False
                     order_err_log_obj = order_err_log_obj.search([('order_number','=',order_number)])

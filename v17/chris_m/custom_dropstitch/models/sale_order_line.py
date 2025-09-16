@@ -24,6 +24,7 @@ class SaleOrderLine(models.Model):
     custom_tiff_file = fields.Binary(string="TIF File")
     custom_tiff_file_name = fields.Char(string="TIF File Name")
     custom_tiff_file_url = fields.Char(string="TIF File URL", size=150)
+    custom_image_file_url_preview = fields.Char(string="Image File URL preview", size=150)
 
     custom_personalize = fields.Char("Personalize", size=80)
     custom_line1 = fields.Char("Line 1", size=80)

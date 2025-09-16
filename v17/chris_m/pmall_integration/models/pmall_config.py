@@ -66,7 +66,8 @@ class PmallConfig(models.Model):
                     "content-type": "application/json"
                 }
                 params = {
-                    "ordersUpdatedSince": since_date,  
+                    "ordersUpdatedSince": since_date,
+                    "productionFileFormat": 'TIFF',
                 }
                 response = requests.get(url,params=params, headers=headers)
                 if response.status_code == 401:

@@ -284,7 +284,8 @@ class Picking(models.Model):
             return res
         for picking in self:
             back_order_flag = False
-            back_order_flag = picking.custom_validate_validation(back_order_flag)
+            if not picking.location_dest_id.is_subcontracting_location:
+                back_order_flag = picking.custom_validate_validation(back_order_flag)
         if not back_order_flag:
             return super(Picking, self).button_validate()
 
@@ -569,6 +570,8 @@ class Picking(models.Model):
         return True
 
     def check_for_auto_delivery(self):
+        if self.location_dest_id.is_subcontracting_location:
+            return False
         done_qty = 0
         for move_lines in self.move_ids_without_package:
             done_qty = done_qty + move_lines.quantity
@@ -595,6 +598,8 @@ class Picking(models.Model):
     
     def check_for_auto_export(self):
         done_qty = 0
+        if self.location_dest_id.is_subcontracting_location:
+            return False
         if self.carrier_id and self.carrier_id.delivery_type == "shipstation_ept":
             for move_lines in self.move_ids_without_package:
                 done_qty = done_qty + move_lines.quantity
@@ -632,7 +637,8 @@ class Picking(models.Model):
         with self.pool.cursor() as new_cr:
             self = self.with_env(self.env(cr=new_cr))
             _logger.info("Exporting picking %s to shipstation - Auto", self.name)
-            self.export_order_to_shipstation()
+            if not self.location_dest_id.is_subcontracting_location:
+                self.export_order_to_shipstation()
     
     def _track_subtype(self, init_values):
         # EXTENDS mail mail.thread
