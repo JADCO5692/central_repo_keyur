@@ -161,6 +161,8 @@
                 </t>
             </td>
         </xpath>
+        <xpath expr="//span[@name='order_note']" position="replace">
+        </xpath>
     </template>
 
     <template id="external_layout_address_inherit_information_block" inherit_id="web.address_layout">
