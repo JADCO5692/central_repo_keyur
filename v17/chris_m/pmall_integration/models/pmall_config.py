@@ -67,7 +67,7 @@ class PmallConfig(models.Model):
                 }
                 params = {
                     "ordersUpdatedSince": since_date,
-                    "productionFileFormat": 'TIFF',
+                    "productionFileFormat": 'bmp',
                 }
                 response = requests.get(url,params=params, headers=headers)
                 if response.status_code == 401:

@@ -151,10 +151,6 @@ class CustomMrpProduction(models.Model):
         string="Order Date", related="custom_sale_order_line.order_id.date_order", store=True
     )
     
-    custom_can_be_sold = fields.Binary(
-        string="Can be Sold", Boolean="product_id.sale_ok"
-    )
-
     @api.model
     def read_group(
         self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True
@@ -208,7 +204,7 @@ class CustomMrpProduction(models.Model):
                     production.custom_tiff_file_url = production.product_id.custom_tiff_file_url
 
     def custom_action_confirm(self):
-        if self.custom_can_be_sold:
+        if self.product_id.sale_ok:
             if ( not self.custom_tiff_file ) and ( not self.custom_tiff_file_url ):
                 raise UserError(_("Cannot Proceed. Add TIFF File URL"))
             if not self.bom_id:
@@ -221,7 +217,7 @@ class CustomMrpProduction(models.Model):
 
     def action_confirm(self):
         for production in self:
-            if production.custom_can_be_sold:
+            if production.product_id.sale_ok:
                 if (not production.bom_id) or (not production.move_raw_ids):
                     production.custom_released = False
                 if production.custom_released:
@@ -274,6 +270,9 @@ class CustomMrpProduction(models.Model):
                             production.update({field_name: component.product_id.id})
                             if proc_grp_id:
                                 component.group_id = proc_grp_id.id
+            else:
+                production.custom_released = True
+                super(CustomMrpProduction, production).action_confirm()
         return True
 
     def button_mark_done(self):
@@ -392,49 +391,73 @@ class CustomMrpProduction(models.Model):
 
     def action_download_tiff_file(self):
         self.ensure_one()
-        if self.custom_tiff_file_url:
+    
+        if not self.custom_tiff_file_url:
+            raise UserError("No file URL provided.")
+    
+        response = None
+        file_ext = None
+        mimetype = None
+    
+        # --- Case 1: Google Drive (always normalize to TIFF) ---
+        if "drive.google.com" in self.custom_tiff_file_url:
             file_id = self.extract_drive_file_id(self.custom_tiff_file_url)
             if not file_id:
                 raise UserError("Invalid Google Drive file path")
+    
             download_url = f"https://drive.google.com/uc?id={file_id}"
-            response = requests.get(download_url)
-
+            response = requests.get(download_url, timeout=20)
+    
             if response.status_code == 200:
-                if response.headers["Content-Type"] == "application/octet-stream":
+                if response.headers.get("Content-Type") == "application/octet-stream":
                     mimetype = "image/tif"
                 else:
-                    mimetype = response.headers["Content-Type"]
-                # Save and ensure proper format
+                    mimetype = response.headers.get("Content-Type", "image/tif")
+                file_ext = "tif"
+    
+                # Re-save to TIFF using Pillow
                 from PIL import Image
                 from io import BytesIO
-
                 image = Image.open(BytesIO(response.content))
                 buffer = BytesIO()
                 image.save(buffer, format="tiff")
                 buffer.seek(0)
-
-                # Create attachment in Odoo
-                attachment = self.env["ir.attachment"].create(
-                    {
-                        "name": self.name,
-                        "type": "binary",
-                        "datas": base64.b64encode(buffer.read()).decode("utf-8"),
-                        "res_model": "mrp.production",
-                        "res_id": self.id,
-                        "mimetype": mimetype,
-                    }
-                )
-                download_url = f"/download/file/{attachment.id}"
-
-                # Return the download action
-                return {
-                    "type": "ir.actions.act_url",
-                    "url": download_url,
-                    "target": "self",
-                }
+                file_data = buffer.read()
+    
             else:
-                raise UserError("Failed to download the file. Check the URL/Access.")
-
+                raise UserError("Failed to download the file from Google Drive.")
+    
+        # --- Case 2: PersonalizationMall (raw BMP, no conversion) ---
+        elif "personalizationmall.com" in self.custom_tiff_file_url:
+            response = requests.get(self.custom_tiff_file_url, timeout=20)
+    
+            if response.status_code == 200:
+                mimetype = "image/bmp"
+                file_ext = "bmp"
+                file_data = response.content
+            else:
+                raise UserError("Failed to download the file from PersonalizationMall.")
+    
+        else:
+            raise UserError("Unsupported file provider")
+    
+        # --- Save attachment in Odoo ---
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": f"{self.name}.{file_ext}",
+                "type": "binary",
+                "datas": base64.b64encode(file_data).decode("utf-8"),
+                "res_model": "mrp.production",
+                "res_id": self.id,
+                "mimetype": mimetype,
+            }
+        )
+    
+        return {
+            "type": "ir.actions.act_url",
+            "url": f"/download/file/{attachment.id}",
+            "target": "self",
+        }
 
     def action_download_custom_tiff_file(self):
         self.ensure_one()
@@ -445,8 +468,6 @@ class CustomMrpProduction(models.Model):
                 'url': f'/web/content/mo_tiff/{self.id}',
                 'target': 'self',
             }
-
-            
 
     def extract_drive_file_id(self, url):
         uc_id_pattern = r"uc\?id=([a-zA-Z0-9_-]+)"
