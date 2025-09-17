@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="shipstation_info_wizard" model="ir.ui.view">
+            <field name="name">Shipstation Errors Info</field>
+            <field name="model">shipstation.error.show</field>
+            <field name="arch" type="xml">
+                <form create="false" edit="false">
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="total_success" readonly="True"/>
+                            </group>
+                            <group>
+                                <field name="total_failed" readonly="True"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="success_records">
+                                <list create="false" edit="false" delete="false">
+                                    <field name="order_number" />
+                                    <field name="action" />
+                                </list>
+                            </field>
+                            <field name="failed_records">
+                                <list create="false" edit="false" delete="false">
+                                    <field name="order_number" />
+                                    <field name="reason" />
+                                </list>
+                            </field>
+                        </group>
+                    </sheet>
+                    <footer>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_shipstation_import_order_errors" model="ir.actions.act_window">
+            <field name="name">Shipstation Order import errors</field>
+            <field name="res_model">shipstation.error.show</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="shipstation_info_wizard"/>
+            <field name="target">new</field>
+            <field name="binding_view_types">form</field>
+        </record>
+    </data>
+</odoo>

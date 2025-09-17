@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="orders_action" model="ir.actions.act_window">
+            <field name="name">ShipStation Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">list,form</field>
+            <!-- <field name="domain">[('carrier_id.delivery_type', '=','shipstation')]</field> -->
+            <field name="domain">['|',('shipstation_user_id', '!=',False),('carrier_id.delivery_type', '=','shipstation')]</field>
+
+        </record>
+
+        <record id="shipstation_sale_order_details" model="ir.ui.view">
+            <field name="name">shipstation.sale.order.details</field>
+            <field name="model">sale.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position='inside'>
+                    <page string="ShipStation Data">
+                        <group>
+                            <group>
+                                <field name="shipstation_order_id" readonly="1"/>
+                                <field name="shipstation_order_key" readonly="1"/>
+                                <field name="shipstation_customer_id" readonly="1"/>
+                                <field name="shipstation_order_date" readonly="1"/>
+                                <field name="has_webhook_logs" readonly="1"/>
+                                <field name="shipstation_delivery_amount" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="shipstation_store_id" readonly="state in ['sale', 'done', 'cancel']"/>
+                                <field name="shipstation_order_number" readonly="1"/>
+                                <field name="shipstation_order_status" readonly="state in ['sale', 'done', 'cancel']"/>
+                                <field name="shipstation_shipped_date" readonly="1"/>
+                                <field name="ssca" invisible="1"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Webhook Logs" invisible="has_webhook_logs == False" groups="base.group_no_one">
+                        <field name="webhook_logs" readonly="1" />
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="shipstation_upload_data_list_view" model="ir.ui.view">
+            <field name="name">shipstation.upload.data.list.view</field>
+            <field name="model">sale.order</field>
+            <field name="type">list</field>
+            <field name="inherit_id" ref="sale.sale_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="activity_ids" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </field>
+                <field name="date_order" position="after">
+                    <field name="shipstation_order_id" optional="hide"/>
+                </field>
+                <field name="company_id" position="after">
+                    <field name="shipstation_order_status" decoration-danger="shipstation_order_status == 'cancelled'" decoration-success="shipstation_order_status == 'shipped'" decoration-info="shipstation_order_status == 'awaiting_shipment'" widget="badge" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="shipstation_upload_data" model="ir.ui.view">
+            <field name="name">shipstation.upload.data</field>
+            <field name="model">sale.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position='inside'>
+                    <button name="create_shipstation_order" type="object" string="Create Shipstation Order" class="oe_highlight" invisible="ssca != 'shipstation' or state == 'sale' or shipstation_order_status == 'shipped'"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="pos_online_payment.OnlinePaymentPopup" t-inherit-mode="extension">
+        <xpath expr="//img[@t-att-src='props.qrCode']" position="after">
+            <div class="url" style="text-align: center; margin-top: 10px;">
+                <p>Or pay using this link:</p>
+                <t t-esc="console.log('In the newwwwwwwwwwwwww',props)"/>
+
+
+                <a t-att-href="props.paymentUrl" t-esc="props.paymentUrl" target="_blank">Pay now</a>
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <menuitem name="ShipStation" id="shistationmenu" groups="base.group_user" />
+        <menuitem name="Configuration" id="shipstation_configuration" parent="odoo_shipstation_connector.shistationmenu" action="odoo_shipstation_connector.config_action"/>
+        <menuitem name="Shipping" id="shipstation_shipping" parent="odoo_shipstation_connector.shistationmenu"/>
+        <menuitem name="ShipStation Marketplaces" id="shipstation_marketplaces" parent="odoo_shipstation_connector.shipstation_shipping" action="odoo_shipstation_connector.marketplaces_action"/>
+        <menuitem name="ShipStation Stores" id="shipstation_stores" parent="odoo_shipstation_connector.shipstation_shipping" action="odoo_shipstation_connector.stores_action"/>
+        <menuitem name="Carriers" id="shipstation_carriers_details" parent="odoo_shipstation_connector.shistationmenu"/>
+        <menuitem name="ShipStation Carriers" id="shipstation_carriers" parent="odoo_shipstation_connector.shipstation_carriers_details" action="odoo_shipstation_connector.carriers_action"/>
+        <menuitem name="ShipStation Services" id="shipstation_services" parent="odoo_shipstation_connector.shipstation_carriers_details" action="odoo_shipstation_connector.services_action"/>
+        <menuitem name="ShipStation Packages" id="shipstation_packages" parent="odoo_shipstation_connector.shipstation_carriers_details" action="odoo_shipstation_connector.packages_action"/>
+        <menuitem name="Orders" id="shipstation_orders_details" parent="odoo_shipstation_connector.shistationmenu"/>
+        <menuitem name="ShipStation Orders" id="shipstation_orders" parent="odoo_shipstation_connector.shipstation_orders_details" action="odoo_shipstation_connector.orders_action"/>
+        <menuitem name="ShipStation Customers" id="shipstation_customers" parent="odoo_shipstation_connector.shipstation_orders_details" action="odoo_shipstation_connector.customers_action"/>
+        <menuitem name="ShipStation Products" id="shipstation_products" parent="odoo_shipstation_connector.shipstation_orders_details" action="odoo_shipstation_connector.products_action"/>
+        <menuitem name="Webhooks" id="shipstation_webhooks_details" parent="odoo_shipstation_connector.shistationmenu" groups="base.group_no_one"/>
+        <menuitem name="ShipStation Webhooks" id="shipstation_webhooks" parent="odoo_shipstation_connector.shipstation_webhooks_details" action="odoo_shipstation_connector.webhooks_action"/>
+        <menuitem name="Webhook Event Logs" id="shipstation_webhooks_event_logs" parent="odoo_shipstation_connector.shipstation_webhooks_details" action="odoo_shipstation_connector.webhooks_event_log_action"/>
+    </data>
+</odoo>

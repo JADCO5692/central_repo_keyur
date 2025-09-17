@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="validate_pin_template_account" name="Account PIN">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container">
+                    <h1 align="center">Please enter your PIN to access your
+                        account.</h1>
+                    <t t-if="error_message">
+                        <div class="alert alert-danger">
+                            <t t-esc="error_message" />
+                        </div>
+                    </t>
+                    <form action="/check-account-pin" method="post">
+                        <div class="form-group" align="center">
+                            <input type="hidden" name="csrf_token"
+                                t-att-value="request.csrf_token()" />
+                            <label for="pin_input" id="Account_pin_label1">Enter
+                                your Account PIN:</label>
+                            <input type="text" id="account_pin_input1"
+                                name="account_pin"
+                                class="form-control d-inline-block w-auto ms-2"
+                                placeholder="Your PIN" />
+                            <button type="submit" class="btn btn-primary ms-2">
+                                Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

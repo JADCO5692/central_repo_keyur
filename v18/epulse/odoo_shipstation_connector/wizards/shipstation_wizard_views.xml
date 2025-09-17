@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<odoo>
+    <record id="shipstation_import_data_wizard" model="ir.ui.view">
+        <field name="name">Import Shipstation Data</field>
+        <field name="model">shipstation.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <h3 class="text-primary" style="font-weight:bold;">Import</h3>
+                <group>
+                    <group>
+                        <field name = 'is_marketplace' />
+                        <field name = 'is_carriers' />
+                        <field name = 'is_services' />
+                        <field name = 'is_packages' />
+                        <footer>
+                            <button name="import_shipstation_data" string="Apply" type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-default" special="cancel" />
+                        </footer>
+                    </group>
+                    <group>
+                        <field name = 'is_stores'/>
+                        <field name = 'is_orders' />
+                        <field name = 'is_customers' />
+                        <field name = 'is_products' />
+                    </group>
+                    <div class="alert alert-warning mt-auto" role="alert" 
+                    invisible="is_packages == False and is_services == False">Please ensure that you import the carriers before importing the packages and services.</div>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_shipstation_import_data" model="ir.actions.act_window">
+        <field name="name">Shipstation Data</field>
+        <field name="res_model">shipstation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="shipstation_import_data_wizard"/>
+        <field name="target">new</field>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

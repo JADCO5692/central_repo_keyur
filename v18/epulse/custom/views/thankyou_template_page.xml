@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="thankyou_page_template" name="Thank You Page">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="s_text_block pt32 pb32">
+                    <div class="container text-center">
+                        <h1 class="display-4">Thank You for placing your Order</h1>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

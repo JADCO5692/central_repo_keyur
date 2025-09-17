@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="custom.disable_cart_notification"  t-inherit="website_sale.cartNotification" t-inherit-mode="extension">
+        <xpath expr="//div[contains(@class, 'toast-body')]" position="replace">
+            <t t-esc="console.log(props)"/>
+             <WarningNotification t-if="this.props.warning" warning="this.props.warning"/>
+<!--            <t t-esc="console.log('hi2111')"/>-->
+<!--                            <AddToCartNotification-->
+<!--                    t-elif="this.props.lines.length"-->
+<!--                    lines="this.props.lines"-->
+<!--                    currency_id="this.props.currency_id"/>-->
+        </xpath>
+<!--         <xpath expr="//t[@t-foreach='lines']" position="replace">-->
+<!--        <t t-foreach="lines" t-as="line">-->
+<!--            <t t-if="not request.session.get('dropship', False)">-->
+<!--                <span t-esc="line.line_price_total" t-options="{'widget': 'monetary', 'display_currency': env['res.currency'].browse(currency_id)}"/>-->
+<!--            </t>-->
+<!--            <t t-esc="line.name"/>-->
+<!--            <t t-if="line.description"><t t-esc="line.description"/></t>-->
+<!--            <img t-att-src="line.image_url"/>-->
+<!--            <t t-esc="line.quantity"/>-->
+<!--        </t>-->
+<!--    </xpath>-->
+    </t>
+</templates>
+
+

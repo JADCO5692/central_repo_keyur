@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="validate_pin_template" name="Validate PIN">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container">
+                    <h1 align="center">Please enter your PIN.</h1>
+                    <t t-if="error_message">
+                        <div class="alert alert-danger">
+                            <t t-esc="error_message" />
+                        </div>
+                    </t>
+                    <form action="/check-pin" method="post">
+                        <div class="form-group" align="center">
+                            <label for="order_type" class="ms-3">Order Type:</label>
+                            <select id="order_type" name="order_type"
+                                class="form-control d-inline-block w-auto ms-2">
+                                <option value="dropship">Dropship</option>
+                                <option value="bulk">Bulk Orders</option>
+                            </select>
+                            <span id="pin_container">
+                                <label for="pin_input1" id="pin_label">Enter a
+                                    PIN:</label>
+                                <input type="text" id="pin_input1" name="pin"
+                                    class="form-control d-inline-block w-auto ms-2"
+                                    placeholder="Your PIN" />
+                            </span>
+                            <button type="submit" class="btn btn-primary ms-2">
+                                Submit</button>
+                        </div>
+                        <script type="text/javascript">
+                            document.addEventListener('DOMContentLoaded',
+                            function() {
+                            const orderTypeSelect =
+                            document.getElementById('order_type');
+                            const pinContainer =
+                            document.getElementById('pin_container');
+                            function togglePinVisibility() {
+                            if (orderTypeSelect.value === 'dropship') {
+                            pinContainer.style.display = 'none';
+                            } else {
+                            pinContainer.style.display = 'inline-block';
+                            }
+                            }
+                            togglePinVisibility();
+                            orderTypeSelect.addEventListener('change',
+                            togglePinVisibility);
+                            });
+                        </script>
+                    </form>
+                    <t t-set="dropship"
+                        t-value="request.session.get('dropship', False)" />
+                    <script type="text/javascript"> window.sessionData =
+                        window.sessionData || {}; window.sessionData.dropship = <t
+                            t-esc="1 if dropship else 0" />; </script>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

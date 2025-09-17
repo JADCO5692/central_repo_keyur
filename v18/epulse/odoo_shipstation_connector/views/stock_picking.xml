@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="shipstation_stock_picking_details" model="ir.ui.view">
+            <field name="name">shipstation.stock.picking.details</field>
+            <field name="model">stock.picking</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='print_return_label']" position='after'>
+                    <button type='object' string='Get ShipStation Label' name='get_shipment_label' 
+                    invisible="delivery_type != 'shipstation' or carrier_tracking_ref != False"/>
+                </xpath>
+                <xpath expr="//notebook" position='inside'>
+                    <page string="ShipStation Data" invisible="delivery_type != 'shipstation'">
+                        <group>
+                            <group>
+                                <field name="shipstation_order_id"/>
+                                <field name="shipstation_order_key"/>
+                                <field name="shipstation_customer_id"/>
+                                <field name="shipstation_order_date"/>
+                            </group>
+                            <group>
+                                <field name="shipstation_store_id"/>
+                                <field name="shipstation_order_number"/>
+                                <field name="shipstation_order_status"/>
+                                <field name="shipstation_shipped_date"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
