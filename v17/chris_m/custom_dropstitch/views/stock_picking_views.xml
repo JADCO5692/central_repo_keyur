@@ -25,6 +25,7 @@
                     <field name="custom_packing_list_name" invisible="1" />
 					<field name="order_line_ref" string="Order Line Ref" readonly="1"/>
 					<field name="custom_client_order_ref" string="Customer Order Ref" readonly="1"/>
+					<field name="subcontract_location_bool" invisible="1"/>
 					<label for="custom_gift_mess" decoration-danger="state not in ('draft')" invisible="custom_gift_mess == False"/>
 					<div class="o_row" invisible="custom_gift_mess == False">
 						<h1>
@@ -39,7 +40,7 @@
 					</div>
 				</xpath>
 				<xpath expr="//form[1]/header" position="inside">
-					<button string="Add Delivery" type="object" name="action_open_delivery_stock_wizard" class="oe_highlight" invisible="picking_type_code != 'outgoing' or state not in ('assigned') or location_dest_id.is_subcontracting_location"/>
+					<button string="Add Delivery" type="object" name="action_open_delivery_stock_wizard" class="oe_highlight" invisible="picking_type_code != 'outgoing' or state not in ('assigned') or subcontract_location_bool"/>
 					<button name="action_register_payment_custom" type="object" class="oe_highlight" invisible="picking_type_code != 'outgoing' or custom_invoice_state != 'posted' or custom_invoice_payment_state not in ('not_paid', 'partial') or custom_invoice_move_type not in ('out_invoice') or is_shopify_delivery_order or state in ('done') or custom_order_policy!='intent' or custom_order_payment_term != 'PrePayment'" context="{'dont_redirect_to_payments': True, 'display_account_trust': True}" string="Register Payment"/>
 				</xpath>
 				<xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='partner_id']" position="after">
