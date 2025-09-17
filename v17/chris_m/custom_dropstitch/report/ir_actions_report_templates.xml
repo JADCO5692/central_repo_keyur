@@ -3,7 +3,7 @@
 
     <template id="sale_order_report_inherit" inherit_id="sale.report_saleorder_document">
         <xpath expr="//th[@name='th_description']" position="before">
-            <th name="th_sm_customer_product" class="text-left">Product</th>
+            <th name="th_sm_customer_product" class="text-left" style="float: left;">Product</th>
         </xpath>
 
         <xpath expr="//td[@name='td_name']" position="before">
@@ -52,7 +52,7 @@
 
                             <span>
                                 <strong>
-                                    <span t-field="doc.name" style="font-size:10px !important"/>
+                                    Sales Order # <span t-field="doc.name" style="font-size:14px !important"/>
                                 </strong>
                             </span>
 
@@ -113,7 +113,7 @@
         <xpath expr="//t[@t-set='doc']" position="after">
             <style>
                 * {
-                font-size: 10px !important;
+                font-size: 14px !important;
                 }
             </style>
         </xpath>

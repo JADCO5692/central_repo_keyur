@@ -275,7 +275,7 @@
                     <t t-if="not partner.custom_customer_logo and company.logo">
                         <img t-att-src="image_data_uri(company.logo)" class="float-start" alt="Logo"/>
                     </t>
-                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
+                    <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
                         <div t-field="partner.commercial_partner_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
@@ -287,7 +287,7 @@
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
+                    <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
                         <div t-esc="shopify_instance.custom_from_address_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
@@ -301,7 +301,7 @@
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
+                    <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
                         <div t-esc="shopify_instance.custom_from_address_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
@@ -313,7 +313,7 @@
                 <img t-if="company.logo"
                      t-att-src="image_data_uri(company.logo)"
                      class="float-start" alt="Logo"/>
-                  <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">
+                  <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
                         <div t-esc="company.partner_id"
                              t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
