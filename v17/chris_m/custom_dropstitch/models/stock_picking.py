@@ -59,6 +59,7 @@ class Picking(models.Model):
     custom_customer_id = fields.Many2one('res.partner', "Customer", related="sale_id.partner_id")
     amount_residual = fields.Float(string="Balance Due", compute="_compute_amount_residual")
     order_line_ref = fields.Char(string="Order Line Ref", compute="_compute_order_line_ref")
+    subcontract_location_bool = fields.Boolean(related="location_dest_id.is_subcontracting_location", string="Subcontract Location Bool")
 
     def _compute_order_line_ref(self):
         for picking in self:
@@ -626,6 +627,9 @@ class Picking(models.Model):
         else:
             return False
 
+    def set_ready_to_be_sent(self):
+        self.state = 'ready_to_be_sent'
+    
     def action_open_delivery_stock_thread(self):
         time.sleep(2)
         with self.pool.cursor() as new_cr:
