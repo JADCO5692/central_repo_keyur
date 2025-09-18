@@ -34,6 +34,7 @@
             'custom/static/src/js/custom_checkout.js',
             'custom/static/src/xml/views/add_to_cart_modified.xml',
             'custom/static/src/js/custom_cart_notification.js',
+            'custom/static/src/css/loader.css',
         ],
     }
 }
