@@ -8,7 +8,7 @@
     ),
     "author": "theERPbot",
     "website": "https://www.theerpbot.com",
-    "version": "17.0.1.7.23",
+    "version": "17.0.1.7.29",
     "development_status": "Production/Stable",
     "license": "LGPL-3",
     "installable": True,

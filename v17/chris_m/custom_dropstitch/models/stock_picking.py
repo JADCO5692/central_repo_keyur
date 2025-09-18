@@ -627,6 +627,9 @@ class Picking(models.Model):
         else:
             return False
 
+    def set_ready_to_be_sent(self):
+        self.state = 'ready_to_be_sent'
+    
     def action_open_delivery_stock_thread(self):
         time.sleep(2)
         with self.pool.cursor() as new_cr:

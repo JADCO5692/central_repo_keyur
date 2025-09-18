@@ -195,6 +195,7 @@ class CustomMrpProduction(models.Model):
         comodel_name="mrp.production", string="Parent Order"
     )
     custom_is_parent_mo = fields.Boolean(string="is Parent Order?")
+    sale_ok_bool = fields.Boolean(related="product_id.sale_ok", string="Sale Ok Bool")
 
     @api.onchange("product_id")
     def _onchange_custom_product_id(self):

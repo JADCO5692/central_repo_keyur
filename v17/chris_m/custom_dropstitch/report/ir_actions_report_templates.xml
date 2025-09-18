@@ -132,13 +132,6 @@
                 }
             </style>
         </xpath>
-<!--        <xpath expr="//div[@class='page']" position="after">-->
-<!--            <style>-->
-<!--                * {-->
-<!--                font-size: 14px !important;-->
-<!--                }-->
-<!--            </style>-->
-<!--        </xpath>-->
         <xpath expr="//div[@t-if='doc.user_id.name']" position="replace">
         </xpath>
         <xpath expr="//div[@t-if='doc.date_order']" position="replace">

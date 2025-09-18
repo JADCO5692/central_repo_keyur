@@ -134,8 +134,8 @@
                 font-size: 11px !important;
                 }
                 .gift-message * {
-                    font-size: 14px !important;
-                    line-height: 16px !important;
+                font-size: 14px !important;
+                line-height: 16px !important;
                 }
             </style>
         </xpath>
@@ -306,36 +306,42 @@
         </xpath>
 
         <xpath expr="//span[@t-field='company.company_details']"
-               position="replace">
+            position="replace">
             <t t-if="custom_dropship_order">
                 <t t-if="not shopify_instance">
                     <div style="display: flex; align-items: center; gap: 20px;">
                         <img t-if="partner.custom_customer_logo"
-                             t-att-src="image_data_uri(partner.custom_customer_logo)" class="float-start"
-                             alt="Logo"/>
-                        <t t-if="not partner.custom_customer_logo and company.logo">
-                            <img t-att-src="image_data_uri(company.logo)" class="float-start" alt="Logo"/>
+                            t-att-src="image_data_uri(partner.custom_customer_logo)"
+                            class="float-start"
+                            alt="Logo" />
+                        <t
+                            t-if="not partner.custom_customer_logo and company.logo">
+                            <img t-att-src="image_data_uri(company.logo)"
+                                class="float-start" alt="Logo" />
                         </t>
                         <div class="float-start company_address"
-                             style="font-size: 12px !important;vertical-align: middle;">
-                            <span t-esc="partner.commercial_partner_id.name" style="font-size: 16px !important;"/>
+                            style="font-size: 12px !important;vertical-align: middle;">
+                            <span t-esc="partner.commercial_partner_id.name"
+                                style="font-size: 16px !important;" />
                             <div t-field="partner.commercial_partner_id"
-                                 t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                                t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}' />
                         </div>
                     </div>
                 </t>
                 <t t-elif="shopify_instance">
                     <div style="display: flex; align-items: center; gap: 20px;">
-                        <img t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
-                             t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
-                             class="float-start"
-                             alt="Logo"/>
+                        <img
+                            t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
+                            t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
+                            class="float-start"
+                            alt="Logo" />
                         <div class="float-start company_address"
-                             style="font-size: 12px !important;vertical-align: middle;">
-                            <span t-esc="shopify_instance.custom_from_address_id.name"
-                                  style="font-size: 16px !important;"/>
+                            style="font-size: 12px !important;vertical-align: middle;">
+                            <span
+                                t-esc="shopify_instance.custom_from_address_id.name"
+                                style="font-size: 16px !important;" />
                             <div t-esc="shopify_instance.custom_from_address_id"
-                                 t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                                t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}' />
                         </div>
                     </div>
                 </t>
@@ -343,28 +349,34 @@
             </t>
             <t t-elif="shopify_instance">
                 <div style="display: flex; align-items: center; gap: 20px;">
-                    <img t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
-                         t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
-                         class="float-start"
-                         alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 12px !important;vertical-align: middle;">
-                        <span t-esc="shopify_instance.custom_from_address_id.name" style="font-size: 16px !important;"/>
+                    <img
+                        t-if="shopify_instance.custom_from_address_id.custom_customer_logo"
+                        t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
+                        class="float-start"
+                        alt="Logo" />
+                    <div class="float-start company_address"
+                        style="font-size: 12px !important;vertical-align: middle;">
+                        <span
+                            t-esc="shopify_instance.custom_from_address_id.name"
+                            style="font-size: 16px !important;" />
                         <div t-esc="shopify_instance.custom_from_address_id"
-                             t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                            t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}' />
                     </div>
                 </div>
             </t>
             <t t-else="">
                 <xpath expr="//div[hasclass('company_address')]"
-                       position="replace">
+                    position="replace">
                 </xpath>
                 <img t-if="company.logo"
-                     t-att-src="image_data_uri(company.logo)"
-                     class="float-start" alt="Logo"/>
-                <div class="float-start company_address" style="font-size: 12px !important;vertical-align: middle;">
-                    <span t-esc="company.partner_id.name" style="font-size: 16px !important;"/>
+                    t-att-src="image_data_uri(company.logo)"
+                    class="float-start" alt="Logo" />
+                <div class="float-start company_address"
+                    style="font-size: 12px !important;vertical-align: middle;">
+                    <span t-esc="company.partner_id.name"
+                        style="font-size: 16px !important;" />
                     <div t-esc="company.partner_id"
-                         t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                        t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}' />
                 </div>
             </t>
         </xpath>
