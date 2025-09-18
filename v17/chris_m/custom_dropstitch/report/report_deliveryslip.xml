@@ -109,10 +109,10 @@
         <xpath expr="//t[@t-set='o']" position="after">
             <style>
                 * {
-                font-size: 10px !important;
+                font-size: 11px !important;
                 }
                 .gift-message * {
-                    font-size: 13px !important;
+                    font-size: 14px !important;
                     line-height: 16px !important;
                 }
             </style>
@@ -275,9 +275,10 @@
                     <t t-if="not partner.custom_customer_logo and company.logo">
                         <img t-att-src="image_data_uri(company.logo)" class="float-start" alt="Logo"/>
                     </t>
-                    <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
+                    <div class="float-start company_address" style="font-size: 12px !important;vertical-align: middle;">
+                        <span t-esc="partner.commercial_partner_id.name" style="font-size: 16px !important;"/>
                         <div t-field="partner.commercial_partner_id"
-                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                             t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
                      </div>
                 </t>
@@ -287,9 +288,10 @@
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
+                    <div class="float-start company_address" style="font-size: 12px !important;vertical-align: middle;">
+                        <span t-esc="shopify_instance.custom_from_address_id.name" style="font-size: 16px !important;"/>
                         <div t-esc="shopify_instance.custom_from_address_id"
-                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                             t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
                      </div>
                 </t>
@@ -301,9 +303,10 @@
                          t-att-src="image_data_uri(shopify_instance.custom_from_address_id.custom_customer_logo)"
                          class="float-start"
                          alt="Logo"/>
-                    <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
+                    <div class="float-start company_address" style="font-size: 12px !important;vertical-align: middle;">
+                        <span t-esc="shopify_instance.custom_from_address_id.name" style="font-size: 16px !important;"/>
                         <div t-esc="shopify_instance.custom_from_address_id"
-                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                             t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
                  </div>
                 </t>
@@ -313,9 +316,10 @@
                 <img t-if="company.logo"
                      t-att-src="image_data_uri(company.logo)"
                      class="float-start" alt="Logo"/>
-                  <div class="float-start company_address" style="font-size: 16px !important;vertical-align: middle;">
-                        <div t-esc="company.partner_id"
-                             t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                  <div class="float-start company_address" style="font-size: 12px !important;vertical-align: middle;">
+                     <span t-esc="company.partner_id.name" style="font-size: 16px !important;"/>
+                      <div t-esc="company.partner_id"
+                             t-options='{"widget": "contact", "fields": ["address", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
                     </div>
 <!--                <div class="float-start company_address" style="font-size: 10px;vertical-align: middle;">-->
 <!--                    <ul class="list-unstyled" name='company_address_list'>-->
