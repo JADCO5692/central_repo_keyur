@@ -46,3 +46,8 @@ class CustomPurchaseOrder(models.Model):
         for order in self:
             if order.partner_id.custom_receipt_type_id:
                 order.picking_type_id = order.partner_id.custom_receipt_type_id
+    
+    def _get_subcontracting_resupplies(self):
+        picking_ids = super()._get_subcontracting_resupplies() 
+        picking_ids = picking_ids.filtered(lambda p: p._get_subcontracting_source_purchase() == self)
+        return picking_ids

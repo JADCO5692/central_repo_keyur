@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="config_action" model="ir.actions.act_window">
+            <field name="name">ShipStation Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shipstation.configuration</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="shipstaion_config_list_view" model="ir.ui.view">
+            <field name="name">ShipStation Configuration List</field>
+            <field name="model">shipstation.configuration</field>
+            <field name="arch" type="xml">
+                <list string="Configuration">
+                    <field name="name"/>
+                    <field name="shipstation_apikey"/>
+                    <field name="shipstation_secret"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="shipstaion_config_form_view" model="ir.ui.view">
+            <field name="name">ShipStation Configuration Form</field>
+            <field name="model">shipstation.configuration</field>
+            <field name="arch" type="xml">
+                <form string="Configuration">
+                    <header>
+                        <button string="Get ShipStation Data" name="get_shipstation_data" type="object" icon="fa-bars" class="oe_highlight"/>
+                        <field name="has_shipstation_webhooks" invisible="1"/>
+                    </header>
+
+                    <sheet>
+                        <field name="shipstation_store_count" invisible="1"/>
+                        <field name="shipstation_carrier_count" invisible="1"/>
+                        <field name="shipstation_service_count" invisible="1"/>
+                        <field name="shipstation_package_count" invisible="1"/>
+                        <field name="shipstation_marketplace_count" invisible="1"/>
+                        <field name="shipstation_order_count" invisible="1"/>
+                        <field name="shipstation_customer_count" invisible="1"/>
+                        <field name="shipstation_product_count" invisible="1"/>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="show_shipstation_stores" type="object" invisible="shipstation_store_count == 0" icon="fa-th">
+                                <field name="shipstation_store_count" widget="statinfo" string="Stores"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_carriers" type="object" invisible="shipstation_carrier_count == 0" icon="fa-truck">
+                                <field name="shipstation_carrier_count" widget="statinfo" string="Carriers"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_services" type="object" invisible="shipstation_service_count == 0" icon="fa-bars">
+                                <field name="shipstation_service_count" widget="statinfo" string="Services"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_packages" type="object" invisible="shipstation_package_count == 0" icon="fa-cubes">
+                                <field name="shipstation_package_count" widget="statinfo" string="Packages"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_marketplaces" type="object" invisible="shipstation_marketplace_count == 0" icon="fa-shopping-cart">
+                                <field name="shipstation_marketplace_count" widget="statinfo" string="Marketplaces"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_orders" type="object" invisible="shipstation_order_count == 0" icon="fa-th-list">
+                                <field name="shipstation_order_count" widget="statinfo" string="Orders"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_customers" type="object" invisible="shipstation_customer_count == 0" icon="fa-users">
+                                <field name="shipstation_customer_count" widget="statinfo" string="Customers"/>
+                            </button>
+                            <button class="oe_stat_button" name="show_shipstation_products" type="object" invisible="shipstation_product_count == 0" icon="fa-list-ul">
+                                <field name="shipstation_product_count" widget="statinfo" string="Products"/>
+                            </button>
+                        </div>
+                        <group>
+                            <field name="name"/>
+                            <field name="shipstation_apikey"/>
+                            <field name="shipstation_secret"/>
+                            <field name="request_url"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Webhooks" invisible="has_shipstation_webhooks == False" groups="base.group_no_one">
+                                <field name = "shipstation_webhooks" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

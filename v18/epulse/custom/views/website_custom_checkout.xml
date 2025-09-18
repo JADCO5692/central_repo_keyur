@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <template id="custom_button" inherit_id="website_sale.checkout_layout" name="Custom Navigation Button">
+        <xpath
+            expr="//div[@class='o_cta_navigation_container position-absolute position-lg-static start-0 bottom-0 col-12']"
+            position="replace">
+            <button id="send_email_redirect" class="btn btn-primary mb-2"
+                type="button">
+                Confirm Order
+            </button>
+        </xpath>
+    </template>
+</odoo>

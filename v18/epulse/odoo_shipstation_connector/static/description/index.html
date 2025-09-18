@@ -1,0 +1,923 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <div class="overflow-hidden">
+        <section class="oe_container">
+            <div>
+                <p class="text-center"
+                    style="font-family: 'Open Sans', sans-serif;font-size: 30px;color: #000000;letter-spacing: 0; font-weight: bold;">
+                    Odoo Shipstation Connector
+                </p>
+                <p class="text-center"
+                    style="font-family: Montserrat;font-style: italic;font-weight: 500;font-size: 16px;line-height: 20px;text-align: center;color: #333333;">
+                    Gateway to connect Multiple shipping carriers with Your Odoo!
+                </p>
+            </div>
+        </section>
+
+        <section class="oe_container d-flex justify-content-center">
+            <div>
+                <div>
+                    <div class="row" style="width: 100%; padding: 2%;">
+                        <div class="col-lg-6 col-md-12 col-sm-12"
+                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 27px;color: #484848;">
+                            <div>
+                                <span>The module Odoo Shipstation Connector facilitates you to integrate multiple
+                                    shipping carriers like USPS, UPS, DHL, etc to Odoo. It helps you with the efficient
+                                    processing, fulfilling, and shipping of orders via major shipping carriers.</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12  border-left">
+                            <div class="d-flex " style="padding: 2%;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="mt-3 row" style="width: 100%;">
+                                        <div>
+                                            <span
+                                                style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: bold;font-size: 18px;line-height: 30px;color: #333333;">Information</span>
+                                            <div class="mt-2 ml-md-3" style="display:flex">
+                                                <span class="ml-1 mr-2 my-auto"><img src="guideicon.png"
+                                                        alt="user-guide"></span>
+                                                <div style="font-weight: 600;font-size: 14px;line-height: 10px;"
+                                                    class="mt-2">
+                                                    User Guide
+                                                </div>
+                                            </div>
+                                            <div class="ml-md-3" style="display:flex;">
+                                                <span style="font-size:15px; margin-top:0.2rem">
+                                                    https://webkul.com/blog/user-guide-for-odoo-shipstation-connector/</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_container">
+            <div class="shadow-sm"
+                style="background-color:#FFFFFF; border-radius:2px; font-weight: normal;border:1px solid #E0E0E0; margin-top:20px">
+                <div class="pb-1 pt-3 pl-3 pr-3 d-sm-flex">
+                    <div class="d-flex align-items-center">
+                        <span class="px-3"
+                            style="font-family:'Open Sans', sans-serif; font-weight:600; font-size:20px; line-height:30px; color:#333333">
+                            Technical Requirements for Odoo ShipStation Connector
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="row" style="padding: 1%;width: 100%;margin-bottom: 20px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12"
+                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 27px;color: #484848;">
+                            <div>
+                                <ul>
+                                    <li>
+                                        <b>Provider:</b> ShipStation
+                                    </li>
+                                    <li>
+                                        <b>Region:</b> Global
+                                    </li>
+                                    <li>
+                                        <b>Used for:</b> Rating, Shipping, Tracking, Import Shipstation data to Odoo, Export Odoo orders to ShipStation.
+                                    </li>
+                                    <li>
+                                        <b>Get API access:</b> Register with <span
+                                            class="text-info" >https://www.shipstation.com/step1/</span>
+                                    </li>
+                                    Please ensure that you have a valid ShipStation API Credentials to integrate Odoo ShipStation Connector.
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_container">
+            <div class="shadow-sm"
+                style="background-color: #FFFFFF;border-radius: 2px;border: 1px solid #E0E0E0;margin-top: 20px;">
+                <div
+                    style="padding: 1%;font-family: 'Open Sans', sans-serif;font-size: 16px;color: #646464;line-height: 29px;font-weight: normal;">
+                    <div>
+                        <span>
+                            Odoo, a single solution for all your business related problems; it is widely known for its
+                            frontend as well as backend functionalities. Whether you want to manage products, orders or
+                            their delivery; Odoo can do it all efficiently!
+                        </span>
+                    </div>
+                    <br>
+                    <div>
+                        <span>
+                            ShipStation offers you to develop an effective product allocation strategy so your inventory
+                            is always optimized, in sync and flowing out the door. It facilitates your customers to
+                            Compare real-time rates as well as delivery times for all carriers and automatically select
+                            the best carrier for each shipment based on its cost and delivery time.
+                        </span>
+                    </div>
+                    <br>
+                    <div>
+                        <span>
+                            <b>Do you want to enhance the delivery system of your Odoo?</b><br>
+                            Now, you can easily integrate your Odoo with Shipstation without any hassle. Odoo
+                            Shipstation Connector allows you to integrate several shipping carriers like USPS, UPS, DHL,
+                            etc to your Odoo.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_container">
+            <div class="shadow-sm"
+                style="background-color: #FFFFFF;border-radius: 2px;border: 1px solid #E0E0E0;margin-top: 20px;">
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 col-sm-12">
+                        <div class="pb-1 pt-3 pl-3 pr-3 d-sm-flex">
+                            <div class="d-flex align-items-center">
+                                <span class="px-3"
+                                    style="font-family:'Open Sans', sans-serif; font-weight:600; font-size:20px; line-height:30px; color:#333333">
+                                    Perks of integrating Shipstation to your Odoo
+                                </span>
+                            </div>
+                        </div>
+                        <div style="padding: 1%;font-weight: normal;">
+                            <div class="px-3"
+                                style="font-family: 'Open Sans', sans-serif;font-size: 16px;color: #646464;line-height: 29px;">
+                                <span>
+                                    Talking about the shipping strategies; undoubtedly, the best is to ship the products
+                                    on time and securely as the customers have high expectations and definitely, no
+                                    store owner would want to turn down a customer's expectations as it directly affects
+                                    the revenue.
+                                </span>
+                            </div>
+                            <ul
+                                style="font-family: 'Open Sans', sans-serif;font-size: 16px;color: #646464;line-height: 29px;">
+                                <li>The customers can place the order in the usual way.</li>
+                                <li>The customers will find the Shipstation Shipping carrier options on the checkout
+                                    page.</li>
+                                <li>The customer can choose any feasible shipping carrier for delivering the order.</li>
+                                <li>If you define a handling fee, it will add up with the shipping method on the
+                                    checkout page.</li>
+                                <li>The chosen shipping carrier will appear before confirming the order.</li>
+                                <li>The customer will find the shipping label in the Order Information Page.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center col-lg-4 col-md-12 col-sm-12">
+                        <div class="d-flex justify-content-center shadow-sm">
+                            <div class="row">
+                                <div
+                                    class="col-lg-12 col-md-12 col-sm-12 d-flex justify-content-center align-items-center">
+                                    <img src="doc_illustration.png" style="width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_container">
+            <div style="margin-top: 50px;">
+                <div
+                    style="font-family:'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 24px;line-height: 40px;color: #333333;">
+                    <p>Highlighted Features</p>
+                </div>
+                <div class="">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <div class="shadow-sm"
+                                style="background-color: #FFFFFF;border-radius: 2px; border: 1px solid #E0E0E0; margin-top: 10px; margin-bottom: 20px;">
+                                <div class="d-flex justify-content-center" style="margin: 2%; min-height: 145px">
+                                    <div>
+                                        <div class="mt-4 d-flex justify-content-center" style="padding: 2%;">
+                                            <img src="doc_icon-1.png">
+                                        </div>
+                                        <div style="text-align: center; padding: 2%;">
+                                            <span
+                                                style="font-family:'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 22px;color: #333333;">Import
+                                                and Manage Orders</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <div class="shadow-sm"
+                                style="background-color: #FFFFFF;border-radius: 2px; border: 1px solid #E0E0E0; margin-top: 10px; margin-bottom: 20px;">
+                                <div class="d-flex justify-content-center" style="margin: 2%; min-height: 145px">
+                                    <div>
+                                        <div class="mt-4 d-flex justify-content-center" style="padding: 2%;">
+                                            <img src="doc_icon-2.png">
+                                        </div>
+                                        <div style="text-align: center; padding: 2%;">
+                                            <span
+                                                style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 22px;color: #333333;">Create
+                                                a Shipping Label</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <div class="shadow-sm"
+                                style="background: #FFFFFF;border-radius: 2px; border: 1px solid #E0E0E0; margin-top: 10px; margin-bottom: 20px;">
+                                <div class="d-flex justify-content-center" style="margin: 2%; min-height: 145px;">
+                                    <div>
+                                        <div class="mt-4 d-flex justify-content-center" style="padding: 2%;">
+                                            <img src="doc_icon-3.png">
+                                        </div>
+                                        <div style="text-align: center; padding: 2%;">
+                                            <span
+                                                style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 22px;color: #333333;">Inventory
+                                                and Stock Management</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="oe_container d-flex justify-content-center">
+            <div style="margin-top: 30px;">
+                <div
+                    style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 24px;line-height: 40px;color: #333333;">
+                    <p>Detailed Features List</p>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="row" style="width: 95%;">
+                        <div class="col-md-6 col-sm-12" style="margin-top: 10px;margin-bottom: 20px;">
+                            <div class="card oe-padded h-100 ml" style="min-height:100px">
+                                <div class="card-body">
+                                    <p class="card-title"
+                                        style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: 600;font-size: 18px;line-height: 25px;color: #333333;">
+                                        Integrates With Multiple Shipping Carriers to Odoo</p>
+                                    <div class="card-text">
+                                        <ul
+                                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 25px;color: #555555;">
+                                            <li>The extension integrates different shipping carriers like USPS, UPS,
+                                                FedEx, DHL, etc to Odoo.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12" style="margin-top: 10px;margin-bottom: 20px;">
+                            <div class="card oe-padded h-100" style="min-height:100px">
+                                <div class="card-body">
+                                    <p class="card-title"
+                                        style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: 600;font-size: 18px;line-height: 25px;color: #333333;">
+                                        Synchronize Orders On ShipStation</p>
+                                    <div class="card-text">
+                                        <ul
+                                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 25px;color: #555555;">
+                                            <li>The order status will sync automatically to the ShipStation account.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="row" style="width: 95%;">
+                        <div class="col-md-6 col-sm-12" style="margin-top: 10px;margin-bottom: 20px;">
+                            <div class="card oe-padded h-100 ml" style="min-height:100px">
+                                <div class="card-body">
+                                    <p class="card-title"
+                                        style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: 600;font-size: 18px;line-height: 25px;color: #333333;">
+                                        Get Live Shipping Rates At Checkout</p>
+                                    <div class="card-text">
+                                        <ul
+                                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 25px;color: #555555;">
+                                            <li>The shipping rates would be calculated as per the admin's origin
+                                                address.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12" style="margin-top: 10px;margin-bottom: 20px;">
+                            <div class="card oe-padded h-100" style="min-height:100px">
+                                <div class="card-body">
+                                    <p class="card-title"
+                                        style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: 600;font-size: 18px;line-height: 25px;color: #333333;">
+                                        Generate Shipment Labels</p>
+                                    <div class="card-text">
+                                        <ul
+                                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 25px;color: #555555;">
+                                            <li>You can manage orders, i.e., view, cancel and hold his orders and can
+                                                generate the shipping labels.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="row" style="width: 95%;">
+                        <div class="col-md-6 col-sm-12" style="margin-top: 10px;margin-bottom: 20px;">
+                            <div class="card oe-padded h-100 ml" style="min-height:100px">
+                                <div class="card-body">
+                                    <p class="card-title"
+                                        style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: 600;font-size: 18px;line-height: 25px;color: #333333;">
+                                        Tracking Number Visibility</p>
+                                    <div class="card-text">
+                                        <ul
+                                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 25px;color: #555555;">
+                                            <li>The customers can view the tracking number for the order placed in the
+                                                Order Information page.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12" style="margin-top: 10px;margin-bottom: 20px;">
+                            <div class="card oe-padded h-100" style="min-height:100px">
+                                <div class="card-body">
+                                    <p class="card-title"
+                                        style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: 600;font-size: 18px;line-height: 25px;color: #333333;">
+                                        Configure A Shipping Title</p>
+                                    <div class="card-text">
+                                        <ul
+                                            style="font-family: 'Open Sans', sans-serif;font-style: normal;font-weight: normal;font-size: 16px;line-height: 25px;color: #555555;">
+                                            <li>You can set a title for Shipstation Shipping. This title will be visible
+                                                to the customers in the checkout page</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_spaced mw-100 card" style="margin-top:20px; margin-bottom:20px">
+            <div class="card-header shadow-sm p-0"
+                style="font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:28px; color:#333333">
+                <ul class="nav nav-tabs justify-content-center pt-1" role="tablist">
+                    <li class="nav-item" style="background-color:#ebf3f5; color:blue !important; border-radius:2px;">
+                        <span href="#odoo_view_tab1" class="nav-link active" role="tab" aria-selected="true"
+                            data-bs-toggle="tab">
+                            Configuration
+                        </span>
+                    </li>
+                    <li class="nav-item ml-1" style="background-color:#ebf3f5; color:blue !important; border-radius:2px;">
+                        <span href="#odoo_view_tab2" class="nav-link" role="tab" aria-selected="false"
+                            data-bs-toggle="tab">
+                            Orders
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body tab-content text-center p-0" style="font-weight:400">
+                <div class="tab-pane active show" id="odoo_view_tab1" role="tabpanel">
+                    <div class="container shadow-sm px-4">
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Enable ShipStation from the backend
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">Add API credentials.</li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss1.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Load Necessary ShipStation Data
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">Make sure to download necessary data first.</li>
+                                        <li class="mt-3 mb-3">This will download Associated Marketplaces, Stores,
+                                            Carriers, Services, Packages, Customers and Products.</li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss2.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss2-1.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss2-2.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Setup Shipstation Delivery Carrier
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">You need to setup default shipstation delivery carrier
+                                            before moving further, this will enable you to download any associated order
+                                            with your shipstation account. </li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss3.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss3-1.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Download Order Data
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">You can now download any associated order in your
+                                            ShipStation Account </li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss4.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss5.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="odoo_view_tab2" role="tabpanel">
+                    <div class="container shadow-sm px-4">
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading"
+                                    style="font-family:'Open Sans', sans-serif; font-weight:normal; font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Create Order
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">To get rate select the data and choose the shipstation
+                                            carrier.</li>
+                                        <li class="mt-3 mb-3">The corresponding rate would be shown.</li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss6.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div
+                                    style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                    Upload Sale Order
+                                </div>
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <li class="mt-3 mb-3"><b>Note:</b> Before creating the delivery you need to upload
+                                        this sale order data to shipstation account. </li>
+                                    <li class="mt-3 mb-3">Once the data the uploaded you can see the order in
+                                        ShipStation Account.</li>
+                                    <li class="mt-3 mb-3">The necessary data will be shown in ShipStation Data Tab in
+                                        Odoo Sale Order.</li>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss7.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss8.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss9.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Generated shipping label
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">Once sale order is confirmed, you need to create the package for the delivery order.
+                                            </li>
+                                        <li class="mt-3 mb-3">Once package is created, you need to click on the "Get ShipStation Label" button to
+                                            generate shipping Label. </li>
+                                        <li class="mt-3 mb-3">Before validating you can see the status of order in
+                                            ShipStation Data tab.</li>
+                                        <li class="mt-3 mb-3">Once the picking is validated the status of ShipStation
+                                            Order Status will change to "shipped" from "awaiting_shipment".</li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss10.png"
+                                        alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss11.png"
+                                        alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss12.png"
+                                        alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                        <section class="oe_container my-4">
+                            <div class="panel">
+                                <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                    <div
+                                        style="margin-top:33px; font-family:'Open Sans', sans-serif; font-weight:600; font-size:18px; line-height:22px; text-align:center; color:#333333">
+                                        Download the label
+                                    </div>
+                                    <div class="panel-heading" style="font-size:16px; line-height:20px; color:#555555">
+                                        <li class="mt-3 mb-3">You can download the generated label of the shipment from
+                                            Odoo itself.</li>
+                                    </div>
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss13.png" alt="Not found">
+                                </div>
+                                <div class="panel-body p-3">
+                                    <img style="width:100%" class="img-responsive border" src="ss14.png" alt="Not found">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <section class="oe_container mb32">
+            <div class="row mt16 mb16 pb32">
+                <div class="container text-center d-none d-xl-block"
+                    style="font-family: 'Open Sans', sans-serif;color:#333333; font-size:26px; font-weight:bold">
+                    <p>Our Other Apps</p>
+                </div>
+                <div class=" d-none d-xl-block container text-center"
+                    style="font-family: 'Open Sans', sans-serif;color:#555555; font-size:18px">
+                    Make your eCommerce Experience more better with our other Apps.
+                </div>
+                <div class="container ml0 mr0">
+                    <div class="offset-md-2 col-md-8">
+                        <div class="row ml0 mr0">
+                            <div id="mp_addons_carousel" class="container carousel slide mt64 mb32 d-none d-xl-block"
+                                data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active" style="min-height: 359.931px;">
+                                        <div class="row">
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/odoo_saas_kit/"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/odoo_saas_kit/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Odoo SaaS Kit
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/ups_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" width="100" height="100"
+                                                            style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/ups_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            UPS Shipping <br> Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/usps_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" width="100" height="100"
+                                                            style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/usps_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            USPS Shipping <br>Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/hermes_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" width="100" height="100"
+                                                            style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/hermes_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Hermes Shipping<br> Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/dhl_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/dhl_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            DHL Shipping<br> Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/canada_post_shipping_integration"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/canada_post_shipping_integration/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Canada Post <br>Shipping Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/apc_shipping_integration"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/apc_shipping_integration/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            APC Overnight <br> Shipping Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/fedex_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/fedex_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            FedEx Shipping<br> Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item" style="min-height: 359.931px;">
+                                        <div class="row">
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/auspost_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/auspost_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Australia Post <br>Shipping Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12222.0/aramex_delivery_carrier"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/aramex_delivery_carrier/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Aramex Shipping <br>Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/wk_delivery_dashboard"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" width="100" height="100"
+                                                            style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/wk_delivery_dashboard/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Delivery <br>Dashboard
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/odoo_shipping_service_apps"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" width="100" height="100"
+                                                            style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/odoo_shipping_service_apps/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Backbone For<br> Shipping Api <br>Integration
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/saas_kit_trial"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" width="100" height="100"
+                                                            style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/saas_kit_trial/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            SaaS Kit <br>Trial
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/wk_debrand_odoo"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/wk_debrand_odoo/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Odoo Backend<br> Debranding
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/product_label_for_zebra_printer"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/product_label_for_zebra_printer/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Print Product<br> Label Directly <br>Via Zebra Printer
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="text-center col-xs-12 col-sm-3 col-md-3 mb16 mt16"
+                                                style="float:left">
+                                                <a href="https://apps.odoo.com/apps/modules/12.0/payment_iyzico"
+                                                    target="_blank">
+                                                    <div>
+                                                        <img class="img img-responsive" alt="not found" width="100"
+                                                            height="100" style="border-radius:16px"
+                                                            src="https://apps.odoocdn.com/apps/assets/12.0/payment_iyzico/icon.png">
+                                                        <div class="mt8"
+                                                            style="font-size:16px; color:#333333; text-align:center; line-height:21px; white-space:nowrap">
+                                                            Website Iyzico<br> Payment Acquirer
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#mp_addons_carousel" data-slide="prev"
+                                    style="width:35px; color:#000">
+                                    <span class="carousel-control-prev-icon"
+                                        style="font-size:35px; opacity:0.2; color:#000000; margin-top:-50px">
+                                        <i class="fa fa-chevron-left" aria-hidden="false"></i>
+                                    </span>
+                                </a>
+                                <a class="carousel-control-next" href="#mp_addons_carousel" data-slide="next"
+                                    style="width:35px; color:#000">
+                                    <span class="carousel-control-next-icon"
+                                        style="font-size:35px; opacity:0.2; color:#000000; margin-top:-50px">
+                                        <i class="fa fa-chevron-right" aria-hidden="false"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <div style="opacity: 0.1;background-color: #000000; margin-bottom: 32px; margin-top: 32px;height: 1px;">
+        </div>
+
+        <section class="pt32" id="webkul_support">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center">Help and Support</h2>
+                    <p class="mb-2 text-center" style="font-size:16px; color:#333; font-weight:400">Get Immediate
+                        support for any of your query</p>
+                </div>
+                <div class="col-12">
+                    <p class="text-center px-5" style="font-size:14px; color:#555; font-weight:normal">You will get 90
+                        days free support for any doubt, queries, and bug fixing (excluding data recovery) or any type
+                        of issue related to this module.</p>
+                </div>
+                <div class="mx-auto col-lg-9 mb-4 oe_screenshot">
+                    <div class="row align-items-center justify-content-center mx-0 p-3">
+                        <div class="col-sm-2 text-center pr-0">
+                            <img src="mail.png" alt="mail" class="img img-fluid">
+                        </div>
+                        <div class="col-xl-7 col-sm-10">
+                            <p class="my-2" style="color:#555; font-weight:bold">Write a mail to us:</p>
+                            <b class="text-primary" style="font-size:18px">support@webkul.com</b>
+                            <p class="my-2" style="font-size:14px; color:#777; font-weight:normal">Any queries or want
+                                any extra features? Just drop a mail to our support.</p>
+                        </div>
+                        <div class="col-xl-3 offset-xl-0 float-xl-right col-sm-10 offset-sm-2 float-left mt16">
+                            <a href="mailto:support@webkul.com"
+                                style="padding:10px 22px; background-color:#2335D7; font-size:14px; color:#fff"><i
+                                    class="fa fa-pencil-square-o" style="color:white; margin-right:4px"></i>Write To
+                                US</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mx-auto col-lg-9 oe_screenshot">
+                    <div class="row align-items-center justify-content-center mx-0 p-3">
+                        <div class="col-sm-2 text-center pr-0">
+                            <img src="support-icon.png" alt="support-icon" class="img img-fluid">
+                        </div>
+                        <div class="col-sm-10 ">
+                            <p class="my-2" style="font-weight:bold; color:#555">Get in touch with our Expert:</p>
+                            <b class="text-primary text-break"
+                                style="font-size:18px">https://webkul.uvdesk.com/en/customer/create-ticket/</b>
+                            <p class="my-2" style="font-weight:normal; font-size:14px; color:#777">Have any technical
+                                queries, want extra features, or anything else? Our team is here to answer all your
+                                questions. Just Raise A Support Ticket.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_container">
+            <div class="oe_span12">
+                <!-- Piwik Image Tracker-->
+                <img alt=""
+                    src="http://odooimg.webkul.com/analytics/piwik/piwik.php?idsite=3&amp;rec=1&amp;action_name=Odoo-Shipstation-Connector&amp;url=https://apps.openerp.com/apps/modules/15.0/odoo_shipstation_connector&amp;uid=dhl_delivery_carrier"
+                    style="border:0" />
+                <!-- End Piwik -->
+            </div>
+        </section>
+    </div>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data noupdate="1">
+        <record forcecreate="True" id="packaging_shipstation" model="stock.package.type">
+            <field name="name">ShipStation Custom Packaging</field>
+            <field name="package_carrier_type">shipstation</field>
+            <field name= "shipper_package_code">ShipStation_Pgk</field>
+            <field name="height">10</field>
+            <field name="width">10</field>
+            <field name="packaging_length">10</field>
+            <field name="max_weight">10</field>
+            <field name="cover_amount">10</field>
+            <!-- <field name="qty">10</field> -->
+        </record>
+
+        <record forcecreate="True" id="product_shipstation" model="product.product">
+            <field name="name">Delivery by ShipStation</field>
+            <field name="default_code">Delivery</field>
+            <field name="type">service</field>
+            <field name="list_price">10.00</field>
+            <field name="standard_price">10.0</field>
+        </record>
+
+        <record forcecreate= "True" id= "product_packaging_shipstation" model= "product.packaging">
+            <field name= "name">ShipStation Custom Packaging</field>
+            <field name= "package_type_id" ref='packaging_shipstation'/>
+            <field name= "product_id" ref='product_shipstation'/>
+            <field name='qty'>10</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="webhooks_action" model="ir.actions.act_window">
+            <field name="name">ShipStation Webhooks</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shipstation.webhooks</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="shipstaion_webhooks_list_view" model="ir.ui.view">
+            <field name="name">ShipStation Webhooks List</field>
+            <field name="model">shipstation.webhooks</field>
+            <field name="arch" type="xml">
+                <list string="Webhooks">
+                    <field name="name"/>
+                    <field name="shipstation_store_id"/>
+                    <field name="event"/>
+                    <field name="target_url" optional="hide"/>
+                    <field name="webhook_id" optional="hide"/>
+                    <field name="shipstation_user_id" optional="hide"/>
+                    <button class="btn btn-primary" type='object' string='Subscribe' name='subscribe_webhook' invisible="webhook_id != False"/>
+                    <button class="btn btn-danger" type='object' string='Unsubscribe' name='unsubscribe_webhook' invisible="webhook_id == False"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record id="shipstaion_webhooks_view" model="ir.ui.view">
+            <field name="name">ShipStation Webhooks Form</field>
+            <field name="model">shipstation.webhooks</field>
+            <field name="arch" type="xml">
+                <form string="Webhooks">
+                    <header>
+                        <button class="btn btn-primary" type='object' string='Subscribe' name='subscribe_webhook' invisible="webhook_id != False"/>
+                        <button class="btn btn-danger" type='object' string='Unsubscribe' name='unsubscribe_webhook' invisible="webhook_id == False"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="shipstation_store_id"/>
+                                <field name="event"/>
+                            </group>
+                            <group>
+                                <field name="target_url"/>
+                                <field name="shipstation_user_id"/>
+                                <field name="webhook_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Webhook Event Logs -->
+
+        <record id="webhooks_event_log_action" model="ir.actions.act_window">
+            <field name="name">ShipStation Webhook Event Logs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">webhooks.event.logs</field>
+            <field name="context">{'search_default_group_by_state': 1}</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="webhooks_event_log_list_view" model="ir.ui.view">
+            <field name="name">ShipStation Webhook Event Logs List</field>
+            <field name="model">webhooks.event.logs</field>
+            <field name="arch" type="xml">
+                <list string="Webhooks">
+                    <field name="webhook_id" optional="hide"/>
+                    <field name="json_response" optional="hide"/>
+                    <field name="state" decoration-danger="state == 'cancelled'" optional="hide"/>
+                    <field name="fulfillment_id"/>
+                    <field name="shipstation_order_id"/>
+                    <field name="tracking_number"/>
+                    <field name="create_date"/>
+                    <field name="ship_date"/>
+                    <field name="delivery_date" optional="hide"/>
+                    <field name="carrier_code"/>
+                    <field name="fulfillment_provider_code"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="webhooks_event_log_form_view" model="ir.ui.view">
+            <field name="name">ShipStation Webhook Event Logs Form</field>
+            <field name="model">webhooks.event.logs</field>
+            <field name="arch" type="xml">
+                <form string="Webhooks">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <!-- <button class="btn btn-primary" type='object' string='Validate' name='validate_webhook' invisible="state not in ['draft']"/> -->
+                        <!-- <button type='object' string='Cancel' name='action_cancel' invisible="state not in ['draft']"/> -->
+                        <!-- <button type='object' string='Reset To Draft' name='action_reset_to_draft' invisible="state not in ['error', 'cancel']"/> -->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="webhook_id"/>
+                                <field name="json_response"/>
+                                <field name="fulfillment_id"/>
+                                <field name="shipstation_order_id"/>
+                                <field name="tracking_number"/>
+                            </group>
+                            <group>
+                                <field name="error_desc" invisible="state != 'error'"/>
+                                <field name="create_date"/>
+                                <field name="ship_date"/>
+                                <field name="delivery_date"/>
+                                <field name="carrier_code"/>
+                                <field name="fulfillment_provider_code"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="shipstation_webhoook_logs_search_view" model="ir.ui.view">
+            <field name="name">shipstation.webhoook.logs.search.view</field>
+            <field name="model">webhooks.event.logs</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="state"/>
+                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                    <separator/>
+                    <filter string="Error" name="filter_error" domain="[('state', '=', 'error')]"/>
+                    <separator/>
+                    <filter string="Done" name="filter_done" domain="[('state', '=', 'done')]"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

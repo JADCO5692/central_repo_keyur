@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="services_action" model="ir.actions.act_window">
+            <field name="name">ShipStation Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shipstation.services</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        
+        <record id="shipstaion_services_list_view" model="ir.ui.view">
+            <field name="name">ShipStation Services List</field>
+            <field name="model">shipstation.services</field>
+            <field name="arch" type="xml">
+                <list string="Services">
+                    <field name="carrier_code"/>
+                    <field name="service_code"/>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="shipstaion_services_form_view" model="ir.ui.view">
+            <field name="name">ShipStation Services Form</field>
+            <field name="model">shipstation.services</field>
+            <field name="arch" type="xml">
+                <form string="Services">
+                    <sheet>
+                        <group>
+                            <field name="carrier_code"/>
+                            <field name="service_code"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="is_domestic"/>
+                            <field name="is_international"/>           
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit.hr</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <group>
+                    <field name="so_id" />
+                    <field name="order_type" />
+                    <field name="user_pwd" />
+                    <field name="is_advanced_payment" />
+                    <field name="of_payment_percentage" widget="percentage"
+                        invisible="is_advanced_payment != True" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

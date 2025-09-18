@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="stores_action" model="ir.actions.act_window">
+            <field name="name">ShipStation Stores</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shipstation.stores</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="shipstaion_stores_list_view" model="ir.ui.view">
+            <field name="name">ShipStation Stores List</field>
+            <field name="model">shipstation.stores</field>
+            <field name="arch" type="xml">
+                <list string="Stores">
+                    <field name="name"/>
+                    <field name="marketplace_name"/>
+                </list>
+            </field>
+        </record>
+        
+        <record id="shipstaion_stores_view" model="ir.ui.view">
+            <field name="name">ShipStation Stores Form</field>
+            <field name="model">shipstation.stores</field>
+            <field name="arch" type="xml">
+                <form string="Stores">
+                    <sheet>
+                        <group>
+                            <field name="store_id"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="marketplace_id"/>
+                            <field name="marketplace_name"/>           
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
