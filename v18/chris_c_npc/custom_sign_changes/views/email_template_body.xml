@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sign_template_mail_completed_custom">
+        <table border="0" cellpadding="0" style="background-color: white; padding: 0px; border-collapse:separate;"> 
+            <tr>
+                <td valign="top">
+                    <div style="margin: 16px 0px 16px 0px; padding: 8px 16px 8px 16px; background-color: #F1F1F1;">
+                        <span>
+                            Please click the link below to complete the next steps and download the finalized document.
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <div style="margin:16px auto; text-align:center">
+                        <a t-att-href="link" style="padding: 8px 16px 8px 16px; border-radius: 3px; background-color:#875A7B; text-align:center; text-decoration:none; color: #FFFFFF;">
+                            Click Here
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </template>
+
+</odoo>
