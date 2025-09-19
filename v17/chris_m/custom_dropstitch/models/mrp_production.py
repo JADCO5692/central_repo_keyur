@@ -278,7 +278,7 @@ class CustomMrpProduction(models.Model):
 
     def button_mark_done(self):
         for production in self:
-            if production.components_availability_state != "available":
+            if production.reservation_state != "assigned":
                 raise UserError(
                     _("Cannot Produce. All raw materials/components not available")
                 )

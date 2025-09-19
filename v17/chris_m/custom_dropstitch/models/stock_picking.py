@@ -60,7 +60,7 @@ class Picking(models.Model):
     amount_residual = fields.Float(string="Balance Due", compute="_compute_amount_residual")
     order_line_ref = fields.Char(string="Order Line Ref", compute="_compute_order_line_ref")
     subcontract_location_bool = fields.Boolean(related="location_dest_id.is_subcontracting_location", string="Subcontract Location Bool")
-    ship_date = fields.Datetime(
+    custom_ship_date = fields.Datetime(
         string="Ship Date",
         readonly=True,
         copy=False,
@@ -70,8 +70,8 @@ class Picking(models.Model):
     def write(self, vals):
         res = super(Picking,self).write(vals)
         for picking in self:
-            if vals.get("date_done") == "done" and not picking.ship_date:
-                picking.ship_date = vals.get("date_done")
+            if vals.get("date_done") == "done" and not picking.custom_ship_date:
+                picking.custom_ship_date = vals.get("date_done")
         return res
 
     def _compute_order_line_ref(self):
