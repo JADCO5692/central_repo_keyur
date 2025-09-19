@@ -28,6 +28,10 @@ class CustomCheckoutController(http.Controller):
         
         portal_url = sale_order.action_custom_checkout(order_type)
         if request.session.get('dropship'):
+            company = request.env.company
+            template = company.mail_template_id
+            if template and sale_order.partner_shipping_id.email:
+                template.sudo().send_mail(sale_order.id, force_send=True)
             so_template = sale_order._find_mail_template()
             base_url = request.httprequest.url_root.rstrip('/')
             sale_order._send_order_notification_mail(so_template)

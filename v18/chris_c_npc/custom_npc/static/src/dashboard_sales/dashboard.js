@@ -27,7 +27,7 @@ function get_time_frames() {
         custom: "Custom",
     };
 }
-
+ 
 class SalesDashboard extends Component {
     setup() {
         super.setup();
@@ -40,11 +40,13 @@ class SalesDashboard extends Component {
             stage_durations:{},
             activity_complete_avg:0,
             sales_persons:[],
+            SelectedSalesRep:[],
             start_date:'',
             end_date:'',
         });
         this.action = useService("action");
         this.notification = useService("notification");
+        this.SalesRep = useRef("SalesRep") 
         this.el = useRef("el");
         this.grid = useRef("grid");
         this.busService = this.env.services.bus_service;
@@ -55,15 +57,15 @@ class SalesDashboard extends Component {
         });
         onMounted(async () => { 
             let defs = [];
-            defs.push(this.loadDashboardData()); 
+            defs.push(this.loadDashboardData());
+            // $(this.SalesRep.el).select2();
             await Promise.all(defs);
-        }); 
+        });
         onWillDestroy(() => {
             this.busService.unsubscribe("dashboard_notify");
         });
-    } 
-    async _onNotification(notifications) { 
-        
+    }
+    async _onNotification(notifications) {  
         if (this.state && this?.__owl__?.component && status(this.__owl__.component) != "destroyed") {
             var self = this;
             var type = notifications?.type;
@@ -174,6 +176,15 @@ class SalesDashboard extends Component {
         if(input == 'end'){
             this.state.end_date = ev.currentTarget.value
         }
+    }
+    OnChangeSalerep(ev){ 
+        // let state = 
+        this.state.SelectedSalesRep.push(ev.currentTarget.value);
+        this.state.SelectedSalesRep = this.state.SelectedSalesRep;
+        ev.currentTarget.value = 'default';
+    }
+    RemoveSS(ss){ 
+        this.state.SelectedSalesRep.pop(ss);
     }
     OnApplyDates(){
         this.loadDashboardData()

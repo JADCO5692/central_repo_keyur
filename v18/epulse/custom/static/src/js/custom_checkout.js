@@ -2,6 +2,7 @@
 
 import publicWidget from "@web/legacy/js/public/public_widget";
 import { rpc } from "@web/core/network/rpc";  // Import the rpc module
+
 export const SendEmailRedirect = publicWidget.Widget.extend({
     selector: '#send_email_redirect',
     events: {
@@ -17,16 +18,30 @@ export const SendEmailRedirect = publicWidget.Widget.extend({
         console.log("Send Email & Redirect button clicked");
         ev.preventDefault();
 
+        const btn = ev.currentTarget;
+        // Save original text
+        const originalText = btn.innerHTML;
+
+        // Disable button + show loader
+        btn.disabled = true;
+        btn.innerHTML = `Processing... <span class="loader"></span>`;
+
         rpc('/custom/custom_checkout', {})  // Use rpc directly for Odoo 18
             .then((response) => {
                 if (response.redirect_url) {
                     window.location.href = response.redirect_url;
                 } else {
                     console.error("Error: No redirect URL received.");
+                    // Restore button if no redirect
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
                 }
             })
             .catch((error) => {
                 console.error("Error sending email:", error);
+                // Restore button on error
+                btn.disabled = false;
+                btn.innerHTML = originalText;
             });
     },
 });

@@ -6,13 +6,8 @@
 			<field name="model">mrp.production</field>
 			<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
 			<field name="arch" type="xml">
-				<xpath expr="//form[1]/header/button[@name='action_open_label_type']" position="after">
-					<button string="Traveler Ticket" type="object" name="action_download_travel_ticket" invisible="not product_id.sale_ok"/>
-					<button string="TIF File" type="object" name="action_download_tiff_file" invisible="custom_tiff_file_url == '' or not product_id.sale_ok"/>
-					<button string="TIF File" type="object" name="action_download_custom_tiff_file" invisible="custom_tiff_file_url != '' or not product_id.sale_ok"/>
-            	</xpath>
 				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']" position="before">
- 					<page string="Packaging Notes" name="custom_pack_notes" groups="custom_dropstitch.cust_group_sew" invisible="not product_id.sale_ok">
+ 					<page string="Packaging Notes" name="custom_pack_notes" groups="custom_dropstitch.cust_group_sew" invisible="not sale_ok_bool">
 	 					<group>
 							<group>
 								<field name="custom_label_type" readonly="1"/>
@@ -31,9 +26,10 @@
 					</page>
 				</xpath>
 				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='components']" position="after">
-					<page string="Production Info" invisible="not product_id.sale_ok">
+					<page string="Production Info" invisible="not sale_ok_bool">
 						<group>
 							<group>
+                                <field name="sale_ok_bool"/>
 								<field name="custom_machine_no" readonly="1"/>
 								<field name="custom_is_binding"/>
 								<field name="custom_is_wash"/>
@@ -50,6 +46,11 @@
 						</group>
 					</page>
 				</xpath>
+				<xpath expr="//form[1]/header/button[@name='action_open_label_type']" position="after">
+                    <button string="Traveler Ticket" type="object" name="action_download_travel_ticket" invisible="not sale_ok_bool"/>
+                    <button string="TIF File" type="object" name="action_download_tiff_file" invisible="custom_tiff_file_url == '' or not sale_ok_bool"/>
+                    <button string="TIF File" type="object" name="action_download_custom_tiff_file" invisible="custom_tiff_file_url != '' or not sale_ok_bool"/>
+                </xpath>
 				<xpath expr="//group[@name='group_extra_info']/label[@for='date_start']" position="replace"/>
 				<xpath expr="//form[1]/sheet[1]/group[1]/group[@name='group_extra_info']/label[1]" position="replace"/>
 				<xpath expr="//group[@name='group_extra_info']/div[1]" position="replace"/>
@@ -60,11 +61,11 @@
 				<field name="product_id" position="after"> 
 					<field name="custom_released" invisible="1"/>
                     <field name="custom_traveler_printed" invisible="1"/>
-					<field name="custom_partner" readonly="1" invisible="not product_id.sale_ok"/>
-					<field name="custom_order_no" readonly="1" invisible="custom_order_no == False or not product_id.sale_ok"/>
-					<field name="origin" invisible="not product_id.sale_ok"/>
-					<field name="custom_needle" readonly="1" invisible="not product_id.sale_ok"/>
-					<field name="custom_prod_size" readonly="1" invisible="not product_id.sale_ok"/>
+					<field name="custom_partner" readonly="1" invisible="not sale_ok_bool"/>
+					<field name="custom_order_no" readonly="1" invisible="custom_order_no == False or not sale_ok_bool"/>
+					<field name="origin" invisible="not sale_ok_bool"/>
+					<field name="custom_needle" readonly="1" invisible="not sale_ok_bool"/>
+					<field name="custom_prod_size" readonly="1" invisible="not sale_ok_bool"/>
 					<field name="custom_attribute_1" readonly="1"  invisible="custom_prod_type not in ('special_mtp_var','special_mtp_prod')"/>/>
 					<label for="date_start" string="Scheduled Date" invisible="state in ['progress', 'to_close', 'done', 'cancel']"/>
                     <label for="date_start" string="Start Date" invisible="state not in ['progress', 'to_close', 'done', 'cancel']"/>
@@ -83,10 +84,10 @@
 					<field name="custom_opentext" invisible="1"/>
 					<field name="custom_etail_ticket_no" invisible="1"/>
 					<field name="custom_customer_product" invisible="1"/>
-					<field name="custom_tiff_file_url" widget="url" groups="mrp.group_mrp_manager" readonly="state in ('done','cancel')" invisible="custom_tiff_file or not product_id.sale_ok" required="not custom_tiff_file"/>
-					<field name="custom_tiff_file_url" widget="url" groups="!mrp.group_mrp_manager" readonly="state != 'draft'" invisible="custom_tiff_file or not product_id.sale_ok" required="not custom_tiff_file"/>
+					<field name="custom_tiff_file_url" widget="url" groups="mrp.group_mrp_manager" readonly="state in ('done','cancel')" invisible="custom_tiff_file or not sale_ok_bool" required="not custom_tiff_file"/>
+					<field name="custom_tiff_file_url" widget="url" groups="!mrp.group_mrp_manager" readonly="state != 'draft'" invisible="custom_tiff_file or not sale_ok_bool" required="not custom_tiff_file"/>
 					<field name="custom_tiff_file_name" invisible="1"/>
-					<field name="custom_tiff_file" readonly="1" invisible="custom_tiff_file == False or not product_id.sale_ok" filename="custom_tiff_file_name"/>			
+					<field name="custom_tiff_file" readonly="1" invisible="custom_tiff_file == False or not sale_ok_bool" filename="custom_tiff_file_name"/>			
 					<label for="custom_personalize" decoration-danger="state not in ('draft')" invisible="custom_personalize == False"/>
 					<div class="o_row" invisible="custom_personalize == False">
 						<h1>
@@ -145,7 +146,7 @@
 					<button name="custom_action_confirm" invisible="state != 'draft'" string="Confirm" type="object" class="oe_highlight" data-hotkey="v"/>
 				</button>
 				<div name="bom_div" position="after">
-				    <t invisible="not product_id.sale_ok">
+				    <t invisible="not sale_ok_bool">
     					<label for="custom_so_special_inst" decoration-danger="state not in ('draft')" invisible="custom_so_special_inst == False"/>
     					<div class="o_row" invisible="custom_so_special_inst == False">
     						<h1>

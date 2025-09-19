@@ -62,9 +62,9 @@
 				<xpath expr="////form[1]/header/button[@class='o_btn_validate']" position="replace">
 					<button name="button_validate" invisible="(state in ('draft','waiting', 'confirmed', 'assigned', 'done', 'cancel', 'invoice_sent', 'ready_to_be_sent') and custom_order_policy == 'intent' and custom_order_payment_term == 'PrePayment') or (state in ('draft','waiting', 'confirmed','assigned', 'done','invoice_sent', 'ready_to_be_sent','cancel') and custom_order_policy == 'intent') or  (custom_order_policy != 'intent' and state in ('waiting', 'assigned', 'done','confirmed', 'cancel', 'ready_to_be_sent'))" string="Validate" type="object" groups="stock.group_stock_user" class="o_btn_validate" data-hotkey="v"/>
 				</xpath>
-				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='operations']/field[@name='move_ids_without_package']/tree[1]/field[@name='quantity']" position="attributes">
+				<!-- <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='operations']/field[@name='move_ids_without_package']/tree[1]/field[@name='quantity']" position="attributes">
 					<attribute name="readonly">(parent.state in ('invoice_sent', 'ready_to_be_sent'))</attribute>
-				</xpath>
+				</xpath>-->
 				<xpath expr="//form[1]/header" position="inside">
 					<button string="Gift Card" type="object" name="action_download_gift_label" invisible="custom_gift_mess == False"/>
 				</xpath>
@@ -72,7 +72,7 @@
 					<field name="custom_item_image" widget="image" options="{'zoom': true}" invisible="parent.picking_type_code != 'outgoing'"/>
 				</xpath>
 				<button name="action_put_in_pack" position="attributes">
-					<attribute name="invisible">state not in ('ready_to_be_sent')</attribute>
+					<attribute name="invisible">state not in ('ready_to_be_sent','confirmed')</attribute>
 				</button>
 				<field name="carrier_tracking_ref" position="attributes">
 					<attribute name="readonly">0</attribute>

@@ -62,7 +62,7 @@
                         <div class="metric-card" t-on-click="()=>this.onclickCustomers()">
                             <div class="metric-card-content">
                                 <div class="metric-info">
-                                    <h3>Avg Days from NP signup to Scheduled Zoom Call</h3>
+                                    <h3>Avg Days (Intro Call)</h3>
                                     <div class="value" id="newCustomers"><t t-esc="getStageTime('zoom')"/> Days</div>
                                     <div class="trend"> 
                                     </div>
@@ -75,7 +75,7 @@
                         <div class="metric-card">
                             <div class="metric-card-content">
                                 <div class="metric-info">
-                                    <h3>Avg Days from NP signup to Scheduled to Meet Physician.</h3>
+                                    <h3>Avg Days (Zoom -&gt; Meet)</h3>
                                     <div class="value" id="quotationsSent"><t t-esc="getStageTime('meet')" /> Days</div>
                                     <div class="trend">
                                          
@@ -88,7 +88,7 @@
                         <div class="metric-card">
                             <div class="metric-card-content">
                                 <div class="metric-info">
-                                    <h3>Activity completed after NP signup.</h3>
+                                    <h3>Activities after Scheduled Intro Call</h3>
                                     <div class="value" id="quotationsSent"><t t-esc="state.activity_complete_avg" /></div>
                                     <div class="trend">
                                          
@@ -103,9 +103,26 @@
                         <div class="bg-white item-container">
                             <div class="table-container">
                                 <div class="table-header">
-                                    <h2>Salesperson Wise Numbers</h2> 
-                                </div>
-                                
+                                    <h2>Individual Sales Performance Summary/Metrics</h2> 
+                                    <div class="d-flex w-100"> 
+                                        <select class="w-auto form-control" id="SalesRep" t-ref="SalesRep" t-on-change="(ev)=>this.OnChangeSalerep(ev)">
+                                            <option value="default">Sales Person</option>
+                                            <t t-foreach="state.sales_persons" t-as="salesrep" t-key="salesrep_index"> 
+                                                <t t-if="!state.SelectedSalesRep.includes(salesrep)"> 
+                                                    <option t-att-value="salesrep">
+                                                        <t t-esc="salesrep"/>
+                                                    </option>
+                                                </t>
+                                            </t>
+                                        </select>
+                                        <div class="px-3">
+                                            <span class="p-1 bagde rounded bg-200 me-1" t-foreach="state.SelectedSalesRep" t-as="ss" t-key="ss_index"> 
+                                                <t t-esc="ss"/>  
+                                                <i class="fa fa-close ms-1" t-on-click="()=>this.RemoveSS(ss)"/>
+                                            </span> 
+                                        </div>
+                                    </div>
+                                </div> 
                                 <div class="table-wrapper">
                                     <table class="table">
                                         <thead>
@@ -113,18 +130,29 @@
                                                 <th>Salesperson</th> 
                                                 <th>New Leads Assigned</th>
                                                 <th>Total Signed Contracts</th>
-                                                <th>Avg. Signup to Zoom Call</th> 
+                                                <!-- <th>Avg. Signup to Zoom Call</th>  -->
                                                 <th>Avg. Zoom Call to Meet</th> 
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody">
-                                            <tr t-foreach="state.sales_persons" t-as="sp" t-key="sp_index">
-                                                <td><t t-esc="sp"/></td> 
-                                                <td><t t-esc="state.new_leads_assigned[sp]"/></td> 
-                                                <td><t t-esc="state.signed_contract[sp]"/></td>
-                                                <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_zoom_days"/></td>
-                                                <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_meet_days"/></td>
-                                            </tr> 
+                                            <t t-if="state.SelectedSalesRep.length">
+                                                <tr t-foreach="state.sales_persons" t-as="sp" t-if="state.SelectedSalesRep.includes(sp)?1:0" t-key="sp_index">
+                                                    <td><t t-esc="sp"/></td> 
+                                                    <td><t t-esc="state.new_leads_assigned[sp]"/></td> 
+                                                    <td><t t-esc="state.signed_contract[sp]"/></td>
+                                                    <!-- <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_zoom_days"/></td> -->
+                                                    <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_meet_days"/></td>
+                                                </tr> 
+                                            </t> 
+                                            <t t-else="">
+                                                <tr t-foreach="state.sales_persons" t-as="sp" t-key="sp_index">
+                                                    <td><t t-esc="sp"/></td> 
+                                                    <td><t t-esc="state.new_leads_assigned[sp]"/></td> 
+                                                    <td><t t-esc="state.signed_contract[sp]"/></td>
+                                                    <!-- <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_zoom_days"/></td> -->
+                                                    <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_meet_days"/></td>
+                                                </tr> 
+                                            </t> 
                                         </tbody>
                                     </table>
                                 </div>

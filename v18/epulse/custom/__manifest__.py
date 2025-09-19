@@ -9,6 +9,7 @@
     """,
     'depends': ['website_sale', 'web', 'point_of_sale', 'sale', 'pos_online_payment'],
     'data': [
+        'data/mail_template.xml',
         'views/website_custom_checkout.xml',
         'views/res_partner.xml',
         'views/custom_template.xml',
@@ -18,6 +19,7 @@
         'views/custom_pin_template_account.xml',
         'views/thankyou_template_page.xml',
         'views/sale_order.xml',
+        'views/company.xml',
         'views/delivery_carrier.xml',
     ],
     "development_status": "Production/Stable",
@@ -34,6 +36,7 @@
             'custom/static/src/js/custom_checkout.js',
             'custom/static/src/xml/views/add_to_cart_modified.xml',
             'custom/static/src/js/custom_cart_notification.js',
+            'custom/static/src/css/loader.css',
         ],
     }
 }
