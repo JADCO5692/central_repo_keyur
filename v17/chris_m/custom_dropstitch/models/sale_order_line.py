@@ -297,3 +297,14 @@ class SaleOrderLine(models.Model):
                 "custom_dropstitch.yarn_compoentn_images", values={"yarn_components": yarn_component_ids},
             )
         return yarn_component_images
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'product_uom_qty' in vals and vals['product_uom_qty'] == 0:
+            for line in self:
+                mos = self.env['mrp.production'].search([
+                    ('custom_sale_order_line', '=', line.id),
+                    ('state', 'in', ['draft', 'confirmed'])
+                ])
+                mos.action_cancel()
+        return res
