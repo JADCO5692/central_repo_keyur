@@ -70,7 +70,7 @@ class Picking(models.Model):
     def write(self, vals):
         res = super(Picking,self).write(vals)
         for picking in self:
-            if vals.get("date_done") == "done" and not picking.custom_ship_date:
+            if vals.get("date_done") and not picking.custom_ship_date:
                 picking.custom_ship_date = vals.get("date_done")
         return res
 
