@@ -104,9 +104,15 @@
                                 style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">Box
                                 Count:&#160;
                             </td>
-                            <td
+                            <td t-if="o.carrier_tracking_ref"
                                 style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
-                                <span>1</span>
+                                <t t-if="o.carrier_tracking_ref.split('+')">
+                                <span t-esc="len(o.carrier_tracking_ref.split('+')) if o.carrier_tracking_ref else 0"/>
+                                </t>
+                                <t t-elif="o.carrier_tracking_ref.split(',')">
+                                    <span t-esc="len(o.carrier_tracking_ref.split(',')) if o.carrier_tracking_ref else 0"/>
+                                </t>
+
                             </td>
                         </tr>
                         <tr t-if="o.carrier_id">
@@ -116,6 +122,43 @@
                             <td
                                 style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <span t-field="o.carrier_id.name" />
+                            </td>
+                        </tr>
+                        <tr t-if="o.carrier_tracking_ref">
+                            <td
+                                    style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
+                                Tracking #:&#160;
+                            </td>
+                            <td
+                                    style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
+                                <t t-if="o.carrier_tracking_ref.split('+')">
+                                    <tr>
+                                        <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
+                                            Tracking:
+                                        </td>
+                                        <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
+                                            <t t-foreach="o.carrier_tracking_ref.split('+')" t-as="track">
+                                                <div>
+                                                    <span t-esc="track"/>
+                                                </div>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-elif="o.carrier_tracking_ref.split(',')">
+                                    <tr>
+                                        <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
+                                            Tracking:
+                                        </td>
+                                        <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
+                                            <t t-foreach="o.carrier_tracking_ref.split(',')" t-as="track">
+                                                <div>
+                                                    <span t-esc="track"/>
+                                                </div>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
                             </td>
                         </tr>
                     </table>
@@ -196,10 +239,10 @@
                             <span t-field="o.weight" />
                             <span t-field="o.weight_uom_name" />
                         </t>
-                        <t t-if="o.carrier_tracking_ref">
-                            <span>- Tracking:</span>
-                            <span t-esc="o.carrier_tracking_ref" />
-                        </t>
+<!--                        <t t-if="o.carrier_tracking_ref">-->
+<!--                            <span>- Tracking:</span>-->
+<!--                            <span t-esc="o.carrier_tracking_ref" />-->
+<!--                        </t>-->
                     </td>
                 </tr>
                 <t t-set="lines"
@@ -496,17 +539,6 @@
                         ) </span>
                 </t>
             </td>
-        </xpath>
-    </template>
-
-    <template
-        id="stock_report_delivery_package_section_line_inherit_delivery_custom_tracking"
-        inherit_id="stock.stock_report_delivery_package_section_line">
-        <xpath expr="//td[@name='package_info']" position="inside">
-            <t t-if="o.carrier_tracking_ref">
-                <span>- Tracking:</span>
-                <span t-esc="o.carrier_tracking_ref" />
-            </t>
         </xpath>
     </template>
 </odoo>
