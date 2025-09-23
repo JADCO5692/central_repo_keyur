@@ -1,121 +1,147 @@
 <odoo>
-    <template id="product_template_override1" inherit_id="website_sale.products_item">
-        <xpath expr="//div[@class='o_wsale_product_sub d-flex justify-content-between align-items-end gap-2 flex-wrap']" position="replace">
+    <template id="product_template_override1"
+        inherit_id="website_sale.products_item">
+        <xpath
+            expr="//div[@class='o_wsale_product_sub d-flex justify-content-between align-items-end gap-2 flex-wrap']"
+            position="replace">
             <t t-if="not request.session.get('dropship', False)">
-                <t t-set="template_price_vals" t-value="get_product_prices(product)"/>
-                <div class="o_wsale_product_btn d-flex gap-2"/>
-                <div class="product_price" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer">
+                <t t-set="template_price_vals"
+                    t-value="get_product_prices(product)" />
+                <div class="o_wsale_product_btn d-flex gap-2" />
+                <div class="product_price" itemprop="offers"
+                    itemscope="itemscope" itemtype="http://schema.org/Offer">
                     <span class="h6 mb-0"
-                          t-if="template_price_vals['price_reduce'] or not website.prevent_zero_price_sale"
-                          t-out="template_price_vals['price_reduce']"
-                          t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-                    <span class="h6 mb-0" t-elif="any(ptav.price_extra for ptav in product.attribute_line_ids.product_template_value_ids)">&amp;nbsp;</span>
-                    <span class="h6 mb-0" t-else="" t-field="website.prevent_zero_price_sale_text"/>
-                    <t t-if="'base_price' in template_price_vals and (template_price_vals['base_price'] &gt; template_price_vals['price_reduce']) and (template_price_vals['price_reduce'] or not website.prevent_zero_price_sale)">
-                        <del t-attf-class="text-muted me-1 h6 mb-0" style="white-space: nowrap;">
-                            <em class="small" t-esc="template_price_vals['base_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                        t-if="template_price_vals['price_reduce'] or not website.prevent_zero_price_sale"
+                        t-out="template_price_vals['price_reduce']"
+                        t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                    <span class="h6 mb-0"
+                        t-elif="any(ptav.price_extra for ptav in product.attribute_line_ids.product_template_value_ids)">
+                        &amp;nbsp;</span>
+                    <span class="h6 mb-0" t-else=""
+                        t-field="website.prevent_zero_price_sale_text" />
+                    <t
+                        t-if="'base_price' in template_price_vals and (template_price_vals['base_price'] &gt; template_price_vals['price_reduce']) and (template_price_vals['price_reduce'] or not website.prevent_zero_price_sale)">
+                        <del t-attf-class="text-muted me-1 h6 mb-0"
+                            style="white-space: nowrap;">
+                            <em class="small"
+                                t-esc="template_price_vals['base_price']"
+                                t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
                         </del>
                     </t>
-                    <span itemprop="price" style="display:none;" t-esc="template_price_vals['price_reduce']" />
-                    <span itemprop="priceCurrency" style="display:none;" t-esc="website.currency_id.name" />
+                    <span itemprop="price" style="display:none;"
+                        t-esc="template_price_vals['price_reduce']" />
+                    <span itemprop="priceCurrency" style="display:none;"
+                        t-esc="website.currency_id.name" />
                 </div>
             </t>
         </xpath>
     </template>
     <template id="product_template_1" inherit_id="website_sale.product">
-        <xpath expr="//div[@class='js_product js_main_product mb-3']/div" position="replace">
+        <xpath expr="//div[@class='js_product js_main_product mb-3']/div"
+            position="replace">
             <div>
                 <t t-if="not request.session.get('dropship', False)">
-                    <t t-call="website_sale.product_price"/>
+                    <t t-call="website_sale.product_price" />
                     <small t-if="'base_unit_price' in combination_info"
-                           class="ms-1 text-muted o_base_unit_price_wrapper d-none" groups="website_sale.group_show_uom_price">
-                        <t t-call='website_sale.base_unit_price'/>
+                        class="ms-1 text-muted o_base_unit_price_wrapper d-none"
+                        groups="website_sale.group_show_uom_price">
+                        <t t-call='website_sale.base_unit_price' />
                     </small>
                 </t>
             </div>
         </xpath>
     </template>
     <template id="cart_lines_inherit" inherit_id="website_sale.cart_lines">
-        <xpath expr="//div[@class='mb-0 h6 fw-bold text-end']" position="replace">
+        <xpath expr="//div[@class='mb-0 h6 fw-bold text-end']"
+            position="replace">
             <t t-if="not request.session.get('dropship', False)">
-             <t t-if="line.discount">
-                        <del t-attf-class="#{'text-muted mr8'}"
-                             style="white-space: nowrap;"
-                             t-out="line._get_displayed_unit_price() * line.product_uom_qty"
-                             t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                <t t-if="line.discount">
+                    <del t-attf-class="#{'text-muted mr8'}"
+                        style="white-space: nowrap;"
+                        t-out="line._get_displayed_unit_price() * line.product_uom_qty"
+                        t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                </t>
+                <t t-set="product_price"
+                    t-value="line._get_cart_display_price()" />
+                <t t-call="website_sale.cart_product_price" />
+                <small
+                    t-if="not line._is_not_sellable_line() and line.product_id.base_unit_price"
+                    class="cart_product_base_unit_price d-block text-muted"
+                    groups="website_sale.group_show_uom_price">
+                    <t t-call='website_sale.base_unit_price'>
+                        <t t-set='product' t-value='line.product_id' />
+                        <t t-set='combination_info'
+                            t-value="{'base_unit_price': product._get_base_unit_price(product_price/line.product_uom_qty)}" />
                     </t>
-                    <t t-set="product_price" t-value="line._get_cart_display_price()"/>
-                    <t t-call="website_sale.cart_product_price"/>
-                    <small t-if="not line._is_not_sellable_line() and line.product_id.base_unit_price"
-                           class="cart_product_base_unit_price d-block text-muted"
-                           groups="website_sale.group_show_uom_price">
-                        <t t-call='website_sale.base_unit_price'>
-                            <t t-set='product' t-value='line.product_id'/>
-                            <t t-set='combination_info'
-                               t-value="{'base_unit_price': product._get_base_unit_price(product_price/line.product_uom_qty)}"/>
-                        </t>
-                    </small>
+                </small>
             </t>
         </xpath>
     </template>
 
-<template id="custom_search" inherit_id="website_sale.search">
-    <xpath expr="//t[@t-call='website.website_search_box_input']" position="replace">
-        <t t-if="not request.session.get('dropship', False)">
-            <t t-call="website.website_search_box_input">
-                <t t-set="_form_classes"
-                   t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 {{_form_classes}}"/>
-                <t t-set="_submit_classes" t-valuef="btn btn-{{navClass}}"/>
-                <t t-set="_input_classes" t-valuef="border-0 text-bg-{{navClass}}"/>
-                <t t-set="search_type" t-valuef="products"/>
-                <t t-set="action"
-                   t-value="keep('/shop'+ ('/category/'+slug(category)) if category else None, search=0) or '/shop'"/>
-                <t t-set="display_image" t-valuef="true"/>
-                <t t-set="display_description" t-valuef="true"/>
-                <t t-set="display_extra_link" t-valuef="true"/>
-                <t t-set="display_detail" t-valuef="true"/>
-                <t t-if="attrib_values">
-                    <t t-foreach="attrib_values" t-as="a">
-                        <input type="hidden" name="attribute_value" t-att-value="'%s-%s' % (a[0], a[1])"/>
+    <template id="custom_search" inherit_id="website_sale.search">
+        <xpath expr="//t[@t-call='website.website_search_box_input']"
+            position="replace">
+            <t t-if="not request.session.get('dropship', False)">
+                <t t-call="website.website_search_box_input">
+                    <t t-set="_form_classes"
+                        t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 {{_form_classes}}" />
+                    <t t-set="_submit_classes" t-valuef="btn btn-{{navClass}}" />
+                    <t t-set="_input_classes"
+                        t-valuef="border-0 text-bg-{{navClass}}" />
+                    <t t-set="search_type" t-valuef="products" />
+                    <t t-set="action"
+                        t-value="keep('/shop'+ ('/category/'+slug(category)) if category else None, search=0) or '/shop'" />
+                    <t t-set="display_image" t-valuef="true" />
+                    <t t-set="display_description" t-valuef="true" />
+                    <t t-set="display_extra_link" t-valuef="true" />
+                    <t t-set="display_detail" t-valuef="true" />
+                    <t t-if="attrib_values">
+                        <t t-foreach="attrib_values" t-as="a">
+                            <input type="hidden" name="attribute_value"
+                                t-att-value="'%s-%s' % (a[0], a[1])" />
+                        </t>
                     </t>
                 </t>
             </t>
-        </t>
-        <t t-else="">
-            <t t-call="website.website_search_box_input">
-                <t t-set="_form_classes"
-                   t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 {{_form_classes}}"/>
-                <t t-set="_submit_classes" t-valuef="btn btn-{{navClass}}"/>
-                <t t-set="_input_classes" t-valuef="border-0 text-bg-{{navClass}}"/>
-                <t t-set="search_type" t-valuef="products"/>
-                <t t-set="action"
-                   t-value="keep('/shop'+ ('/category/'+slug(category)) if category else None, search=0) or '/shop'"/>
-                <t t-set="display_image" t-valuef="true"/>
-                <t t-set="display_description" t-valuef="true"/>
-                <t t-set="display_extra_link" t-valuef="true"/>
-                <t t-set="display_detail" t-valuef="false"/>
-                <t t-if="attrib_values">
-                    <t t-foreach="attrib_values" t-as="a">
-                        <input type="hidden" name="attribute_value" t-att-value="'%s-%s' % (a[0], a[1])"/>
+            <t t-else="">
+                <t t-call="website.website_search_box_input">
+                    <t t-set="_form_classes"
+                        t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 {{_form_classes}}" />
+                    <t t-set="_submit_classes" t-valuef="btn btn-{{navClass}}" />
+                    <t t-set="_input_classes"
+                        t-valuef="border-0 text-bg-{{navClass}}" />
+                    <t t-set="search_type" t-valuef="products" />
+                    <t t-set="action"
+                        t-value="keep('/shop'+ ('/category/'+slug(category)) if category else None, search=0) or '/shop'" />
+                    <t t-set="display_image" t-valuef="true" />
+                    <t t-set="display_description" t-valuef="true" />
+                    <t t-set="display_extra_link" t-valuef="true" />
+                    <t t-set="display_detail" t-valuef="false" />
+                    <t t-if="attrib_values">
+                        <t t-foreach="attrib_values" t-as="a">
+                            <input type="hidden" name="attribute_value"
+                                t-att-value="'%s-%s' % (a[0], a[1])" />
+                        </t>
                     </t>
                 </t>
             </t>
-        </t>
-    </xpath>
-</template>
+        </xpath>
+    </template>
 
 
     <template id="total_inherit" inherit_id="website_sale.total">
         <xpath expr="//div[@id='cart_total']" position="replace">
-            <div id="cart_total" t-if="website_sale_order and website_sale_order.website_order_line" t-att-class="_cart_total_classes">
+            <div id="cart_total"
+                t-if="website_sale_order and website_sale_order.website_order_line"
+                t-att-class="_cart_total_classes">
                 <table class="table mb-0">
                     <tr
                         t-if="website_sale_order._has_deliverable_products()"
                         id="order_delivery"
                         t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
-    
                     >
-                        <td class="ps-0 pt-0 pb-2 border-0 text-muted" colspan="2">
+                        <td class="ps-0 pt-0 pb-2 border-0 text-muted"
+                            colspan="2">
                             Delivery
                         </td>
                         <td class="text-end pe-0 pt-0 pb-2 border-0">
@@ -123,9 +149,8 @@
                                 id="message_no_dm_set"
                                 t-att-class="'d-none' if website_sale_order.carrier_id else ''"
                                 title="Price will be updated after choosing a delivery method"
-    
                             >
-                     -
+                                -
                             </span>
                             <span
                                 t-out="website_sale_order.amount_delivery"
@@ -143,35 +168,38 @@
                             Subtotal
                         </td>
                         <td class="text-end border-0 pb-2 pe-0 pt-0"
-                            >
+                        >
                             <span t-field="website_sale_order.amount_untaxed"
-                                  class="monetary_field"
-                                  style="white-space: nowrap;"
+                                class="monetary_field"
+                                style="white-space: nowrap;"
                                 t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
-                                  t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}"/>
+                                t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
                         </td>
                     </tr>
                     <tr id="order_total_taxes"
-    t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
+                        t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
                     >
-                        <td colspan="2" class="text-muted border-0 ps-0 pt-0 pb-3">Taxes</td>
+                        <td colspan="2"
+                            class="text-muted border-0 ps-0 pt-0 pb-3">Taxes</td>
                         <td class="text-end border-0 pe-0 pt-0 pb-3">
                             <span t-field="website_sale_order.amount_tax"
-                                  class="monetary_field"
-                                  style="white-space: nowrap;"
+                                class="monetary_field"
+                                style="white-space: nowrap;"
                                 t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
-                                  t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}"/>
+                                t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
                         </td>
                     </tr>
                     <tr id="order_total" class="border-top"
                         t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
-    >
-                        <td colspan="2" class="border-0 ps-0 pt-3"><strong>Total</strong></td>
+                    >
+                        <td colspan="2" class="border-0 ps-0 pt-3">
+                            <strong>Total</strong>
+                        </td>
                         <td class="text-end border-0 px-0 pt-3">
                             <strong t-field="website_sale_order.amount_total"
-                                    class="monetary_field text-end p-0"
+                                class="monetary_field text-end p-0"
                                 t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
-                                    t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}"/>
+                                t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
                         </td>
                     </tr>
                 </table>
@@ -179,50 +207,67 @@
         </xpath>
     </template>
     <template id="layout_inherit" inherit_id="website_sale.checkout_layout">
-        <xpath expr="//div[@class='accordion-header d-block align-items-center mb-4']" position="replace">
+        <xpath
+            expr="//div[@class='accordion-header d-block align-items-center mb-4']"
+            position="replace">
             <div class="accordion-header d-block align-items-center mb-4">
                 <button class="accordion-button px-0 collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#o_wsale_accordion_item"
-                        aria-expanded="false"
-                           t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
-                        aria-controls="o_wsale_accordion_item">
+                    data-bs-toggle="collapse"
+                    data-bs-target="#o_wsale_accordion_item"
+                    aria-expanded="false"
+                    t-att-style="'display: none;' if request.session.get('dropship', False) else ''"
+                    aria-controls="o_wsale_accordion_item">
                     <div class="d-flex flex-wrap">
                         <b class="w-100">Order summary</b>
-                        <span t-out="str(website_sale_order.cart_quantity)"/>
-                        &amp;nbsp;item(s)&amp;nbsp;-&amp;nbsp;
-                        <span id="amount_total_summary"
+                        <span
+                            t-out="str(website_sale_order.cart_quantity)" />
+                        &amp;nbsp;item(s)&amp;nbsp;-&amp;nbsp; <span
+                            id="amount_total_summary"
                             class="monetary_field ms-1"
                             t-field="website_sale_order.amount_total"
-                            t-options='{"widget": "monetary", "display_currency": website_sale_order.currency_id}'/>
+                            t-options='{"widget": "monetary", "display_currency": website_sale_order.currency_id}' />
                     </div>
                 </button>
             </div>
         </xpath>
     </template>
-    <template id="checkout_inherit_custom" inherit_id="website_sale.checkout" name="Custom Checkout Address Logic">
-        <xpath expr="//t[@t-call='website_sale.delivery_address_row']" position="replace">
-            <t t-if="order._has_deliverable_products()" groups="account.group_delivery_invoice_address">
+    <template id="checkout_inherit_custom" inherit_id="website_sale.checkout"
+        name="Custom Checkout Address Logic">
+        <xpath expr="//t[@t-call='website_sale.delivery_address_row']"
+            position="replace">
+            <t t-if="order._has_deliverable_products()"
+                groups="account.group_delivery_invoice_address">
                 <div id="delivery_address_row" class="mb-4">
                     <!-- Dropship condition -->
-                    <t t-if="order.partner_shipping_id and order.partner_shipping_id.order_type == 'dropship' and order.partner_shipping_id.so_id">
+                    <t
+                        t-if="order.partner_shipping_id and order.partner_shipping_id.order_type == 'dropship' and order.partner_shipping_id.so_id">
                         <div style="color: black;">Delivery Order</div>
                         <div class="css_editable_mode_display mb-2">
                             <div class="o_address_format">
-                                <t t-esc="order.partner_shipping_id.name"/><br/>
-                                <t t-esc="order.partner_shipping_id.street"/><br/>
-                                <t t-esc="order.partner_shipping_id.city"/><br/>
-                                <t t-esc="order.partner_shipping_id.zip"/> <t t-esc="order.partner_shipping_id.country_id.name"/><br/>
-                                <t t-if="order.partner_shipping_id.phone"><t t-esc="order.partner_shipping_id.phone"/></t>
+                                <t t-esc="order.partner_shipping_id.name" />
+                                <br />
+                                <t t-esc="order.partner_shipping_id.street" />
+                                <br />
+                                <t t-esc="order.partner_shipping_id.city" />
+                                <br />
+                                <t t-esc="order.partner_shipping_id.zip" />
+                                <t
+                                    t-esc="order.partner_shipping_id.country_id.name" />
+                                <br />
+                                <t t-if="order.partner_shipping_id.phone">
+                                    <t t-esc="order.partner_shipping_id.phone" />
+                                </t>
                             </div>
-      <a t-att-href="'/shop/address?partner_id=' + str(order.partner_shipping_id.id) + '&amp;address_type=delivery&amp;use_delivery_as_billing=True&amp;callback=/shop/checkout?dropship_address_submitted=True'" class="js_edit_address">Edit</a>
+                            <a
+                                t-att-href="'/shop/address?partner_id=' + str(order.partner_shipping_id.id) + '&amp;address_type=delivery&amp;use_delivery_as_billing=True&amp;callback=/shop/checkout?dropship_address_submitted=True'"
+                                class="js_edit_address">Edit</a>
                         </div>
                     </t>
                     <!-- Bulk condition -->
                     <t t-elif="request.session.get('bulk')">
-                        <t t-set="addresses" t-value="delivery_addresses"/>
-                        <t t-call="website_sale.delivery_address_row"/>
-                    <!-- Default case -->
+                        <t t-set="addresses" t-value="delivery_addresses" />
+                        <t t-call="website_sale.delivery_address_row" />
+                        <!-- Default case -->
                     </t>
                 </div>
             </t>

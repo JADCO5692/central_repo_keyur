@@ -1,9 +1,6 @@
-import pdb
-
 from odoo import http, fields
 from odoo.tools.translate import _
 from odoo.exceptions import UserError
-import odoo
 import logging
 from odoo.http import request, route
 from odoo.tools.translate import _
@@ -30,7 +27,7 @@ class CustomCheckoutController(http.Controller):
         if request.session.get('dropship'):
             company = request.env.company
             template = company.mail_template_id
-            email_values = {'email_to': sale_order.partner_shipping_id.email, 'email_from': request.env.company.email}
+            email_values = {'email_to': sale_order.partner_shipping_id.email, 'email_from': company.email}
             if template and sale_order.partner_shipping_id.email:
                 template.sudo().send_mail(sale_order.id,email_values=email_values ,force_send=True)
             so_template = sale_order._find_mail_template()
@@ -102,8 +99,3 @@ class CustomCheckoutController(http.Controller):
                 error_message = "Invalid PIN, please try again."
                 return request.render('custom.validate_pin_template_account', {'error_message': error_message,
                                                                        'from_portal': False, })
-
-
-
-
-
