@@ -59,9 +59,10 @@
         </xpath>
     </template>
 
-    <template id="custom_search" inherit_id="website_sale.search">
-        <t t-call="website.website_search_box_input">
-            <t t-if="not request.session.get('dropship', False)">
+<template id="custom_search" inherit_id="website_sale.search">
+    <xpath expr="//t[@t-call='website.website_search_box_input']" position="replace">
+        <t t-if="not request.session.get('dropship', False)">
+            <t t-call="website.website_search_box_input">
                 <t t-set="_form_classes"
                    t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 {{_form_classes}}"/>
                 <t t-set="_submit_classes" t-valuef="btn btn-{{navClass}}"/>
@@ -79,7 +80,9 @@
                     </t>
                 </t>
             </t>
-            <t t-elif="request.session.get('dropship', False)">
+        </t>
+        <t t-else="">
+            <t t-call="website.website_search_box_input">
                 <t t-set="_form_classes"
                    t-valuef="o_wsale_products_searchbar_form me-auto flex-grow-1 {{_form_classes}}"/>
                 <t t-set="_submit_classes" t-valuef="btn btn-{{navClass}}"/>
@@ -98,7 +101,9 @@
                 </t>
             </t>
         </t>
-    </template>
+    </xpath>
+</template>
+
 
     <template id="total_inherit" inherit_id="website_sale.total">
         <xpath expr="//div[@id='cart_total']" position="replace">
