@@ -35,7 +35,7 @@ class CustomCheckoutController(http.Controller):
                 template.sudo().send_mail(sale_order.id,email_values=email_values ,force_send=True)
             so_template = sale_order._find_mail_template()
             base_url = request.httprequest.url_root.rstrip('/')
-            sale_order._send_order_notification_mail(so_template)
+            # sale_order._send_order_notification_mail(so_template)
             portal_url = f"{base_url}/thankyou"
         return {'redirect_url': portal_url}
 
