@@ -12,7 +12,6 @@ from . import stock_picking
 from . import account_move_line
 from . import custom_product_warehouse
 from . import purchase
-from . import payment_method
 from . import payment_stripe
 from . import custom_label_template
 from . import shopify_instance

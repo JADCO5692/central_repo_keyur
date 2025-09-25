@@ -3,11 +3,13 @@
 from odoo import api, models, _
 from datetime import date
 import requests
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class Picking(models.Model):
     _inherit = "stock.picking" 
 
-    @api.onchange('carrier_tracking_ref','state')
     def _create_pmall_invoice(self):
         pm_config = self.env['pmall.config'].sudo().search([],limit=1)
         if self.carrier_tracking_ref and self.state == 'done' and self.sale_id and pm_config:
@@ -40,7 +42,9 @@ class Picking(models.Model):
                 }
             }
             response = requests.post(url, headers=headers, json=payload) 
-            print(response.json())
+            _logger.info("Pmall Response - Start")
+            _logger.info(response.json())
+            _logger.info("Pmall Response - End")
 
     def get_delivery_type(self):
         carrier = ''
@@ -63,3 +67,11 @@ class Picking(models.Model):
             elif dtype == 'shipstation_ept':
                 carrier = 'Shipstation'
         return carrier
+    
+    def write(self,vals):
+        res = super().write(vals)
+        if 'carrier_tracking_ref' in vals:
+            for rec in self:
+                if rec.sale_id and rec.sale_id.is_pmall_order:
+                    rec._create_pmall_invoice()
+        return res

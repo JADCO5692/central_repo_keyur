@@ -694,6 +694,9 @@ class Picking(models.Model):
                                                               weight or self.shipping_weight)
 
     def _send_confirmation_email(self):
-        if not self.shopify_instance_id and not self.partner_id.custom_shipping_confirmation_ids:
+        partners = self.partner_id.custom_shipping_confirmation_ids
+        if not partners:
+            partners = self.partner_id.parent_id.custom_shipping_confirmation_ids
+        if not self.shopify_instance_id and not partners:
             return False
         return super()._send_confirmation_email()

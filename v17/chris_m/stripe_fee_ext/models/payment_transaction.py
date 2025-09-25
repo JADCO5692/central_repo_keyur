@@ -20,7 +20,8 @@ class PaymentTransaction(models.Model):
         for values in values_list:
             provider = self.env['payment.provider'].browse(values['provider_id'])
             partner = self.env['res.partner'].browse(values['partner_id'])
-            if values.get('operation') == 'validation':
+            payment_method_id = self.env['payment.method'].browse(values['payment_method_id'])
+            if values.get('operation') == 'validation' or not payment_method_id.custom_fee_applicable:
                 values['stripe_fees'] = 0
             else:
                 currency = self.env['res.currency'].browse(values.get('currency_id')).exists()
