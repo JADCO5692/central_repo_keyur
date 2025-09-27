@@ -233,11 +233,13 @@
     </template>
     <template id="checkout_inherit_custom" inherit_id="website_sale.checkout"
         name="Custom Checkout Address Logic">
-        <xpath expr="//t[@t-call='website_sale.delivery_address_row']" position="replace">
+        <xpath expr="//t[@t-call='website_sale.delivery_address_row']"
+            position="replace">
             <div id="air_cargo_fields" class="mb-4 d-none">
                 <div class="mb-3">
                     <label class="form-label">Cargo Location</label>
-                    <input type="text" name="cargo_location" class="form-control"/>
+                    <input type="text" name="cargo_location"
+                        class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Cargo Instructions</label>
@@ -245,46 +247,52 @@
                 </div>
             </div>
 
-            <!-- Delivery Address (default shown, hidden by JS if cargo carrier selected) -->
-            <t t-if="order._has_deliverable_products()" groups="account.group_delivery_invoice_address">
+            <!-- Delivery Address (default shown, hidden by JS if cargo carrier
+            selected) -->
+            <t t-if="order._has_deliverable_products()"
+                groups="account.group_delivery_invoice_address">
                 <div id="delivery_address_row" class="mb-4">
                     <!-- Dropship condition -->
-                    <t t-if="order.partner_shipping_id and order.partner_shipping_id.order_type == 'dropship' and order.partner_shipping_id.so_id">
+                    <t
+                        t-if="order.partner_shipping_id and order.partner_shipping_id.order_type == 'dropship' and order.partner_shipping_id.so_id">
                         <div style="color: black;">Delivery Order</div>
                         <div class="css_editable_mode_display mb-2">
                             <div class="o_address_format">
-                                <t t-esc="order.partner_shipping_id.name"/>
-                                <br/>
-                                <t t-esc="order.partner_shipping_id.street"/>
-                                <br/>
-                                <t t-esc="order.partner_shipping_id.city"/>
-                                <br/>
-                                <t t-esc="order.partner_shipping_id.zip"/>
-                                <t t-esc="order.partner_shipping_id.country_id.name"/>
-                                <br/>
+                                <t t-esc="order.partner_shipping_id.name" />
+                                <br />
+                                <t t-esc="order.partner_shipping_id.street" />
+                                <br />
+                                <t t-esc="order.partner_shipping_id.city" />
+                                <br />
+                                <t t-esc="order.partner_shipping_id.zip" />
+                                <t
+                                    t-esc="order.partner_shipping_id.country_id.name" />
+                                <br />
                                 <t t-if="order.partner_shipping_id.phone">
-                                    <t t-esc="order.partner_shipping_id.phone"/>
+                                    <t t-esc="order.partner_shipping_id.phone" />
                                 </t>
                             </div>
-                            <a t-att-href="'/shop/address?partner_id=' + str(order.partner_shipping_id.id) + '&amp;address_type=delivery&amp;use_delivery_as_billing=True&amp;callback=/shop/checkout?dropship_address_submitted=True'"
-                               class="js_edit_address">Edit
+                            <a
+                                t-att-href="'/shop/address?partner_id=' + str(order.partner_shipping_id.id) + '&amp;address_type=delivery&amp;use_delivery_as_billing=True&amp;callback=/shop/checkout?dropship_address_submitted=True'"
+                                class="js_edit_address">Edit
                             </a>
                         </div>
                     </t>
                     <!-- Bulk condition -->
                     <t t-elif="request.session.get('bulk')">
-                        <t t-set="addresses" t-value="delivery_addresses"/>
-                        <t t-call="website_sale.delivery_address_row"/>
+                        <t t-set="addresses" t-value="delivery_addresses" />
+                        <t t-call="website_sale.delivery_address_row" />
                     </t>
                 </div>
             </t>
         </xpath>
     </template>
-   <template id="custom_module_checkout_carrier_inherit" inherit_id="website_sale.delivery_method">
-    <xpath expr="//input[@name='o_delivery_radio']" position="attributes">
-        <attribute name="t-att-data-is-custom-cargo">
-            dm.is_custom_cargo and 'true' or 'false'
-        </attribute>
-    </xpath>
-</template>
+    <template id="custom_module_checkout_carrier_inherit"
+        inherit_id="website_sale.delivery_method">
+        <xpath expr="//input[@name='o_delivery_radio']" position="attributes">
+            <attribute name="t-att-data-is-custom-cargo">
+                dm.is_custom_cargo and 'true' or 'false'
+            </attribute>
+        </xpath>
+    </template>
 </odoo>

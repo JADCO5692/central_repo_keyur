@@ -25,7 +25,6 @@ export const SendEmailRedirect = publicWidget.Widget.extend({
         // Disable button + show loader
         btn.disabled = true;
         btn.innerHTML = `Processing... <span class="loader"></span>`;
-        debugger;
         const cargo_location = document.querySelector("[name='cargo_location']")?.value || "";
         const cargo_instructions = document.querySelector("[name='cargo_instructions']")?.value || "";
 

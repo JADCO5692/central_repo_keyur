@@ -45,16 +45,20 @@ class SaleOrder(models.Model):
 
     def action_custom_checkout(self, order_type):
         template = self._find_mail_template()
-        self.write(
-            {
-                'is_online':True,
-                'order_type': order_type,
-            }
-        )
-
-        if template:
-            self._send_order_notification_mail(template)        
-
+        for order in self:
+            order.write(
+                {
+                    'is_online':True,
+                    'order_type': order_type,
+                }
+            )
+    
+            if template:
+                order._send_order_notification_mail(template)        
+    
+            if order_type == 'bulk' and not order.partner_id.is_advanced_payment:
+                order.action_confirm()
+        
         portal_url = self.get_portal_url()
         return portal_url
 

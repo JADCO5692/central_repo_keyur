@@ -15,8 +15,6 @@ WebsiteSaleCheckout.include({
         }
 
         // Check if carrier has `is_custom_cargo`
-        debugger;
-        console.log("Checked Radio Data:", checkedRadio.dataset);
         const isCustomCargo = checkedRadio.dataset.isCustomCargo === "true";
 
         if (isCustomCargo) {

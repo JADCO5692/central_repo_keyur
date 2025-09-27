@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'custom',
-    "version": "18.0.0.0.6",
+    "version": "18.0.0.0.7",
     'category': 'Sales',
     'summary': 'Custom Changes',
     'description': """

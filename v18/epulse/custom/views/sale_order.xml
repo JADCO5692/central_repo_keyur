@@ -3,17 +3,17 @@
     <record id="view_sale_order_isp_mgmt_form_inherit_erp" model="ir.ui.view">
         <field name="name">sale.order.form.erp</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='validity_date']" position="after">
-                <field name="is_online"/>
-                <field name="order_type"/>
-                <field name="cargo_location"/>
-                <field name="cargo_instructions"/>
-
+                <field name="is_online" />
+                <field name="order_type" />
+                <field name="cargo_location" />
+                <field name="cargo_instructions" />
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="attributes">
-                <attribute name="domain">[('is_company', '=', True),('company_id', 'in', (False, company_id))]</attribute>
+                <attribute name="domain">[('is_company', '=',
+                    True),('company_id', 'in', (False, company_id))]</attribute>
             </xpath>
         </field>
     </record>
