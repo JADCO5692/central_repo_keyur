@@ -13,6 +13,8 @@ class DeliveryCarrier(models.Model):
             ('dropship', 'Dropship'),
         ], string='Order Type')
 
+    is_custom_cargo = fields.Boolean(string='Is Delivery Cargo')
+
     def _is_available_for_order(self, order):
         bulk_bool = request.session.get('bulk')
         dropship_bool = request.session.get('dropship')

@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <field name="fixed_price" position="after">
                 <field name="order_type" />
+                <field name="is_custom_cargo" />
             </field>
         </field>
     </record>

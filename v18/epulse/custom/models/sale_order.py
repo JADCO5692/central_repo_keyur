@@ -12,6 +12,8 @@ class SaleOrder(models.Model):
         ('bulk', 'Bulk Order'),
         ('dropship', 'Dropship'),
         ], string='Order Type')
+    cargo_location = fields.Char(string='Cargo Location')
+    cargo_instructions = fields.Html(string='Cargo Instructions')
 
     @api.model
     def create(self, vals):
@@ -55,3 +57,10 @@ class SaleOrder(models.Model):
 
         portal_url = self.get_portal_url()
         return portal_url
+
+    def _has_cargo_shipping(self):
+        self.ensure_one()
+        if self.carrier_id and self.carrier_id.is_custom_cargo:
+            return True
+        else:
+            return False
