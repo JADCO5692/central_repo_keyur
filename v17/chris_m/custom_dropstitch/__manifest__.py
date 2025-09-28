@@ -8,7 +8,7 @@
     ),
     "author": "theERPbot",
     "website": "https://www.theerpbot.com",
-    "version": "17.0.1.7.38",
+    "version": "17.0.1.7.39",
     "development_status": "Production/Stable",
     "license": "LGPL-3",
     "installable": True,
@@ -81,6 +81,7 @@
             "/custom_dropstitch/static/src/js/field/float_field.js", 
             "/custom_dropstitch/static/src/js/widget.js",
             "/custom_dropstitch/static/src/xml/widget.xml",
+            "/custom_dropstitch/static/src/xml/ForecastedDetails.xml"
         ],
     },
     "images": [],

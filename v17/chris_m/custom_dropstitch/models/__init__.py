@@ -37,3 +37,5 @@ from . import payment_gateway
 from . import mail_server
 from . import account_payment
 from . import mail_thread
+from . import hr_employee
+from . import stock_forecasted
