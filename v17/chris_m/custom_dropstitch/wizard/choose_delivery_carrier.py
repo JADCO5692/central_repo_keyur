@@ -168,6 +168,7 @@ class ChooseDeliveryCarrierCustom(models.TransientModel):
             
             carriers_non_shipstation = carriers.filtered(lambda carrier: carrier.delivery_type != 'shipstation_ept')
             carriers_shopify = carriers.filtered(lambda carrier: carrier.shopify_source)
+            carriers_outside_usa = carriers.filtered(lambda carrier: carrier.custom_outside_usa)
             
             if rec.order_id.partner_id.custom_allowed_shipping_ids:
                 rec.available_carrier_ids = rec.order_id.partner_id.custom_allowed_shipping_ids
@@ -178,6 +179,9 @@ class ChooseDeliveryCarrierCustom(models.TransientModel):
                     rec.available_carrier_ids = carriers_shopify
                 else:
                     rec.available_carrier_ids = carriers.available_carriers(rec.order_id.partner_shipping_id) if rec.partner_id else carriers
+                    
+            if rec.order_id.partner_shipping_id.country_id.code != "US":
+                rec.available_carrier_ids = carriers_outside_usa
     
     def _get_shipment_rate(self):
         total_weight = self.total_weight

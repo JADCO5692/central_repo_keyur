@@ -197,6 +197,14 @@ class Picking(models.Model):
             )
             if secondary_default_carrier:
                 carrier = secondary_default_carrier
+                
+        if self.partner_id.country_id.code != "US":
+            carriers_outside_usa = self.env["delivery.carrier"].search(
+                [("custom_outside_usa", "=", True)], limit=1
+            )
+            if carriers_outside_usa:
+                carrier = carriers_outside_usa
+        
         return {
             "name": name,
             "type": "ir.actions.act_window",
