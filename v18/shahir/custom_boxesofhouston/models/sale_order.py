@@ -96,6 +96,7 @@ class SaleOrder(models.Model):
         """Open the account.payment.register wizard to pay the selected journal entries.
         :return: An action opening the account.payment.register wizard.
         """
+        self._check_negative_margin()
         if not self.stock_route_id:
             raise UserError("Please add 'Route' on order to proceed")
         message_id = self.env["custom.order.payment"].create(
@@ -118,6 +119,7 @@ class SaleOrder(models.Model):
         pricelists = self.env['product.pricelist'].sudo().search([])
         for rec in self:
             if rec.partner_id:
+                rec._check_negative_margin()
                 customer_id = rec.partner_id.id
                 customer_pricelist = pricelists.filtered(lambda p: customer_id in p.customer_id.ids)
                 if customer_pricelist:
@@ -217,6 +219,7 @@ class SaleOrder(models.Model):
         return super().action_quotation_send()
 
     def custom_action_send_email(self):
+        self._check_negative_margin()
         if not self.stock_route_id:
             raise UserError("Please add 'Route' on order to proceed")
 
