@@ -13,6 +13,25 @@ class SaleOrder(models.Model):
         string="NPC Fees Waiver Start",
         help="Date from which waiver period starts. Defaults to subscription start date.",copy=False
     )
+    npc_waiver_locked = fields.Boolean(
+        string="Waiver Locked",
+        compute="_compute_npc_waiver_locked",
+        store=True
+    )
+
+    @api.depends("invoice_ids.invoice_line_ids")
+    def _compute_npc_waiver_locked(self):
+        for sub in self:
+            locked = False
+            if sub.invoice_ids and sub.npc_fees_waiver_months:
+                for inv in sub.invoice_ids:
+                    if any(
+                            line.product_id.is_np_fees_product and line.price_unit == 0
+                            for line in inv.invoice_line_ids
+                    ):
+                        locked = True
+                        break
+            sub.npc_waiver_locked = locked
 
     @api.depends('npc_fees_waiver_months', 'npc_fees_waiver_start_date', 'next_invoice_date')
     def _compute_npc_fees_waiver_days(self):
