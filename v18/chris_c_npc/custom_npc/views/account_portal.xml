@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_invoice_page_ext" inherit_id="account.portal_invoice_page" name="portal invoice">
+        <xpath expr="//t[@t-call='portal.portal_record_sidebar']//h2" position="replace">
+            <h2 class="mb-0 text-break mx-auto">
+                <span t-esc="invoice.amount_total + invoice.custom_stripe_fees" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+            </h2>
+        </xpath>
+    </template>
+    <template id="report_invoice_document_ext" inherit_id="account.report_invoice_document" name="report invoice document">
+        <xpath expr="//t[@t-foreach='payments_vals']" position="replace">
+        </xpath>
+    </template>
+    <template id="document_tax_totals_template_ext" inherit_id="account.document_tax_totals_template" name="template_name">
+        <xpath expr="//tr[contains(@class,'o_total')]" position="after">
+            <tr class="o_total" t-if="o and o.custom_stripe_fees">
+                <td><strong>Card Fees</strong></td>
+                <td class="text-end">
+                    <strong t-out="o.custom_stripe_fees"
+                            t-options='{"widget": "monetary", "display_currency": currency}'
+                    >31.05</strong>
+                </td>
+            </tr>
+            <tr class="o_total" t-if="o and o.custom_stripe_fees">
+                <td><strong>Total Incl. Card fees</strong></td>
+                <td class="text-end">
+                    <strong t-out="o.custom_total_inc_fees" t-options='{"widget": "monetary", "display_currency": currency}'
+                    >31.05</strong>
+                </td>
+            </tr>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC Sign Changes",
-    'version': '18.0.0.0',
+    'version': '18.0.0.2',
     'category': 'Sign',
     'summary': "Custom NPC Sign",
     'description': """

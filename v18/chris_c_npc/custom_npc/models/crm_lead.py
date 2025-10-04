@@ -43,25 +43,43 @@ class CrmLead(models.Model):
             },
         }
     
-    def get_lead_assigned(self,date_domain): 
-        domain = [('field_id.name', '=', 'user_id'),('new_value_integer', '!=', False)]+date_domain
-        tracking_vals = self.env['mail.tracking.value'].sudo().search(domain) 
-        # lead_ids = tracking_vals.mapped('mail_message_id.res_id')
-        # result = self.env['crm.lead'].browse(lead_ids)
-        # return result 
+    def get_lead_assigned(self, date_domain): 
+        domain = [
+            ('field_id.name', '=', 'user_id'),
+            ('new_value_integer', '!=', False)
+        ] + date_domain
 
-        result = {}
+        tracking_vals = self.env['mail.tracking.value'].sudo().search(domain) 
+
+        result = {}       # counts
+        record_ids = {}   # lead IDs per salesperson
+        rids = []
         for val in tracking_vals:
             salesperson_id = val.new_value_integer
-            if salesperson_id:
-                result.setdefault(salesperson_id, 0)
-                result[salesperson_id] += 1
+            lead_id = val.mail_message_id.res_id
+            print(lead_id)
+            leadobj = self.search([('id','=',lead_id)],limit=1)
+            if len(leadobj) and lead_id not in rids: 
+                if salesperson_id:
+                    # Count
+                    result.setdefault(salesperson_id, 0)
+                    result[salesperson_id] += 1
+
+                    # Record IDs
+                    record_ids.setdefault(salesperson_id, [])
+                    record_ids[salesperson_id].append(lead_id)
+                    rids.append(lead_id)
 
         # Add salesperson names
         salespersons = self.env['res.users'].browse(result.keys())
+        final_counts = {sp.name: result[sp.id] for sp in salespersons}
+        final_records = {sp.name: record_ids.get(sp.id, []) for sp in salespersons}
+
         return {
-            sp.name: result[sp.id] for sp in salespersons
+            "counts": final_counts,
+            "record_ids": final_records,
         }
+
 
     def get_won_leads_by_date(self, date_domain):
         Tracking = self.env['mail.tracking.value']

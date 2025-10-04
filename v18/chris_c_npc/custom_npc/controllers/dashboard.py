@@ -28,7 +28,7 @@ class SalesDashboard(http.Controller):
 
         # Fetch invoices for given month
         invoices = request.env['account.move'].search([
-            ('payment_state', 'in', ['paid', 'in_payment', 'not_paid', 'partial']),
+            ('payment_state', 'in', ['draft','paid', 'in_payment', 'not_paid', 'partial']),
             ('move_type', '=', 'out_invoice'),
             ('commission_id', '=', False),
             ('is_commission_excluded', '=', False),

@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='date_done']" position="after">
                 <field name="is_urgent" widget="boolean_badge" />
+                <field name="cargo_location" />
+                <field name="cargo_instructions" />
             </xpath>
         </field>
     </record>

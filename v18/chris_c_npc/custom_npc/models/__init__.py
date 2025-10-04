@@ -7,6 +7,6 @@ from . import res_partner
 from . import helpdesk_ticket
 from . import project_task_type
 from . import project_task
-from . import payment_method
 from . import payment_stripe
 from . import account_move_send
+from . import mail_message

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- list view for Affiliate Leads -->
+    <record id="view_crm_lead_np_pipline_list" model="ir.ui.view">
+        <field name="name">crm.lead.affiliate.list</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email_from"/>
+                <field name="reg_date" string="Registration Date"/>
+                <field name="custom_user_referral"/>
+                <field name="stage_id" optional="show"/>
+                <field name="description" optional="show"/>
+                <field name="custom_last_stage_changed_date" optional="show"/>
+                <field name="custom_stage_duration_hours" optional="show"/>
+                <field name="activity_ids" optional="show"/>
+                <field name="activity_state" optional="show"/>
+                <field name="meeting_date" optional="show"/>
+                <field name="activity_calendar_event_id" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="first_payment_date" optional="show"/>
+                <field name="second_payment_date" optional="show"/>
+                <field name="calendly_questions_answers" optional="show"/>
+                <field name="custom_sch_zoom_call_date" optional="hide"/>
+                <field name="custom_contract_sent_date" optional="hide"/>
+                <field name="custom_invoice_sent_date" optional="hide"/>
+                <field name="custom_all_contracts_signed2"/>
+                <field name="active_status_label" optional="hide"/>
+                <field name="lost_reason_id" optional="hide"/>
+                <field name="custom_invoice_sent_date" optional="show"/>
+                <field name="custom_contract_sent_date" optional="show"/>
+                <field name="custom_registered" optional="show"/>
+                <field name="custom_matched_with_physician" optional="show"/>
+                <field name="custom_scheduled_meet_physician" optional="show"/>
+                <field name="custom_met_considering_option" optional="show"/>
+                <field name="custom_met_going_to_contract" optional="show"/>
+                <field name="custom_bus_contract_signed" optional="show"/>
+                <field name="custom_awaiting_state_approval" optional="show"/>
+                <field name="custom_paid_client" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view for Affiliate Leads (reuse default form) -->
+
+    <!-- Action for Affiliate Leads -->
+    <record id="action_np_pipline_list" model="ir.actions.act_window">
+        <field name="name">Np Pipline Show</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_crm_lead_np_pipline_list"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu item for Affiliate Leads -->
+    <menuitem id="menu_np_pipline_list" name="NP Pipeline List" action="action_np_pipline_list"
+              parent="crm.crm_menu_sales" sequence="0"/>
+</odoo>

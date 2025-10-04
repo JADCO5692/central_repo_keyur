@@ -10,6 +10,7 @@
                     <group>
                         <field name="lead_partner_ids" invisible="1"/>
                         <field name="vendor_id" domain="[('id', 'in', lead_partner_ids)]" required="1"/>
+                        <field name="invoice_date"/>
                     </group>
                     <sperator/>
                     <field name="invoice_line_ids">

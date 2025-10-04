@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC",
-    'version': '18.0.0.60',
+    'version': '18.0.0.73',
     'category': 'CRM',
     'summary': "Custom NPC",
     'description': """
@@ -29,16 +29,22 @@
         'views/payment_method_view.xml',
         'views/payment_form_template.xml',
 		'views/portal_invoice.xml',
+        'views/mail_message.xml',
+        'views/account_portal.xml',
+        'views/np_portal.xml'
     ],
     'installable': True,
     'application': False,
     'assets': {
+        'web.assets_frontend': [
+            '/custom_npc/static/src/js/portal.js'
+        ],
         'web.assets_backend': [
             'custom_npc/static/plugins/*',
             'custom_npc/static/src/js/ChatterExt.js',
             'custom_npc/static/src/xml/ChatterExt.xml',
             'custom_npc/static/src/dashboard/*',
-            'custom_npc/static/src/dashboard_sales/*',
+            'custom_npc/static/src/dashboard_sales/*', 
         ],
     },
     'license': 'LGPL-3',

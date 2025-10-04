@@ -11,6 +11,7 @@ class VendorSelection(models.TransientModel):
     vendor_id = fields.Many2one("res.partner", string="Vendor")
     lead_partner_ids = fields.Many2many(
         'res.partner',related='invoice_line_ids.lead_partner_ids')
+    invoice_date = fields.Date(string='Invoice Date')
 
     @api.model
     def default_get(self, fields):
@@ -23,4 +24,4 @@ class VendorSelection(models.TransientModel):
 
 
     def process(self):
-        return self.invoice_line_ids.move_id._action_create_vendor_bill(self.vendor_id, self.invoice_line_ids)
+        return self.invoice_line_ids.move_id._action_create_vendor_bill(self.vendor_id, self.invoice_line_ids, self.invoice_date_due)

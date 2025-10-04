@@ -18,6 +18,7 @@ class NpsDashboard(http.Controller):
             'signed_contract':self.get_signed_contracts_report(params),
             'stage_durations':self.get_speed_ti_interview(params),
             'activity_complete_avg':self.get_avg_completion_time(params),
+            'contract_signed_not_cnl':self.get_contract_signed_not_cnl(params),
             'salespersons':sales_p
         }
 
@@ -40,6 +41,7 @@ class NpsDashboard(http.Controller):
          
         # 1) Total per salesperson (fast via read_group)
         totals = {}
+        record_ids = defaultdict(list)
         try:
             grp_totals = Model.read_group(domain, fields=['user_id'], groupby=['user_id'], lazy=False)
         except Exception:
@@ -50,6 +52,10 @@ class NpsDashboard(http.Controller):
             count = rec.get("user_id_count") or rec.get("__count") or 0
             totals[name] = count
 
+        matching_orders = Model.search(domain)
+        for order in matching_orders:
+            salesrep = order.user_id.name or "Unassigned"
+            record_ids[salesrep].append(order.id)
         # 2) Monthly per salesperson
         monthly = defaultdict(dict)  # { salesperson_name: { 'YYYY-MM': count } }
         # group by user + month of date_field
@@ -70,8 +76,8 @@ class NpsDashboard(http.Controller):
                 monthly[name][month_key] = monthly[name].get(month_key, 0) + count
 
         return {
-            'total_per_rep': totals,
-            # 'monthly_per_rep': dict(monthly),
+            'total_per_rep': totals, 
+            'record_ids': dict(record_ids),
         }
     
     def get_won_leads(self,params):
@@ -109,16 +115,85 @@ class NpsDashboard(http.Controller):
         return result
 
 
-    def get_avg_completion_time(self,params):
+    def get_avg_completion_time(self, params):
+        zoom_stage = request.env['crm.stage'].search([('name', '=', 'Scheduled zoom call')], limit=1)
         date_domain = self.prepare_date_domain('create_date', params)
-        # domain = [
-        #     ('res_model', '=', 'crm.lead'),
-        #     ('date_done', '!=', False),
-        # ]
-        completed_activities = request.env['mail.message'].search_count([
-        ('model','=','crm.lead'),('subtype_id', '=', request.env.ref('mail.mt_activities').id)]+date_domain)
-        # activities = request.env['mail.activity'].search(domain + date_domain)
-        return completed_activities
+
+        completed_activities = request.env['mail.message'].search([
+            ('model', '=', 'crm.lead'),
+            ('subtype_id', '=', request.env.ref('mail.mt_activities').id)
+        ] + date_domain)
+
+        salesperson_wise = {}
+
+        for act in completed_activities:
+            lead = act.record_ref
+            salesrep = lead.user_id
+
+            # tracking for stage changes
+            trackings = request.env["mail.tracking.value"].sudo().search(
+                [
+                    ("field_id.name", "=", "stage_id"),
+                    ("mail_message_id.model", "=", "crm.lead"),
+                    ("mail_message_id.res_id", "=", lead.id),
+                ] + date_domain,
+                order="create_date asc",
+            )
+
+            # filter only zoom stage changes
+            zoom_trackings = trackings.filtered(lambda a: a.new_value_integer == zoom_stage.id)
+
+            if zoom_trackings:
+                last_zoom_tracking = zoom_trackings.sorted(lambda r: r.create_date)[-1]
+
+                if last_zoom_tracking and last_zoom_tracking.create_date > act.create_date:
+                    if salesrep.name not in salesperson_wise:
+                        salesperson_wise[salesrep.name] = {
+                            'count': 0,
+                            'ids':[]
+                        }
+
+                    salesperson_wise[salesrep.name]['count'] += 1
+                    salesperson_wise[salesrep.name]['ids'] += [act.id]
+
+        return salesperson_wise
+
+    
+    def get_contract_signed_not_cnl(self, params):
+        """
+        Get leads with signed contracts (not cancelled) and count them by salesperson.
+        """
+        crm_lead_obj = request.env['crm.lead'].sudo()
+        
+        # Prepare the date domain for filtering
+        date_domain = self.prepare_date_domain('custom_all_contracts_signed2', params)
+        
+        # Search leads with non-false custom_all_contracts_signed2 and date domain
+        leads = crm_lead_obj.search([('custom_all_contracts_signed2', '!=', False)] + date_domain)
+        
+        # Filter leads where no order has subscription_state == '6_churn'
+        lead_ids = [
+            ld.id for ld in leads
+            if not any(order.subscription_state == '6_churn' for order in ld.order_ids)
+        ]
+        
+        # Group leads by salesperson (user_id) and count them
+        salesperson_counts = {}
+        for lead in leads:
+            if lead.id in lead_ids:  # Only count leads that passed the filter
+                salesperson = lead.user_id
+                if salesperson:  # Ensure salesperson exists 
+                    salesperson_counts[salesperson.name] = salesperson_counts.get(salesperson.name, 0) + 1
+                else:
+                    # Handle leads with no salesperson (optional)
+                    salesperson_counts['no_salesperson'] = salesperson_counts.get('no_salesperson', 0) + 1
+         
+        
+        return {
+            'lead_ids': lead_ids,
+            'lead_counts': len(lead_ids),
+            'salesperson_counts': salesperson_counts
+        }
     
     def prepare_date_domain(self,date_field,params): 
         time_frame = params.get('time_frame')

@@ -3,8 +3,11 @@ from odoo.exceptions import ValidationError
 from datetime import timedelta
 class StockPicking(models.Model):
     _inherit = "stock.picking"
-    is_urgent=fields.Boolean('Urgent')
+
+    is_urgent = fields.Boolean('Urgent')
     urgency_badge = fields.Char(compute="_compute_urgency_badge", store=False)
+    cargo_location = fields.Char("Cargo Location", related="sale_id.cargo_location")
+    cargo_instructions = fields.Html("Cargo Instructions", related="sale_id.cargo_instructions")
 
     @api.depends('is_urgent', 'state')
     def _compute_urgency_badge(self):
@@ -21,15 +24,3 @@ class StockPicking(models.Model):
             if urgent_pricelist.name == 'Urgent':
                 vals['is_urgent']=True
         return super(StockPicking, self).create(vals)
-
-    # def button_validate(self):
-    #     res = super(StockPicking, self).button_validate()
-    #     for picking in self:
-    #         if picking.state == 'done':
-    #             # Send Email using the existing _send_confirmation_email method
-    #             try:
-    #                 picking._send_confirmation_email()
-    #             except Exception as e:
-    #                 picking.message_post(body=f"Failed to send Email: {str(e)}")
-
-    #     return res

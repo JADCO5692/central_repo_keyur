@@ -2,12 +2,20 @@
 <odoo>
 
     <template id="payment_payment_methods_ext" inherit_id="payment.payment_methods" name="Payments Methods">
+        <xpath expr="//div[contains(@class,'wrap')]//div[contains(@class,'container')]/div[contains(@class,'row')]" position="before">
+            <div t-if="not len(tokens_sudo)" class="row justify-content-center text-center m-auto mb-5">
+                <h2 class="fs-4 fw-bolder">
+                    Please add your saved payment method to download your signed documents
+                </h2>
+                <span class="mt-4">You can change your payment method at any time.</span>
+            </div>
+        </xpath>
         <xpath expr="//div[contains(@class,'wrap')]//div[contains(@class,'container')]" position="inside">
             <div class="container docs_to_doenload my-4" >
                 <div class="row gap-2 justify-content-center">
                     <div t-if="len(tokens_sudo)" class="col-12 col-md-7">
                         <h4 class="fs-6 small text-uppercase fw-bolder">
-                            Your Signed Docusments
+                            Your Signed Documents
                         </h4>
                     </div>
                     <div class="col-12 col-md-7 px-0">
@@ -21,13 +29,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                        <div t-if="not len(tokens_sudo)" class="row justify-content-center text-center m-auto">
-                            <h2 class="fs-4 fw-bolder">
-                                Please add your saved payment method to download your signed documents
-                            </h2>
-                            <span class="mt-4">You can change your payment method at any time.</span>
-                        </div>
+                        </div>  
                     </div>
                 </div>    
             </div>

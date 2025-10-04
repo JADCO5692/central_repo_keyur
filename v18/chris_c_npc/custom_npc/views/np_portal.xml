@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="np_portal_my_home_sale" name="Quotations / Sales Orders" inherit_id="portal.portal_my_home" priority="60">
+        <xpath expr="//div[contains(@class,'o_portal_my_home')]" position="attributes">
+            <attribute name="t-att-data-nptype">request.env.user.partner_id.npc_user_type or 'none'</attribute>
+        </xpath>
+        <xpath expr="//div[@id='portal_alert_category']" position="attributes"> 
+            <attribute name="t-attf-class">o_portal_category row g-2 mt-3 #{'d-none' if request.env.user.partner_id.npc_user_type in ['PHYS',False] else ''}</attribute>
+        </xpath>
+        <xpath expr="//div[@id='portal_service_category']" position="attributes"> 
+            <attribute name="t-attf-class">o_portal_category row g-2 mt-3 #{'d-none' if request.env.user.partner_id.npc_user_type in ['PHYS',False] else ''}</attribute>
+        </xpath>
+        <xpath expr="//div[@id='portal_vendor_category']" position="attributes"> 
+            <attribute name="t-attf-class">o_portal_category row g-2 mt-3 #{'d-none' if request.env.user.partner_id.npc_user_type in ['PHYS',False] else ''}</attribute>
+        </xpath>
+        <xpath expr="//div[@id='portal_vendor_category']" position="attributes"> 
+            <attribute name="t-attf-class">o_portal_category row g-2 mt-3 #{'d-none' if request.env.user.partner_id.npc_user_type in ['PHYS',False] else ''}</attribute>
+        </xpath>
+         <xpath expr="//div[@id='portal_common_category']" position="attributes"> 
+            <attribute name="t-attf-class">o_portal_category row g-2 mt-3 #{'d-none' if request.env.user.partner_id.npc_user_type in ['PHYS',False] else ''}</attribute>
+        </xpath>
+    </template>
+    <template id="sale_portal_my_home_sale" inherit_id="sale.portal_my_home_sale" name="portal_my_home_sale">
+        <xpath expr="//t[@t-call='portal.portal_docs_entry']" position="attributes">
+            <attribute name="t-if">request.env.user.partner_id.npc_user_type == 'APP'</attribute>
+        </xpath>
+    </template> 
+</odoo>
