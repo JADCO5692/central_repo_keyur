@@ -14,6 +14,7 @@ class SaleOrder(models.Model):
         ], string='Order Type')
     cargo_location = fields.Char(string='Cargo Location')
     cargo_instructions = fields.Html(string='Cargo Instructions')
+    is_cargo_shipping = fields.Boolean(string='Is Cargo Shipping',related='carrier_id.is_custom_cargo', store=True)
 
     @api.model
     def create(self, vals):

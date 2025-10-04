@@ -25,3 +25,8 @@ class DeliveryCarrier(models.Model):
         if self.order_type == order_type or not self.order_type:
             return True
         return False
+
+class PickingType(models.Model):
+    _inherit = 'stock.picking'
+
+    is_cargo_shipping = fields.Boolean(string='Is Cargo Shipping',related='carrier_id.is_custom_cargo', store=True)

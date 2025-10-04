@@ -10,6 +10,7 @@
                 <field name="order_type" />
                 <field name="cargo_location" />
                 <field name="cargo_instructions" />
+                <field name="is_cargo_shipping" invisible="1" />
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="attributes">
                 <attribute name="domain">[('is_company', '=',
@@ -17,4 +18,16 @@
             </xpath>
         </field>
     </record>
+
+    <record id="custom_sale_order_tree" model="ir.ui.view">
+        <field name="name">custom.sale.order.list.inherit.sale.stock</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+              <attribute name="decoration-success">is_cargo_shipping</attribute>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

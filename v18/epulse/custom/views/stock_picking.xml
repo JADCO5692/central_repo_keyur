@@ -9,7 +9,19 @@
                 <field name="is_urgent" widget="boolean_badge" />
                 <field name="cargo_location" />
                 <field name="cargo_instructions" />
+                <field name="is_cargo_shipping" invisible="1" />
             </xpath>
         </field>
     </record>
+     <record id="custom_stock_picking_inherited_wk" model="ir.ui.view">
+        <field name="name">custom.stock.picking.list.shipping</field>
+        <field name="model">stock.picking</field>
+         <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+              <attribute name="decoration-success">is_cargo_shipping</attribute>
+            </xpath>
+      </field>
+    </record>
+
 </odoo>

@@ -19,7 +19,6 @@ class CustomCheckoutController(http.Controller):
 
         cargo_location = kwargs.get("cargo_location")
         cargo_instructions = kwargs.get("cargo_instructions")
-        print("Cargo Location:", cargo_location)
         if cargo_location or cargo_instructions:
             sale_order.write({
                 "cargo_location": cargo_location,
