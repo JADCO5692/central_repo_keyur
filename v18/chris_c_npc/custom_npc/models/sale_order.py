@@ -6,31 +6,33 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     np_partner_id = fields.Many2one('res.partner','NP Partner')
-    npc_fees_waiver_months = fields.Integer(default=0, string="NPC Fees - Waiver Months")
+    npc_fees_waiver_months = fields.Integer(default=0, string="NPC Fees - Waiver Months",copy=False)
     
     npc_fees_waiver_days = fields.Integer(string="NPC Fees - Waiver Days",compute='_compute_npc_fees_waiver_days', tracking=True)
+    npc_fees_waiver_start_date = fields.Date(
+        string="NPC Fees Waiver Start",
+        help="Date from which waiver period starts. Defaults to subscription start date.",copy=False
+    )
 
-    @api.depends('npc_fees_waiver_months', 'start_date', 'next_invoice_date')
+    @api.depends('npc_fees_waiver_months', 'npc_fees_waiver_start_date', 'next_invoice_date')
     def _compute_npc_fees_waiver_days(self):
         today = date.today()
-        for record in self:
-            months = record.npc_fees_waiver_months or 0
-            start = record.start_date
-            nxt_inv = record.next_invoice_date
+        for rec in self:
+            months = rec.npc_fees_waiver_months or 0
+            if not rec.npc_fees_waiver_start_date and rec.npc_fees_waiver_months:
+                rec.npc_fees_waiver_start_date = rec.next_invoice_date
+            start = rec.npc_fees_waiver_start_date
+            nxt = rec.next_invoice_date
 
-            # No months or missing dates → zero days
-            if months <= 0 or not start or not nxt_inv:
-                record.npc_fees_waiver_days = 0
+            if months <= 0 or not start:
+                rec.npc_fees_waiver_days = 0
                 continue
 
-            last_date = start + relativedelta(months=months)
-            total_days = (last_date - start).days
-            used_days = (nxt_inv - start).days if nxt_inv >= start else 0
-
+            waiver_end = start + relativedelta(months=months)
+            total_days = (waiver_end - start).days
+            used_days = (nxt - start).days if nxt and nxt >= start else 0
             remaining = total_days - used_days
-            if remaining > 0:
-                remaining = remaining - 1
-            record.npc_fees_waiver_days = max(0, remaining)
+            rec.npc_fees_waiver_days = max(0, remaining)
 
     @api.onchange('opportunity_id')
     def create_sale_lines(self): 

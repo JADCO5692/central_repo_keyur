@@ -265,7 +265,7 @@ class AccountMove(models.Model):
                 fee = line.price_unit
                 inv_count = subscription.invoice_count
                 months = subscription.npc_fees_waiver_months
-                start = subscription.start_date
+                start = subscription.npc_fees_waiver_start_date
                 end = subscription.end_date
                 nxt = subscription.next_invoice_date
                 if line.product_id.is_np_fees_product and subscription.npc_fees_waiver_months:
@@ -280,6 +280,8 @@ class AccountMove(models.Model):
                         if end and (nxt.year == end.year and nxt.month == end.month) and subscription.npc_fees_waiver_days and subscription.npc_fees_waiver_days < end.day:
                             days_in_end_month = calendar.monthrange(end.year, end.month)[1]
                             used_days = end.day - subscription.npc_fees_waiver_days
+                            if used_days <= 0:
+                                used_days = 0
                             prorated_amount = round(fee * used_days / days_in_end_month, 2)
                             expire_date = date(end.year, end.month, subscription.npc_fees_waiver_days)
                             line.price_unit = prorated_amount
@@ -293,6 +295,8 @@ class AccountMove(models.Model):
                         else:
                             days_in_start_month = calendar.monthrange(start.year, start.month)[1]
                             used_days = days_in_start_month - subscription.npc_fees_waiver_days
+                            if used_days <= 0:
+                                used_days = 0
                             expire_date = date(nxt.year, nxt.month, subscription.npc_fees_waiver_days)
                             prorated_amount = round(fee * used_days / days_in_start_month, 2)
                             line.price_unit = prorated_amount
