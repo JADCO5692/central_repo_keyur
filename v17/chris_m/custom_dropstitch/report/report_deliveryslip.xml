@@ -127,10 +127,6 @@
                         <tr t-if="o.carrier_tracking_ref">
                             <td
                                     style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
-                                Tracking #:&#160;
-                            </td>
-                            <td
-                                    style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
                                 <t t-if="o.carrier_tracking_ref.split('+')">
                                     <tr>
                                         <td style="padding:0 !important; margin:0 !important; line-height:1.2 !important;">
@@ -239,10 +235,6 @@
                             <span t-field="o.weight" />
                             <span t-field="o.weight_uom_name" />
                         </t>
-<!--                        <t t-if="o.carrier_tracking_ref">-->
-<!--                            <span>- Tracking:</span>-->
-<!--                            <span t-esc="o.carrier_tracking_ref" />-->
-<!--                        </t>-->
                     </td>
                 </tr>
                 <t t-set="lines"
@@ -304,10 +296,6 @@
                         style="vertical-align: middle; text-align: center;">
                         <strong>Description</strong>
                     </th>
-                    <!--                    <th name="th_sm_product_image" class="text-left" style
-                    ="vertical-align: middle; text-align: center;">-->
-                    <!--                        <strong >Product Image</strong>-->
-                    <!--                    </th>-->
                     <th name="th_sm_customer_order_ref" class="text-left"
                         style="vertical-align: middle; text-align: center;">
                         <strong>Order Ref</strong>

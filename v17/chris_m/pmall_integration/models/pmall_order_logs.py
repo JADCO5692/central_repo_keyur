@@ -263,7 +263,7 @@ class PmallOrderLogs(models.Model):
 
         ship_to_partner = partner_obj.search(base_domain + ship_domain, limit=1)
         if not ship_to_partner:
-            ship_to_partner = self._create_partner_record(ship_data,for_partner_id, 'delivery')
+            ship_to_partner = self._create_partner_record(ship_data, for_partner_id, 'delivery')
 
         return {
             #'bill_to_id': bill_to_partner.id if bill_to_partner else False,
@@ -272,6 +272,9 @@ class PmallOrderLogs(models.Model):
 
     def _prepare_address_domain(self, data):
         country = self.env['res.country'].sudo().search([('code', '=', data.get('country', ''))], limit=1)
+        state = False
+        if country:
+            state = self.env['res.country.state'].sudo().search([('code', '=', data.get('state', '')),('country_id', '=', country.id)], limit=1)
         return [
             ('first_name', '=', data.get('firstName', False)),
             ('last_name', '=', data.get('lastName', False)),
@@ -279,12 +282,15 @@ class PmallOrderLogs(models.Model):
             ('street2', '=', data.get('address2', False)),
             ('zip', '=', data.get('zipCode', False)),
             ('city', '=', data.get('city', False)),
-            ('state_id', '=', False),
+            ('state_id', '=', state.id if state else False),
             ('country_id', '=', country.id if country else False),
         ]
 
-    def _create_partner_record(self, data,parent_partner, address_type):
+    def _create_partner_record(self, data, parent_partner, address_type):
         country = self.env['res.country'].sudo().search([('code', '=', data.get('country', ''))], limit=1)
+        state = False
+        if country:
+            state = self.env['res.country.state'].sudo().search([('code', '=', data.get('state', '')),('country_id', '=', country.id)], limit=1)
         name = f"{data.get('firstName', '')} {data.get('lastName', '')}".strip()
         
         vals = {
@@ -297,7 +303,8 @@ class PmallOrderLogs(models.Model):
             'street2': data.get('address2', False),
             'zip': data.get('zipCode', False),
             'city': data.get('city', False),
-            'state_id': False,
+            'phone': data.get('phone', False),
+            'state_id': state.id if state else False,
             'country_id': country.id if country else False,
         }
 

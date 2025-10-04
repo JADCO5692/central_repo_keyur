@@ -25,8 +25,13 @@ export const SendEmailRedirect = publicWidget.Widget.extend({
         // Disable button + show loader
         btn.disabled = true;
         btn.innerHTML = `Processing... <span class="loader"></span>`;
+        const cargo_location = document.querySelector("[name='cargo_location']")?.value || "";
+        const cargo_instructions = document.querySelector("[name='cargo_instructions']")?.value || "";
 
-        rpc('/custom/custom_checkout', {})  // Use rpc directly for Odoo 18
+        rpc('/custom/custom_checkout', {
+        cargo_location: cargo_location,
+        cargo_instructions: cargo_instructions
+        })  // Use rpc directly for Odoo 18
             .then((response) => {
                 if (response.redirect_url) {
                     window.location.href = response.redirect_url;

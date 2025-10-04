@@ -26,4 +26,17 @@
         - Check Shopify delivery methods mapping with live environment
          -->
     </data>
+    <data>
+        <record id="ir_cron_daily_attendance" model="ir.cron">
+            <field name="name">Daily Employee Attendance</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">model.create_daily_attendance(0)</field>
+            <field name="active">True</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall">False</field>
+        </record>
+    </data>
 </odoo>

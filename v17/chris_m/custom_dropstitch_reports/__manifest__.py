@@ -1,6 +1,6 @@
 {
     'name':'Custom - Drop Stitch Reports',
-    'version':'17.0.1.0.7',
+    'version':'17.0.1.0.9',
     "development_status": "Production/Stable",
     "license": "LGPL-3",
     'category': 'Manufacturing/Manufacturing',

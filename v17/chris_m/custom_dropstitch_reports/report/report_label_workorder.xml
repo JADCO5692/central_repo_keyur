@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row justify-content-center mt-1">
+                            <div class="row justify-content-center">
                                 <div class="col-12" style="text-align:center;padding:0px 0px;">
                                     <!-- method to get open_text barcode value -->
                                     <!-- <t t-set="open_text" t-value="o.get_open_text()"/> -->
@@ -75,7 +75,10 @@
                                         <div t-out="o.sudo().custom_opentext" style="padding:1px" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size1}"/>
                                         <!--<img t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(o.custom_opentext), 100, 100)" style="height:50px; width:100px;" alt="QR Code"/>-->
                                     </div>
-                                    <div> <t t-out="o.sudo().custom_opentext"/></div>
+                                    <div class="w-100" > 
+                                        <span class="w-50 text-center pe-3" t-out="o.sudo().custom_opentext" />
+                                        <span class="w-50 text-center ps-3" t-out="o.sudo().name" /> 
+                                    </div>
                                 </div>
                             </div>
                         </div>

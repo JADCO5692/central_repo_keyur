@@ -74,10 +74,13 @@ class AccountMove(models.Model):
             raise UserError(_("Previous posted bill doesn't exist for this vendor."))
 
     def _generate_pdf_and_send_invoice(self, template, force_synchronous=True, allow_fallback_pdf=True, bypass_download=False, **kwargs):
-        if not self.shopify_instance_id and not self.partner_id.custom_invoice_generated_ids:
+        partners = self.partner_id.custom_invoice_generated_ids
+        if not partners:
+            partners = self.partner_id.parent_id.custom_invoice_generated_ids
+            
+        if not self.shopify_instance_id and not partners:
             return False
         return super()._generate_pdf_and_send_invoice(template, force_synchronous=force_synchronous, allow_fallback_pdf=allow_fallback_pdf, bypass_download=bypass_download, **kwargs)
-
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"

@@ -97,16 +97,16 @@
 					<page string="Contacts To Notify" name="custom_contacts_notify" invisible="company_type != 'company'">
 						<group>
 							<group>
-								<field name="custom_order_confirmation_ids" domain="[('id','in',child_ids+[active_id])]" widget="many2many_tags"/>
+								<field name="custom_order_confirmation_ids" domain="[('id','in', child_ids + [active_id]), ('email', '!=', False)]" widget="many2many_tags"/>
 							</group>
 							<group>
-								<field name="custom_shipping_confirmation_ids" domain="[('id','in',child_ids+[active_id])]" widget="many2many_tags"/>
+								<field name="custom_shipping_confirmation_ids" domain="[('id','in', child_ids + [active_id]), ('email', '!=', False)]" widget="many2many_tags"/>
 							</group>
 							<group>
-								<field name="custom_invoice_generated_ids" domain="[('id','in',child_ids+[active_id])]" widget="many2many_tags"/>
+								<field name="custom_invoice_generated_ids" domain="[('id','in', child_ids + [active_id]), ('email', '!=', False)]" widget="many2many_tags"/>
 							</group>
 							<group>
-								<field name="custom_payment_completed_ids" domain="[('id','in',child_ids+[active_id])]" widget="many2many_tags"/>
+								<field name="custom_payment_completed_ids" domain="[('id','in', child_ids + [active_id]), ('email', '!=', False)]" widget="many2many_tags"/>
 							</group>
 						</group>
 					</page>

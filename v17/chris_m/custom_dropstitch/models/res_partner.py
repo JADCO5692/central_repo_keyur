@@ -331,10 +331,10 @@ class CustomResPartner(models.Model):
         """
         Returns the partner ids to notify based on the field name.
         """
-        if hasattr(object, 'shopify_instance_id') and not object.shopify_instance_id and not self[field_name]:
+        partners = self[field_name]
+        if not partners:
+            partners = self.parent_id[field_name]
+        if hasattr(object, 'shopify_instance_id') and not object.shopify_instance_id and not partners:
             return []
         else:
-            partners = self[field_name]
-            if not partners:
-                partners = self.parent_id[field_name]
             return partners.ids if partners else self.ids

@@ -1,9 +1,6 @@
-import pdb
-
 from odoo import http, fields
 from odoo.tools.translate import _
 from odoo.exceptions import UserError
-import odoo
 import logging
 from odoo.http import request, route
 from odoo.tools.translate import _
@@ -20,6 +17,15 @@ class CustomCheckoutController(http.Controller):
 
         sale_order = request.env['sale.order'].sudo().browse(sale_order_id)
 
+        cargo_location = kwargs.get("cargo_location")
+        cargo_instructions = kwargs.get("cargo_instructions")
+        print("Cargo Location:", cargo_location)
+        if cargo_location or cargo_instructions:
+            sale_order.write({
+                "cargo_location": cargo_location,
+                "cargo_instructions": cargo_instructions,
+            })
+
         bulk_bool = request.session.get('bulk')
         dropship_bool = request.session.get('dropship')
         order_type = 'bulk'
@@ -30,11 +36,12 @@ class CustomCheckoutController(http.Controller):
         if request.session.get('dropship'):
             company = request.env.company
             template = company.mail_template_id
+            email_values = {'email_to': sale_order.partner_shipping_id.email, 'email_from': company.email}
             if template and sale_order.partner_shipping_id.email:
-                template.sudo().send_mail(sale_order.id, force_send=True)
+                template.sudo().send_mail(sale_order.id,email_values=email_values ,force_send=True)
             so_template = sale_order._find_mail_template()
             base_url = request.httprequest.url_root.rstrip('/')
-            sale_order._send_order_notification_mail(so_template)
+            # sale_order._send_order_notification_mail(so_template)
             portal_url = f"{base_url}/thankyou"
         return {'redirect_url': portal_url}
 
@@ -101,8 +108,3 @@ class CustomCheckoutController(http.Controller):
                 error_message = "Invalid PIN, please try again."
                 return request.render('custom.validate_pin_template_account', {'error_message': error_message,
                                                                        'from_portal': False, })
-
-
-
-
-

@@ -28,18 +28,15 @@
 				</xpath>
 				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_information']/group[1]/group[1]/field[@name='client_order_ref']" position="replace">
 				</xpath>
-				
 				<xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='payment_term_id']" position="after">
 					<field name="custom_shipping_fees" required="1" invisible="shopify_order_id != False"/>
 					<field name="custom_gift_mess" readonly="state in ['cancel']"/>
 					<field name="client_order_ref" string="Customer Order Ref" readonly="state in ['cancel']"/>
 					<field name="custom_policy" widget="radio" force_save="1" readonly="1" />
 				</xpath>
-				
 				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='name']" position="before">
 					<field name="custom_order_no" optional="hide"/>
 				</xpath>
-
 				<xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='name']" position="after">
 	                <field name="custom_color_2" column_invisible="True"/>
 	                <field name="custom_color_3" column_invisible="True"/>
@@ -147,9 +144,8 @@
             </field>
         </record>
 
-
 		<record id="view_quotation_tree_inherit" model="ir.ui.view">
-			<field name="name">mrp.production.tree.custom</field>
+			<field name="name">sale.order.tree.custom1</field>
 			<field name="model">sale.order</field>
 			<field name="inherit_id" ref="sale.view_quotation_tree"/>
 			<field name="arch" type="xml">
@@ -158,5 +154,16 @@
 				</xpath>
 			</field>
 		</record>
+		
+		<record id="view_order_tree_inherit2" model="ir.ui.view">
+            <field name="name">sale.order.tree.custom2</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="client_order_ref" string="Customer Order Ref"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>

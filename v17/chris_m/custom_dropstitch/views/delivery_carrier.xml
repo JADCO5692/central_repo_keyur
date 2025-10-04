@@ -10,6 +10,7 @@
                 <field name="hide_price_from_ecom" />
                 <field name="custom_hide_for_sel" />
                 <field name="custom_secondary_default_carrier" />
+                <field name="custom_outside_usa" />
             </field>
         </field>
     </record>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+    <t t-name="stockForecastedDetails" t-inherit="stock.ForecastedDetails" t-inherit-mode="extension" owl="1" >
+        <xpath expr="//table/thead/tr/td[contains(@class,'text-end')]" position="after">
+            <td>Product Variant</td>
+            <td>Status</td>
+        </xpath>
+        <xpath expr="//table/tbody/tr[@t-key='line_index']/td[@name='usedby_cell']" position="before">
+            <td><t t-esc="line.product.display_name"/></td>
+            <td t-if="line.document_in"><t t-esc="line.document_in?.state"/></td>
+            <td t-if="line.reservation"><t t-esc="line.reservation?.state"/></td>
+            <t t-debug="pdb"/>
+        </xpath>
+    </t>
+
+</templates>

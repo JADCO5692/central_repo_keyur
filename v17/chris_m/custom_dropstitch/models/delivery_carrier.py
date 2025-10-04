@@ -18,6 +18,7 @@ class DeliveryCarrier(models.Model):
     hide_price_from_ecom = fields.Boolean('Hide price from ECommerce')
     custom_secondary_default_carrier = fields.Boolean('Secondary Default Carrier')
     custom_hide_for_sel = fields.Boolean('Hide from General Selection')
+    custom_outside_usa = fields.Boolean('Outside USA')
     #def _is_available_for_order(self, order):
     #    if order.partner_id.property_delivery_carrier_id.id == self.id:
     #        return True

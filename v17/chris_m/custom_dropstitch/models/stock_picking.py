@@ -197,6 +197,14 @@ class Picking(models.Model):
             )
             if secondary_default_carrier:
                 carrier = secondary_default_carrier
+                
+        if self.partner_id.country_id.code != "US":
+            carriers_outside_usa = self.env["delivery.carrier"].search(
+                [("custom_outside_usa", "=", True)], limit=1
+            )
+            if carriers_outside_usa:
+                carrier = carriers_outside_usa
+        
         return {
             "name": name,
             "type": "ir.actions.act_window",
@@ -694,6 +702,9 @@ class Picking(models.Model):
                                                               weight or self.shipping_weight)
 
     def _send_confirmation_email(self):
-        if not self.shopify_instance_id and not self.partner_id.custom_shipping_confirmation_ids:
+        partners = self.partner_id.custom_shipping_confirmation_ids
+        if not partners:
+            partners = self.partner_id.parent_id.custom_shipping_confirmation_ids
+        if not self.shopify_instance_id and not partners:
             return False
         return super()._send_confirmation_email()
