@@ -33,7 +33,7 @@
                 </div>
                 <div id="body_container" class="body_container container-fluid"> 
                     <div class="metrics-grid">
-                        <div class="metric-card">
+                        <div class="metric-card" t-on-click="()=>this.action_leads()">
                             <div class="metric-card-content">
                                 <div class="metric-info">
                                     <h3>New Leads Assigned</h3>
@@ -45,11 +45,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="metric-card">
                             <div class="metric-card-content">
-                                <div class="metric-info">
-                                    <h3>Total Signed Contracts</h3>
+                                <div class="metric-info" t-on-click="()=>this.action_contracts()">
+                                    <h3>Active Subscription Created</h3>
                                     <div class="value" id="totalSales"><t t-esc="getsignedContracts()"/></div>
                                     <div class="trend">  
                                     </div>
@@ -58,7 +57,19 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="metric-card">
+                            <div class="metric-card-content">
+                                <div class="metric-info"  t-on-click="()=>this.all_contract_signed()">
+                                    <h3>All Contracts signed(Not Cancelled)</h3>
+                                    <div class="value" id="quotationsSent"><t t-esc="get_all_contract_signed" /></div>
+                                    <div class="trend">
+                                         
+                                    </div>
+                                </div>
+                                <div class="metric-icon icon-orange"> 
+                                </div>
+                            </div>
+                        </div>
                         <div class="metric-card" t-on-click="()=>this.onclickCustomers()">
                             <div class="metric-card-content">
                                 <div class="metric-info">
@@ -71,7 +82,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="metric-card">
                             <div class="metric-card-content">
                                 <div class="metric-info">
@@ -87,9 +97,9 @@
                         </div> 
                         <div class="metric-card">
                             <div class="metric-card-content">
-                                <div class="metric-info">
+                                <div class="metric-info"  t-on-click="()=>this.action_activities()">
                                     <h3>Activities after Scheduled Intro Call</h3>
-                                    <div class="value" id="quotationsSent"><t t-esc="state.activity_complete_avg" /></div>
+                                    <div class="value" id="quotationsSent"><t t-esc="get_activity_complete_avg" /></div>
                                     <div class="trend">
                                          
                                     </div>
@@ -97,7 +107,7 @@
                                 <div class="metric-icon icon-orange"> 
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div> 
                     <div class="table-grid m-auto"> 
                         <div class="bg-white item-container">
@@ -129,28 +139,31 @@
                                             <tr>
                                                 <th>Salesperson</th> 
                                                 <th>New Leads Assigned</th>
-                                                <th>Total Signed Contracts</th>
-                                                <!-- <th>Avg. Signup to Zoom Call</th>  -->
+                                                <th>Active Subscription Created</th>
+                                                <th>All Contracts signed(Not Cancelled)</th>
                                                 <th>Avg. Zoom Call to Meet</th> 
+                                                <th>Activities after Scheduled Intro Call</th> 
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody">
                                             <t t-if="state.SelectedSalesRep.length">
                                                 <tr t-foreach="state.sales_persons" t-as="sp" t-if="state.SelectedSalesRep.includes(sp)?1:0" t-key="sp_index">
                                                     <td><t t-esc="sp"/></td> 
-                                                    <td><t t-esc="state.new_leads_assigned[sp]"/></td> 
-                                                    <td><t t-esc="state.signed_contract[sp]"/></td>
-                                                    <!-- <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_zoom_days"/></td> -->
+                                                    <td><t t-esc="state.new_leads_assigned.counts[sp]"/></td> 
+                                                    <td><t t-esc="state.signed_contract.total_per_rep[sp]"/></td>
+                                                    <td><t t-if="state.contract_signed_not_cnl.salesperson_counts" t-esc="state.contract_signed_not_cnl.salesperson_counts[sp]"/></td>
                                                     <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_meet_days"/></td>
+                                                    <td><t t-if="state.activity_complete_avg[sp]" t-esc="state.activity_complete_avg[sp]['count']"/></td>
                                                 </tr> 
                                             </t> 
                                             <t t-else="">
                                                 <tr t-foreach="state.sales_persons" t-as="sp" t-key="sp_index">
                                                     <td><t t-esc="sp"/></td> 
-                                                    <td><t t-esc="state.new_leads_assigned[sp]"/></td> 
-                                                    <td><t t-esc="state.signed_contract[sp]"/></td>
-                                                    <!-- <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_zoom_days"/></td> -->
+                                                    <td><t t-esc="state.new_leads_assigned.counts[sp]"/></td> 
+                                                    <td><t t-esc="state.signed_contract.total_per_rep[sp]"/></td>
+                                                    <td><t t-if="state.contract_signed_not_cnl.salesperson_counts" t-esc="state.contract_signed_not_cnl.salesperson_counts[sp]"/></td>
                                                     <td><t t-if="state.stage_durations[sp]" t-esc="state.stage_durations[sp].avg_meet_days"/></td>
+                                                    <td><t t-if="state.activity_complete_avg[sp]" t-esc="state.activity_complete_avg[sp]['count']"/></td>
                                                 </tr> 
                                             </t> 
                                         </tbody>

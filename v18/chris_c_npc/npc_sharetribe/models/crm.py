@@ -23,9 +23,8 @@ class CRMLead(models.Model):
     custom_user_referral = fields.Char("User Referral", tracking=True)
     custom_last_stage_changed_date = fields.Datetime("Last Stage Change Date", compute="_compute_custom_last_stage_changed_date", store=True)
     custom_sch_zoom_call_date = fields.Datetime("Scheduled zoom call", compute="_compute_custom_invoice_sent_date", store=True)
-    custom_invoice_sent_date = fields.Datetime("Invoice Sent", compute="_compute_custom_invoice_sent_date", store=True)
-    custom_contract_sent_date = fields.Datetime("Contract Sent", compute="_compute_custom_invoice_sent_date", store=True)
-    custom_all_contracts_signed2 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date")
+
+    custom_all_contracts_signed2 = fields.Datetime("All Contracts Signed", compute="_compute_custom_invoice_sent_date", store=True)
     custom_stage_duration_hours = fields.Float(
         string="Hours in Current Stage",
         compute="_compute_custom_stage_duration_hours",
@@ -38,9 +37,7 @@ class CRMLead(models.Model):
     calendlyintialisation_url = fields.Char("Calendly Initialisation URL", readonly=True)
     calendlyintialisation_date = fields.Datetime("Calendly Initialisation Date", readonly=True)
 
-    custom_sch_zoom_call_date_alternative = fields.Datetime(
-        "Alternate scheduled zoom call",
-    )
+
 
     custom_calendly_qa_ids = fields.One2many('npc.calendly.qa', 'crm_id', string='Calendly Q&A')
     lost_reason_id = fields.Many2one('crm.lost.reason', "Lost Reason")
@@ -50,44 +47,75 @@ class CRMLead(models.Model):
         store=False
     )
 
+    # Stage Fields Date
+    custom_invoice_sent_date = fields.Datetime("Invoice Sent", compute="_compute_custom_invoice_sent_date", store=True)
+    custom_contract_sent_date = fields.Datetime("Contract Sent", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_sch_zoom_call_date_alternative = fields.Datetime(
+        "Alternate scheduled zoom call",
+    )
+    custom_registered =  fields.Datetime("Registered", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_matched_with_physician =  fields.Datetime("Matched with Physician", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_scheduled_meet_physician =  fields.Datetime("Scheduled to meet with Physician", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_met_considering_option =  fields.Datetime("Met/Considering Options", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_met_going_to_contract =  fields.Datetime("Met/Going to Contract", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_bus_contract_signed =  fields.Datetime("Business Contract Signed", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_awaiting_state_approval =  fields.Datetime("Awaiting State Approval", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+    custom_paid_client =  fields.Datetime("Paid Client", compute="_compute_custom_invoice_sent_date",
+                                                store=True)
+
     def _compute_active_status(self):
         for rec in self:
             rec.active_status_label = "ACTIVE" if rec.active else "LOST"
 
     @api.depends('message_ids', 'custom_sch_zoom_call_date_alternative')
     def _compute_custom_invoice_sent_date(self):
-        invoice_stage = self.env['crm.stage'].search([('name', '=', 'Invoice sent')], limit=1)
-        contract_stage = self.env['crm.stage'].search([('name', '=', 'Contracts sent')], limit=1)
-        sch_zoom_call_stage = self.env['crm.stage'].search([('name', '=', 'Scheduled zoom call')], limit=1)
+        stage_names = [
+            ('Invoice sent', 'custom_invoice_sent_date'),
+            ('Contracts sent', 'custom_contract_sent_date'),
+            ('Registered', 'custom_registered'),
+            ('Matched with physician', 'custom_matched_with_physician'),
+            ('Scheduled to meet physician', 'custom_scheduled_meet_physician'),
+            ('Met, considering options', 'custom_met_considering_option'),
+            ('Met, going to contract', 'custom_met_going_to_contract'),
+            ('Bus Contract signed', 'custom_bus_contract_signed'),
+            ('Awaiting State Approval', 'custom_awaiting_state_approval'),
+            ('Paid Client', 'custom_paid_client'),
+        ]
+
+        stage_objs = {name: self.env['crm.stage'].search([('name', '=', name)], limit=1) for name, _ in stage_names}
+
         for lead in self:
-            lead.custom_invoice_sent_date = False
-            lead.custom_contract_sent_date = False
-            # Find mail.message entries where stage_id changed to this stage
+            # Reset all fields
+            for _, field in stage_names:
+                setattr(lead, field, False)
+
             messages = self.env['mail.message'].sudo().search([
                 ('model', '=', 'crm.lead'),
                 ('res_id', '=', lead.id),
                 ('tracking_value_ids.field_id.name', '=', 'stage_id')
             ], order='create_date asc')
 
-            # Loop through and find if the new value matches the Invoice Sent stage
-            if invoice_stage:
-                for msg in messages:
-                    for track in msg.tracking_value_ids:
-                        if track.field_id.name == 'stage_id' and track.new_value_char == invoice_stage.name:
-                            lead.custom_invoice_sent_date = msg.create_date
+            for stage_name, field_name in stage_names:
+                stage_obj = stage_objs[stage_name]
+                if stage_obj:
+                    for msg in messages:
+                        if any(
+                                track.field_id.name == 'stage_id' and track.new_value_char == stage_obj.name
+                                for track in msg.tracking_value_ids
+                        ):
+                            setattr(lead, field_name, msg.create_date)
                             break
-                    if lead.custom_invoice_sent_date:
-                        break
-            
-            if contract_stage:
-                for msg in messages:
-                    for track in msg.tracking_value_ids:
-                        if track.field_id.name == 'stage_id' and track.new_value_char == contract_stage.name:
-                            lead.custom_contract_sent_date = msg.create_date
-                            break
-                    if lead.custom_contract_sent_date:
-                        break
-
+                        if getattr(lead, field_name):
+                            continue
+            sch_zoom_call_stage = self.env['crm.stage'].search([('name', '=', 'Scheduled zoom call')], limit=1)
             # Scheduled Zoom Call Date
             if sch_zoom_call_stage:
                 for msg in messages:
@@ -163,7 +191,7 @@ class CRMLead(models.Model):
             if payment_dates:
                 lead.first_payment_date = payment_dates[0]
                 if len(payment_dates) > 1:
-                    lead.second_payment_date = payment_dates[1]
+                    lead.second_payment_date = payment_dates[1] 
 
 
 class WorkHistory(models.Model):

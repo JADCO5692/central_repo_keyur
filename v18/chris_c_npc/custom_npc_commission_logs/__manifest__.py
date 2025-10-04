@@ -1,7 +1,7 @@
 
 {
     'name': "Custom NPC Commission Logs",
-    'version': '18.0.0.27',
+    'version': '18.0.0.31',
     'category': 'CRM',
     'summary': "Custom NPC Commission Logs",
     'description': """

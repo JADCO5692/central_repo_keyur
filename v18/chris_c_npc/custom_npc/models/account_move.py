@@ -23,6 +23,26 @@ class AccountMove(models.Model):
                                         string='Source Invoice')
 
     related_invoice_count = fields.Integer(string="Related Invoices", compute='compute_related_invoice_count')
+    
+    custom_stripe_fees = fields.Float('Stripe Fees',compute="_compute_stripe_fees",store=True)
+    custom_total_inc_fees = fields.Float('Total Incl Stripe Fees',compute="_compute_total_inc_stripe_fees")
+
+    @api.depends('transaction_ids')
+    def _compute_stripe_fees(self):
+        for rec in self:
+            transaction_ids = rec.transaction_ids
+            if transaction_ids:
+                fees = 0  
+                for tr in transaction_ids:
+                    if tr.provider_id.name == 'Stripe':
+                        fees += tr.fees
+                rec.custom_stripe_fees = fees
+            else:
+                rec.custom_stripe_fees = 0
+
+    def _compute_total_inc_stripe_fees(self):
+        for rec in self:
+            rec.custom_total_inc_fees = (rec.amount_total + rec.custom_stripe_fees)
 
     @api.depends('invoice_line_ids.vendor_bill_id')
     def compute_related_invoice_count(self):
@@ -33,7 +53,7 @@ class AccountMove(models.Model):
     @api.depends('vendor_bill_ids')
     def _compute_vendor_bill_count(self):
         for record in self:
-            record.vendor_bill_count = len(record.vendor_bill_ids)
+            record.vendor_bill_count = len(record.vendor_bill_ids.filtered(lambda bill: bill.related_commission_id.id == False))
 
     def action_view_vendor_bills(self):
         """Action to view related vendor bills"""
@@ -41,7 +61,7 @@ class AccountMove(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Related Vendor Bills',
             'res_model': 'account.move',
-            'domain': [('id', 'in', self.vendor_bill_ids.ids)],
+            'domain': [('id', 'in', self.vendor_bill_ids.filtered(lambda bill: bill.related_commission_id.id == False).ids)],
             'view_mode': 'list,form' if len(self.vendor_bill_ids) > 1 else 'form',
             'target': 'current',
         }
@@ -112,6 +132,10 @@ class AccountMove(models.Model):
                 eligible_days = 0
 
             total_reduced = 0.0
+            for line in move.invoice_line_ids:
+                line.write({
+                    "custom_contract_amount": line.price_unit if not line.custom_contract_amount else line.custom_contract_amount
+                })
 
             # Step 1: Prorate physician fee lines
             for line in move.invoice_line_ids.filtered("product_id.is_physician_fees_product"):
@@ -147,12 +171,16 @@ class AccountMove(models.Model):
             'target': 'new',
             'context': {
                 'invoice_line_ids': invoice_line_ids.ids,
+                'default_invoice_date': self.invoice_date,
             },
         }
 
+    def _get_related_invoices(self):
+        return self.env['account.move.line'].search([('vendor_bill_id','in',self.ids)]).move_id
+
     def action_view_related_invoices(self):
         self.ensure_one()
-        invoice = self.env['account.move.line'].search([('vendor_bill_id','in',self.ids)]).move_id
+        invoice = self._get_related_invoices()
         if not invoice:
             return {
                 'type': 'ir.actions.client',
@@ -173,7 +201,7 @@ class AccountMove(models.Model):
         if len(invoice) == 1:
             vals['res_id'] = invoice[0].id
         return vals
-    def _action_create_vendor_bill(self, vendor_id, invoice_line_ids):
+    def _action_create_vendor_bill(self, vendor_id, invoice_line_ids, invoice_date):
         """Create vendor bills based on vendors selected in invoice lines"""
         if not invoice_line_ids:
             return {
@@ -209,7 +237,7 @@ class AccountMove(models.Model):
 
         # Create vendor bills for each vendor
         for vendor, lines in vendor_lines.items():
-            bill_vals = self._prepare_vendor_bill_vals(vendor, lines)
+            bill_vals = self._prepare_vendor_bill_vals(vendor, lines, invoice_date)
             vendor_bill = self.env['account.move'].create(bill_vals)
             for line in lines:
                 line.vendor_bill_id = vendor_bill.id
@@ -225,7 +253,7 @@ class AccountMove(models.Model):
 
         return self.action_view_vendor_bills()
 
-    def _prepare_vendor_bill_vals(self, vendor, lines):
+    def _prepare_vendor_bill_vals(self, vendor, lines, invoice_date):
         """Prepare values for creating vendor bill"""
         bill_lines = []
 
@@ -245,7 +273,9 @@ class AccountMove(models.Model):
         return {
             'move_type': 'in_invoice',  # Vendor bill
             'partner_id': vendor.id,
-            'invoice_date': fields.Date.context_today(self),
+            'invoice_date': invoice_date,
+            'invoice_date_due': invoice_date,
+            'date': invoice_date,
             'ref': f"Bill from {self.name}",
             'invoice_line_ids': bill_lines,
             'company_id': self.company_id.id,
@@ -319,6 +349,12 @@ class AccountMove(models.Model):
                         line.name = f"{used_days} days {nxt.strftime('%m/%d/%Y')} to {end.strftime('%m/%d/%Y')}"
                         continue
 
+    def reload_price_unit(self):
+        self.ensure_one()
+        self.custom_contract_end_date = False
+        for line in self.invoice_line_ids:
+            line.price_unit = line.custom_contract_amount if line.custom_contract_amount != 0 else line.price_unit
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
@@ -328,6 +364,7 @@ class AccountMoveLine(models.Model):
                                                string='Original Invoice Line')
     vendor_bill_id = fields.Many2one('account.move', string='Vendor Bill',
                                                domain=[('move_type', '=', 'in_invoice')])
+    custom_contract_amount = fields.Float('Contract Amount')
 
     def _compute_lead_partner_ids(self):
         for line in self:

@@ -5,6 +5,9 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref='stock.vpicktree' />
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="cargo_location"/>
+            </xpath>
             <xpath expr="//field[@name='state']" position="after">
                 <field name="urgency_badge" string="Urgent" />
             </xpath>

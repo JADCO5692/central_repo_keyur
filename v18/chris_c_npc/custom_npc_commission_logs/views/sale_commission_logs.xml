@@ -6,6 +6,9 @@
         <field name="model">sale.commission.logs</field>
         <field name="arch" type="xml">
             <list create="0" edit="0">
+                <header>
+                    <button name="action_create_vendor_bill" string="Create Vendor Bill" type="object" class="btn-primary"/>
+                </header>
                 <field name="name" optional="show"/> 
                 <field name="collaborator_id" optional="show"/>
                 <field name="np_partner_id" optional="hide"/>
@@ -36,7 +39,9 @@
                 <field name="salesperson_id" optional="hide"/>
                 
                 <field name="subscription_pause_date" optional="hide"/>
-                <field name="subscription_status" optional="hide"/> 
+                <field name="subscription_status" optional="hide"/>
+                <field name="vendor_bill_ids" column_invisible="1"/>
+                <button name="action_show_vendor_bill" class="oe_link" invisible="not vendor_bill_ids" string="Show Vendor Bill" type="object"/>
             </list>
         </field>
     </record>

@@ -29,5 +29,11 @@
                 </t>
             </div>
         </xpath>
+        <xpath expr="//td[@name='td_price_unit']/span[@t-field='line.price_unit']" position="attributes">
+            <attribute name="t-field">line.custom_contract_amount</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_subtotal']/span[@t-field='line.price_subtotal']" position="replace">
+            <span class="text-nowrap" t-esc="line.custom_contract_amount * line.quantity"/>
+        </xpath>
     </template>
 </odoo>

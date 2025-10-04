@@ -2,7 +2,7 @@
 # noinspection PyStatementEffect
 {
     'name': "NP Collaborator Sharetribe Sync",
-    'version': '18.0.1.34',
+    'version': '18.0.1.38',
     'category': 'Technical',
     'summary': "Sync with Sharetribe",
     'description': """
@@ -26,6 +26,7 @@ Sync with Sharetribe
         'report/crm_referral_view.xml',
         'views/npc_favorites_view.xml',
         'wizard/sync_views.xml',
+        'views/crm_np_pipline_list_views.xml',
     ],
     'demo': [
     ],

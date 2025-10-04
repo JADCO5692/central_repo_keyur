@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mail_view_message_tree_ext" model="ir.ui.view">
+        <field name="name">mail_view_message_tree_ext</field>
+        <field name="model">mail.message</field>
+        <field name="inherit_id" ref="mail.view_message_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='res_id']" position="after">
+                <field name="activity_type"></field>
+            </xpath>
+            <xpath expr="//field[@name='model']" position="replace"/>
+        </field>
+    </record>
+
+</odoo>
