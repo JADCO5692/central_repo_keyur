@@ -28,7 +28,13 @@
             <xpath expr="//field[@name='stock_route_id']" position="after">
                 <field name="margine_percentage" widget="percentage" readonly="state in ['sale','cancel']"/>
                 <field name="customer_statement" />
-                <field name="custom_quote" invisible="1" /> 
+                <field name="custom_quote" invisible="1" />
+            </xpath>
+             <xpath expr="//field[@name='order_line']/list//field[@name='product_uom']" position="after">
+                <field name="allowed_uom_ids" column_invisible="1"/>
+                </xpath>
+            <xpath expr="//field[@name='order_line']/list//field[@name='product_uom']" position="attributes">
+                <attribute name="domain">[('id','in',allowed_uom_ids)]</attribute>
             </xpath>
         </field>
     </record>

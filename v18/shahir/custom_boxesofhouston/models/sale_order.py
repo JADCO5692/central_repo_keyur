@@ -360,3 +360,37 @@ class SaleOrder(models.Model):
 
                     # op.write({ "product_min_qty": threshold, ... })
                     pass
+                
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    allowed_uom_ids = fields.Many2many(
+        "uom.uom",
+        string="Allowed UoMs",compute='_compute_allowed_uom_ids'
+    )
+    product_uom = fields.Many2one(
+        comodel_name='uom.uom',
+        string="Unit of Measure",
+        compute='_compute_product_uom',
+        store=True, readonly=False, precompute=True, ondelete='restrict',
+        domain="[('id', 'in', allowed_uom_ids)]",
+    )
+
+    @api.depends('product_id','product_template_id')
+    def _compute_allowed_uom_ids(self):
+        for line in self:
+            allowed_list = []
+            if line.product_id.uom_id:
+                allowed_list = [line.product_id.uom_id.id]
+            if line.product_id and line.product_id.multi_uom_price_ids:
+                for moum in line.product_id.multi_uom_price_ids:
+                    allowed_list.append(moum.uom_id.id)
+            line.allowed_uom_ids = [(6, 0, allowed_list)]
+
+    @api.depends('product_id')
+    def _compute_product_uom(self):
+        for line in self:
+            if line.product_id and not line.product_id.multi_uom_price_ids:
+                line.product_uom = line.product_id.uom_id
+            else:
+                line.product_uom = False

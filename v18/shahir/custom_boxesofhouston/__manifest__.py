@@ -52,7 +52,7 @@
         "account",
         "point_of_sale",
         "website_hide_button",
-        "web", "bus"
+        "web", "bus","pos_multi_uom_price"
     ],
     'assets': {
         'web.assets_frontend': [
