@@ -45,11 +45,4 @@ class ProductTemplate(models.Model):
         return items.mapped('product_tmpl_id.id')
     
 
-class ProductProductCustom(models.Model):
-    _inherit = 'product.product'
-
-    replenishment_threshold = fields.Float(
-        string="Replenishment Threshold",
-        default=0.0,
-        help="If on-hand is *at least* this, when sale order is confirmed, a replenishment request is created."
-    )
+             

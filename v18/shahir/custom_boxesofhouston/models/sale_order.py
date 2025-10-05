@@ -38,7 +38,6 @@ class SaleOrder(models.Model):
             if order.stock_route_id and order.stock_route_id.is_address_mandatory:
                 order.check_delivery_address()
             order._check_negative_margin()
-            order._create_or_update_orderpoints_for_lines()
             if order.stock_route_id:
                 if order.payment_term_id.id in [self.env.ref("account.account_payment_term_immediate").id, False, None]:
                     payment_ids = self.env['payment.transaction'].sudo().search([('sale_order_ids', 'in', [order.id])])
@@ -120,13 +119,14 @@ class SaleOrder(models.Model):
         pricelists = self.env['product.pricelist'].sudo().search([])
         for rec in self:
             if rec.partner_id:
-                rec._check_negative_margin()
+                self._check_negative_margin()
                 customer_id = rec.partner_id.id
                 customer_pricelist = pricelists.filtered(lambda p: customer_id in p.customer_id.ids)
                 if customer_pricelist:
                     self.update_pricelist_item(rec, customer_pricelist)
                 else:
                     self.create_pricelist_item(rec)
+                rec.custom_quote = False
 
     def action_confirm(self):
         res = super().action_confirm()
@@ -144,7 +144,6 @@ class SaleOrder(models.Model):
             if rec.stock_route_id.is_auto_complete:
                 rec._simple_force_validate()
         self.send_notification()
-        self._create_or_update_orderpoints_for_lines()
         return res
 
     def update_pricelist_item(self, order, pricelist):
@@ -210,8 +209,12 @@ class SaleOrder(models.Model):
 
     @api.onchange('stock_route_id')
     def onchange_route(self):
+        dropship_route = self.env.ref('stock_dropshipping.route_drop_shipping').id
         for rec in self:
             for line in rec.order_line:
+                # ✅ Skip if dropshipping route is already set
+                if line.route_id and line.route_id.id == dropship_route:
+                    continue
                 line.route_id = rec.stock_route_id.id
 
     def action_quotation_send(self):
@@ -236,10 +239,8 @@ class SaleOrder(models.Model):
                 line.custom_margin_percentage = margine_percentage
                 line._inverse_margin_percentage()
 
-
     def _simple_force_validate(self):
         """Simple force validation method"""
-
         for picking in self.picking_ids.filtered(lambda pick: pick.state not in ('done','cancel')):
             try:
                 # Confirm picking
@@ -325,7 +326,17 @@ class SaleOrder(models.Model):
         order_ids = tracking_vals.mapped('mail_message_id.res_id')
         result = self.env['sale.order'].browse(order_ids)
         return result
-
+        
+    def _action_cancel(self):
+        result = super(SaleOrder, self)._action_cancel()
+        if result:
+            for sale_order in self:
+                for invoice in sale_order.invoice_ids:
+                    if invoice.state in ["posted"] and invoice.status_in_payment in ["not_paid"]:
+                        invoice.button_draft()
+                        invoice.button_cancel()
+        return result
+        
     def _create_or_update_orderpoints_for_lines(self):
         Orderpoint = self.env["stock.warehouse.orderpoint"]
         for line in self.order_line:
@@ -355,9 +366,7 @@ class SaleOrder(models.Model):
                         # you could set other fields as needed (location_id, orderpoint name, etc.)
                     }
                     op = Orderpoint.create(op_vals)
-
                 else:
-
                     # op.write({ "product_min_qty": threshold, ... })
                     pass
                 

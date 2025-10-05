@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_home_attendances" name="Productions" inherit_id="portal.portal_my_home"
+        priority="20">
+        <div id="portal_common_category" position="inside">
+            <t t-if="request.env.user.partner_id.employee_ids" t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/custom_boxesofhouston/static/img/timesheet.svg'" />
+                <t t-set="title">My Attendance</t>
+                <t t-set="text">Follow your daily attendance.</t>
+                <t t-set="url" t-value="'/my/attendances'" />
+                <t t-set="config_card" t-value="True" />
+            </t>
+        </div>
+    </template>
+    <template id="portal_searchbar_custom" name="Portal Search Bar">
+        <nav t-attf-class="navbar navbar-expand-lg flex-wrap mb-4 p-0 o_portal_navbar {{classes if classes else ''}}">
+            <!--  Navbar breadcrumb or title  -->
+            <ol t-if="page_name != '    '" class="o_portal_submenu breadcrumb mb-0 flex-grow-1 px-0">
+                <li class="breadcrumb-item ms-1"><a href="/my/home" aria-label="Home" title="Home"><i class="fa fa-home"/></a></li>
+                <li class="breadcrumb-item">My Attendance</li>
+            </ol>
+            <!--  Collapse button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#o_portal_navbar_content" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle filters">
+                <span class="fa fa-fw fa-bars"/>
+            </button>
+
+            <!--  Collapsable content  -->
+            <div class="collapse navbar-collapse flex-wrap-reverse justify-content-end gap-3" id="o_portal_navbar_content">
+                <div class="nav flex-column flex-sm-row gap-2 ms-auto p-0 mb-3 mb-lg-0 mt-1 mt-lg-0"> 
+                    <div t-if="searchbar_filters" class="ms-lg-2">
+                        <span class="small me-1 navbar-text">Filter By:</span>
+                        <div class="btn-group">
+                            <button id="portal_searchbar_filters" data-bs-toggle="dropdown" class="btn btn-light dropdown-toggle">
+                                <t t-esc="searchbar_filters.get(filterby,searchbar_filters.get('all')).get('label', 'All')"/>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="portal_searchbar_filters">
+                                <t t-foreach="searchbar_filters" t-as="option">
+                                    <li t-att-href="default_url + '?' + keep_query(filterby=option)"
+                                       t-att-data-filter="searchbar_filters[option].get('label')" t-attf-class="filter dropdown-item#{filterby == option and ' active' or ''}">
+                                        <span t-esc="searchbar_filters[option].get('label')"/>
+                                    </li>
+                                </t>
+                            </div>
+                        </div>
+                    </div>   
+                    <t t-if="filterby == 'custom'" t-call="custom_boxesofhouston.custom_date_range"/>
+                </div> 
+            </div>
+        </nav>
+    </template>
+    <template id="my_attendances_view" name="My Attendance">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" /> 
+            <t t-call="custom_boxesofhouston.portal_searchbar_custom">
+                <t t-set="title">Attendance</t>
+            </t>
+
+            <t t-if="not attendances">
+                <p class="alert alert-warning">There are currently no attendance for your account.</p>
+            </t>
+
+            <t t-if="attendances" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active"> 
+                        <th class="text-start">Check In Date</th>
+                        <th class="text-start">Check Out Date</th>
+                        <th class="text-start">Duration</th>
+                        <th class="text-start">Amount</th>
+                    </tr>
+                </thead>
+                <t t-set="total_hours" t-value="0"/>
+                <t t-set="total_amount" t-value="0"/>
+                <t t-foreach="attendances" t-as="att">
+                    <t t-set="amount" t-value="coast * att.worked_hours"/>
+                    <t t-set="total_hours" t-value="total_hours +att.worked_hours"/>
+                    <t t-set="total_amount" t-value="total_amount+amount"/>
+                    <tr> 
+                        <td class="text-start">
+                            <span t-esc="att.check_in"/>
+                        </td>
+                        <td class="text-start">
+                            <span t-esc="att.check_out" />
+                        </td>
+                        <td class="text-start">
+                            <span t-esc="round(att.worked_hours,2)" />
+                        </td>
+                        <td class="text-start">
+                            <span t-esc="round(amount,2)" t-options='{"widget": "monetary", "display_currency": employee.currency_id}'/>
+                        </td>
+                    </tr>
+                </t>
+                <tr >
+                    <td></td>
+                    <td></td>
+                    <td><b t-esc="round(total_hours,2)"/></td>
+                    <td><b t-esc="round(total_amount,2)" t-options='{"widget": "monetary", "display_currency": employee.currency_id}'/></td>
+                </tr>
+            </t>
+        </t>
+    </template>
+    <template id="custom_date_range" name="Dates">
+        <div class="d-flex align-items-center bg-100 rounded px-1 dates-container">
+            <div class="d-flex align-items-center">
+                <lable class="form-lable">From</lable>
+                <input class="form-control border-0 sdate" type="date" name="sdate" t-att-value="sdate"/>
+            </div>
+            <div class="d-flex align-items-center">
+                <lable class="form-lable">To</lable>
+                <input class="form-control border-0 edate" type="date" name="edate" t-att-value="edate"/>
+            </div> 
+            <div><button class="btn btn-secondary btn-apply">Apply</button> </div>
+        </div>
+    </template>
+</odoo>

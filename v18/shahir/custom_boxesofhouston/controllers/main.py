@@ -395,32 +395,34 @@ class WebsiteSaleCustom(WebsiteSale):
                 'available':True if p.qty_available else False
             })
         # ----------
-        pquoted = [] 
-        pending_products = request.env['product.template'].sudo().search(pq_domain)
-        # pending_products_prices = lazy(lambda: pending_products._get_sales_prices(website))
-        # p_prices = lambda product: lazy(lambda: pending_products_prices[product.id]) 
-        if stock == 'in_stock':
-            pending_products = pending_products.filtered(lambda a:a.qty_available)
-        ppager = website.pager(url='/', total=len(pending_products), page=ppage, step=8, scope=8, url_args={})
-        offset = ppager['offset']
-        pending_products = pending_products[offset:offset + 8]
+        pquoted = []
+        ppager = False
+        if pq_domain:
+            pending_products = request.env['product.template'].sudo().search(pq_domain)
+            # pending_products_prices = lazy(lambda: pending_products._get_sales_prices(website))
+            # p_prices = lambda product: lazy(lambda: pending_products_prices[product.id])
+            if stock == 'in_stock':
+                pending_products = pending_products.filtered(lambda a:a.qty_available)
+            ppager = website.pager(url='/', total=len(pending_products), page=ppage, step=8, scope=8, url_args={})
+            offset = ppager['offset']
+            pending_products = pending_products[offset:offset + 8]
         
-        for p in pending_products:
-            pquoted.append({
-                'id': p.id,
-                'name': p.name,
-                'url':p.website_url,
-                'price': 0,
-                'in_stock': self.get_stock_label(p),
-                'available':True if p.qty_available else False
-            })
+            for p in pending_products:
+                pquoted.append({
+                    'id': p.id,
+                    'name': p.name,
+                    'url':p.website_url,
+                    'price': 0,
+                    'in_stock': self.get_stock_label(p),
+                    'available':True if p.qty_available else False
+                })
 
         return { 
             'categories':self.get_all_parent_categs(),
             'quoted': quoted,
             'q_get_pager':qpager,
             'pending_quote':pquoted,  
-            'p_get_pager':ppager, 
+            'p_get_pager':ppager,
             'page_size': page_size,
             'currency':request.website.currency_id.symbol
         }
