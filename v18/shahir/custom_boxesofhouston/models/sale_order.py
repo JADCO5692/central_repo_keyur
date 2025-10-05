@@ -39,6 +39,7 @@ class SaleOrder(models.Model):
                 order.check_delivery_address()
             order._check_negative_margin()
             if order.stock_route_id:
+                order._create_or_update_orderpoints_for_lines()
                 if order.payment_term_id.id in [self.env.ref("account.account_payment_term_immediate").id, False, None]:
                     payment_ids = self.env['payment.transaction'].sudo().search([('sale_order_ids', 'in', [order.id])])
                     amount = 0
@@ -143,6 +144,7 @@ class SaleOrder(models.Model):
         for rec in self:
             if rec.stock_route_id.is_auto_complete:
                 rec._simple_force_validate()
+            rec._create_or_update_orderpoints_for_lines()
         self.send_notification()
         return res
 
