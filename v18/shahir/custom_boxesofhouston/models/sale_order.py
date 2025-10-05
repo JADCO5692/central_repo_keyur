@@ -38,6 +38,7 @@ class SaleOrder(models.Model):
             if order.stock_route_id and order.stock_route_id.is_address_mandatory:
                 order.check_delivery_address()
             order._check_negative_margin()
+            order._create_or_update_orderpoints_for_lines()
             if order.stock_route_id:
                 if order.payment_term_id.id in [self.env.ref("account.account_payment_term_immediate").id, False, None]:
                     payment_ids = self.env['payment.transaction'].sudo().search([('sale_order_ids', 'in', [order.id])])
@@ -143,6 +144,7 @@ class SaleOrder(models.Model):
             if rec.stock_route_id.is_auto_complete:
                 rec._simple_force_validate()
         self.send_notification()
+        self._create_or_update_orderpoints_for_lines()
         return res
 
     def update_pricelist_item(self, order, pricelist):
@@ -323,3 +325,38 @@ class SaleOrder(models.Model):
         order_ids = tracking_vals.mapped('mail_message_id.res_id')
         result = self.env['sale.order'].browse(order_ids)
         return result
+
+    def _create_or_update_orderpoints_for_lines(self):
+        Orderpoint = self.env["stock.warehouse.orderpoint"]
+        for line in self.order_line:
+            prod = line.product_id
+            # if not prod.auto_create_orderpoint:
+            #     continue
+            if prod.type != 'consu':  # only for storable
+                continue
+            # Use available quantity (or forecast) at this moment
+            qty_available = prod.qty_available
+            threshold = prod.replenishment_threshold or 0.0
+            order_qty = line.product_uom_qty or 0.0
+            if order_qty >= qty_available and order_qty > 0:
+                domain = [
+                    ("product_id", "=", prod.id),
+                    ("warehouse_id", "=", line.warehouse_id.id),
+                ]
+                op = Orderpoint.search(domain, limit=1)
+                if not op:
+                    # create
+                    op_vals = {
+                        "product_id": prod.id,
+                        "warehouse_id": line.warehouse_id.id,
+                        "product_min_qty": threshold,  # or some default
+                        "product_max_qty": prod.replenishment_threshold,
+                        "qty_multiple": 1,
+                        # you could set other fields as needed (location_id, orderpoint name, etc.)
+                    }
+                    op = Orderpoint.create(op_vals)
+
+                else:
+
+                    # op.write({ "product_min_qty": threshold, ... })
+                    pass
