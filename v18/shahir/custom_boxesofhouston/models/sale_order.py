@@ -341,8 +341,6 @@ class SaleOrder(models.Model):
         Orderpoint = self.env["stock.warehouse.orderpoint"]
         for line in self.order_line:
             prod = line.product_id
-            # if not prod.auto_create_orderpoint:
-            #     continue
             if prod.type != 'consu':  # only for storable
                 continue
             # Use available quantity (or forecast) at this moment
@@ -367,7 +365,6 @@ class SaleOrder(models.Model):
                     }
                     op = Orderpoint.create(op_vals)
                 else:
-                    # op.write({ "product_min_qty": threshold, ... })
                     pass
                 
 class SaleOrderLine(models.Model):

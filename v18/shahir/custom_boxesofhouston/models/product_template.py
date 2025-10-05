@@ -1,4 +1,4 @@
-from odoo import models, api, _, fields
+from odoo import models, api, _
 from odoo.exceptions import ValidationError
 
 class ProductTemplate(models.Model):
