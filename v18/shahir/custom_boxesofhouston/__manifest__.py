@@ -4,7 +4,7 @@
     "summary": ("Custom - Boxes of Houston"),
     "author": "https://www.theerpbot.com",
     "website": "https://www.theerpbot.com",
-    "version": "18.0.0.0.87",
+    "version": "18.0.0.0.97",
     "development_status": "Production/Stable",
     "license": "LGPL-3",
     "installable": True,
@@ -36,7 +36,8 @@
         "views/report_delivery_document.xml",
         "templates/product.xml",
         "templates/custom_pricelist_list.xml",
-        "views/dashboard_menu.xml"
+        "views/dashboard_menu.xml",
+        "views/portal_template.xml"
     ],
     "images": [],
     "depends": [
@@ -52,7 +53,9 @@
         "account",
         "point_of_sale",
         "website_hide_button",
-        "web", "bus"
+        "web",
+        "bus",
+        "stock_dropshipping",
     ],
     'assets': {
         'web.assets_frontend': [
@@ -60,7 +63,10 @@
             '/custom_boxesofhouston/static/src/scss/header.scss', 
             '/custom_boxesofhouston/static/src/js/menu_widget.js',
             '/custom_boxesofhouston/static/src/js/website_sale.js',
-            '/custom_boxesofhouston/static/src/components/pricelist_list/*'
+            '/custom_boxesofhouston/static/src/components/pricelist_list/*',
+            '/custom_boxesofhouston/static/src/js/portal.js',
+            '/custom_boxesofhouston/static/src/scss/portal.scss',
+            '/custom_boxesofhouston/static/src/xml/portal_date.xml'
         ],
         'web.assets_backend': [
             '/custom_boxesofhouston/static/src/scss/backend.scss',

@@ -55,7 +55,7 @@
                                     class="btn btn-light a-submit" aria-label="Shopping cart" title="Shopping cart" >
                                     Add
                                 </a>
-                                <t t-if="not pricelist_product"> 
+                                <t t-if="not pricelist_product and not request.env.user._is_public()">
                                     <t t-if="product_variant_id in current_quote_ids">
                                         <a href="javascript:;" role="button" class="btn btn-primary a-quote" aria-label="Request A Quote" title="Added to Quote" >
                                             Added to Quote

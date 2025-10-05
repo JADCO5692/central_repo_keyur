@@ -15,7 +15,7 @@
         </xpath>
         <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
             <div id="o_wsale_cta_wrapper" class="d-flex flex-wrap align-items-center">
-                <t t-if="not pricelist_product"> 
+                <t t-if="not pricelist_product and not request.env.user._is_public()">
                     <t t-if="curr_quote_ids and product_variant.id in curr_quote_ids">
                         <a href="javascript:;" role="button" class="btn btn-primary a-quote" aria-label="Request A Quote" title="Added to Quote" >
                             Added to Quote

@@ -30,9 +30,13 @@ class SaleOrderLine(models.Model):
                 except ZeroDivisionError:
                     line.price_unit = 0.0
 
-    def create(self,vals):
+    def create(self, vals):
         lines = super().create(vals)
-        for line in lines: 
+        dropship_route = self.env.ref('stock_dropshipping.route_drop_shipping').id
+        for line in lines:
             if line.order_id.stock_route_id:
-               line.route_id = line.order_id.stock_route_id.id
+                # ✅ Skip if dropshipping route is already set
+                if line.route_id and line.route_id.id == dropship_route:
+                    continue
+                line.route_id = line.order_id.stock_route_id.id
         return lines
