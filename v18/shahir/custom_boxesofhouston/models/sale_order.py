@@ -347,7 +347,7 @@ class SaleOrder(models.Model):
                 continue
             # Use available quantity (or forecast) at this moment
             qty_available = prod.qty_available
-            threshold = prod.replenishment_threshold or 0.0
+
             order_qty = line.product_uom_qty or 0.0
             if order_qty >= qty_available and order_qty > 0:
                 domain = [
@@ -360,8 +360,8 @@ class SaleOrder(models.Model):
                     op_vals = {
                         "product_id": prod.id,
                         "warehouse_id": line.warehouse_id.id,
-                        "product_min_qty": threshold,  # or some default
-                        "product_max_qty": prod.replenishment_threshold,
+                        "product_min_qty": 0,  # or some default
+                        "product_max_qty": 0,
                         "qty_multiple": 1,
                         # you could set other fields as needed (location_id, orderpoint name, etc.)
                     }
