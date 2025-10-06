@@ -37,7 +37,8 @@
         "templates/product.xml",
         "templates/custom_pricelist_list.xml",
         "views/dashboard_menu.xml",
-        "views/portal_template.xml"
+        "views/portal_template.xml",
+        "views/sale_order_report.xml"
     ],
     "images": [],
     "depends": [
