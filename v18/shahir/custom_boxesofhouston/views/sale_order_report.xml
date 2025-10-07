@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-<!-- <record id="view_order_product_pivot_extend_distinct_customer" model="ir.ui.view">-->
-<!--    <field name="name">sale.report.pivot.extend.distinct.customer</field>-->
-<!--    <field name="model">sale.report</field>-->
-<!--    <field name="inherit_id" ref="sale.view_order_product_pivot"/>-->
-<!--    <field name="arch" type="xml">-->
-<!--      &lt;!&ndash; Insert our custom measure field into the pivot &ndash;&gt;-->
-<!--      <xpath expr="//pivot" position="inside">-->
-<!--        &lt;!&ndash; after existing measures or at suitable place &ndash;&gt;-->
-<!--        <field name="distinct_customer" type="measure"/>-->
-<!--      </xpath>-->
-<!--    </field>-->
-<!--  </record>-->
-
-    <odoo>
-  <record id="view_order_product_pivot_extend_distinct_customer" model="ir.ui.view">
-    <field name="name">sale.report.pivot.extend.distinct.customer</field>
-    <field name="model">sale.report</field>
-    <field name="inherit_id" ref="view_order_product_pivot"/>
-    <field name="arch" type="xml">
-      <xpath expr="//pivot" position="inside">
-        <field name="distinct_customer" type="measure"/>
-      </xpath>
-      <xpath expr="//pivot/field[@name='product_uom_qty']" position="after">
-        <field name="distinct_customer"/>
-      </xpath>
-    </field>
-  </record>
-</odoo>
+    <record id="view_order_product_pivot_extend_distinct_customer" model="ir.ui.view">
+        <field name="name">sale.report.pivot.extend.distinct.customer</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="view_order_product_pivot" />
+        <field name="arch" type="xml">
+            <xpath expr="//pivot" position="inside">
+                <field name="distinct_customer" type="measure" />
+            </xpath>
+            <xpath expr="//pivot/field[@name='product_uom_qty']" position="after">
+                <field name="distinct_customer" />
+            </xpath>
+        </field>
+    </record>
 </odoo>

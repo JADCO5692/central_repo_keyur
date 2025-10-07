@@ -363,7 +363,7 @@ class SaleOrder(models.Model):
                         "product_min_qty": 0,  # or some default
                         "product_max_qty": 0,
                         "qty_multiple": 1,
-                        # you could set other fields as needed (location_id, orderpoint name, etc.)
+                        "trigger": "manual",
                     }
                     op = Orderpoint.create(op_vals)
                 else:

@@ -4,7 +4,7 @@
     "summary": ("Custom - Boxes of Houston"),
     "author": "https://www.theerpbot.com",
     "website": "https://www.theerpbot.com",
-    "version": "18.0.0.0.97",
+    "version": "18.0.0.0.98",
     "development_status": "Production/Stable",
     "license": "LGPL-3",
     "installable": True,
